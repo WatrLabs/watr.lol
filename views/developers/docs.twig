@@ -1,0 +1,108 @@
+{% extends "models/app.twig" %}
+{% block pageName %}Developer docs{% endblock %}
+{% block body %}
+<article class="docs">
+<h1>Sign in with {{ env('APP_NAME') }}</h1>
+<p class="lede">Let people log in to your site with their {{ env('APP_NAME') }} account. It's plain OAuth 2.0 with the authorization code flow, so any OAuth library works. Here it is by hand.</p>
+
+<h2>1. Make an app</h2>
+<p>Go to <a href="/developers/new">your apps</a> and make one. Add the url on your site that people come back to, like <code>https://yoursite.com/auth/callback</code>. You get a <b>client id</b> and a <b>client secret</b>. The secret stays on your server.</p>
+
+<h2>2. Send people here</h2>
+<p>Make a random <code>state</code>, save it in their session, then redirect to:</p>
+<pre><code>{{ base }}/oauth/authorize
+    ?response_type=code
+    &amp;client_id=YOUR_CLIENT_ID
+    &amp;redirect_uri=https://yoursite.com/auth/callback
+    &amp;scope=profile
+    &amp;state=RANDOM_STATE</code></pre>
+<p>They log in if they need to, and the first time they're asked to allow your app. Then they come back to your callback url with <code>?code=...&amp;state=...</code>. Check <code>state</code> matches what you saved. If they said no you get <code>?error=access_denied</code> instead.</p>
+
+<h2>3. Swap the code for a token</h2>
+<p>From your server, within five minutes. The code works once.</p>
+<pre><code>curl -X POST {{ base }}/oauth/token \
+  -u YOUR_CLIENT_ID:YOUR_CLIENT_SECRET \
+  -d grant_type=authorization_code \
+  -d code=THE_CODE \
+  -d redirect_uri=https://yoursite.com/auth/callback</code></pre>
+<pre><code>{
+  "access_token": "f3Kx...",
+  "token_type": "Bearer",
+  "expires_in": 2592000,
+  "scope": "profile"
+}</code></pre>
+<p>You can send <code>client_id</code> and <code>client_secret</code> as form fields instead of basic auth.</p>
+
+<h2>4. Ask who they are</h2>
+<pre><code>curl {{ base }}/api/v1/me -H "Authorization: Bearer f3Kx..."</code></pre>
+<pre><code>{
+  "id": 42,
+  "sub": "42",
+  "username": "sword",
+  "preferred_username": "sword",
+  "display_name": "sword",
+  "name": "sword",
+  "bio": "centipede enthusiast",
+  "role": "user",
+  "created": 1791763200,
+  "profile_url": "{{ base }}/u/sword"
+}</code></pre>
+<p>Store <code>id</code> on your side. Usernames can change, ids never do. <code>/oauth/userinfo</code> returns the same thing, for libraries that expect that name.</p>
+
+<h2>Scopes</h2>
+<div class="watr-table-wrap">
+    <table class="watr-table watr-table--compact">
+        <thead><tr><th>scope</th><th>what it gives you</th></tr></thead>
+        <tbody>{% for scope, text in scopes %}<tr><td><code>{{ scope }}</code></td><td>{{ text }}</td></tr>{% endfor %}</tbody>
+    </table>
+</div>
+
+<h2>The whole thing in PHP</h2>
+<p>For a watrkit site. Drop these into a routes file.</p>
+<pre><code>$router-&gt;get('/auth/watr', function () {
+    $_SESSION['watr_state'] = bin2hex(random_bytes(16));
+    header('Location: {{ base }}/oauth/authorize?' . http_build_query([
+        'response_type' =&gt; 'code',
+        'client_id' =&gt; $_ENV['WATR_CLIENT_ID'],
+        'redirect_uri' =&gt; $_ENV['APP_URL'] . '/auth/callback',
+        'scope' =&gt; 'profile',
+        'state' =&gt; $_SESSION['watr_state'],
+    ]));
+});
+
+$router-&gt;get('/auth/callback', function () {
+    if (!hash_equals($_SESSION['watr_state'] ?? '', $_GET['state'] ?? '')) {
+        die('Start again.');
+    }
+
+    $ch = curl_init('{{ base }}/oauth/token');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER =&gt; true,
+        CURLOPT_USERPWD =&gt; $_ENV['WATR_CLIENT_ID'] . ':' . $_ENV['WATR_CLIENT_SECRET'],
+        CURLOPT_POSTFIELDS =&gt; http_build_query([
+            'grant_type' =&gt; 'authorization_code',
+            'code' =&gt; $_GET['code'] ?? '',
+            'redirect_uri' =&gt; $_ENV['APP_URL'] . '/auth/callback',
+        ]),
+    ]);
+    $token = json_decode(curl_exec($ch), true);
+
+    $ch = curl_init('{{ base }}/api/v1/me');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER =&gt; true,
+        CURLOPT_HTTPHEADER =&gt; ['Authorization: Bearer ' . $token['access_token']],
+    ]);
+    $me = json_decode(curl_exec($ch), true);
+
+    // find or make the local user with watr id $me['id'], then log them in
+});</code></pre>
+
+<h2>Extras</h2>
+<ul class="docs__list">
+    <li><b>PKCE.</b> Send <code>code_challenge</code> (base64url sha256 of a random verifier) and <code>code_challenge_method=S256</code> to authorize, then <code>code_verifier</code> to token. Recommended for anything that runs in a browser or on a phone.</li>
+    <li><b>Logging out.</b> POST the token to <code>{{ base }}/oauth/revoke</code> with your client credentials.</li>
+    <li><b>Trusted apps.</b> watrlabs' own sites can be marked trusted by an admin. People sign in to those without the "allow" screen.</li>
+    <li><b>Another {{ env('APP_NAME') }} as a login.</b> A second copy of this site can use this one as its generic <code>OAUTH_*</code> provider: set <code>OAUTH_AUTHORIZE_URL={{ base }}/oauth/authorize</code>, <code>OAUTH_TOKEN_URL={{ base }}/oauth/token</code>, <code>OAUTH_USERINFO_URL={{ base }}/api/v1/me</code>, <code>OAUTH_SCOPES=profile</code>, <code>OAUTH_ID_FIELD=id</code>, <code>OAUTH_USERNAME_FIELD=username</code>.</li>
+</ul>
+</article>
+{% endblock %}

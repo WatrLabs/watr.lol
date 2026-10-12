@@ -1,0 +1,36 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}People{% endblock %}
+{% block body %}
+{% include 'admin/tabs.twig' %}
+
+<form method="get" action="/admin/users" class="watr-row search">
+    <label class="sr-only" for="q">search usernames</label>
+    <input type="search" name="q" id="q" value="{{ search }}" placeholder="search usernames">
+    <button type="submit" class="watr-btn watr-btn--quiet">Search</button>
+</form>
+
+{% if users %}
+<div class="watr-table-wrap">
+    <table class="watr-table watr-table--stack">
+        <thead><tr><th>person</th><th>role</th><th>joined</th><th>last seen</th></tr></thead>
+        <tbody>
+        {% for u in users %}
+            <tr>
+                <td class="is-main"><span class="user-cell">{{ m.avatar(u, 'small') }}<a href="/admin/users/{{ u.id }}">{{ u.username }}</a></span></td>
+                <td>{{ m.role_tag(u) }}{% if u.role == 'user' and not u.banned %}<span class="muted">user</span>{% endif %}</td>
+                <td class="muted">{{ u.created|day }}</td>
+                <td class="muted">{{ u.last_seen ? u.last_seen|ago : 'never' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="list-foot">
+    <span class="muted">{{ pager.total|number }} {{ pager.total == 1 ? 'person' : 'people' }}</span>
+    {{ m.pages(pager, '/admin/users' ~ (search ? '?q=' ~ search|url_encode : '')) }}
+</div>
+{% else %}
+    {{ m.empty('Nobody found', 'No usernames match "' ~ search ~ '".', 3) }}
+{% endif %}
+{% endblock %}

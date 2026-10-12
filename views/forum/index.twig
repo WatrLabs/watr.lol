@@ -1,0 +1,40 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Forum{% endblock %}
+{% block body %}
+<div class="page__head">
+    <h1>Forum</h1>
+</div>
+
+{% if categories %}
+<div class="watr-table-wrap">
+    <table class="watr-table watr-table--stack">
+        <thead><tr><th>category</th><th class="num">threads</th><th class="num">posts</th><th>last post</th></tr></thead>
+        <tbody>
+        {% for c in categories %}
+            <tr>
+                <td class="is-main">
+                    <a href="/forum/{{ c.slug }}" class="thread-link">{{ c.name }}</a>
+                    {% if c.staff_only %}<span class="watr-tag">staff posts</span>{% endif %}
+                    {% if c.description %}<small class="muted thread-by">{{ c.description }}</small>{% endif %}
+                </td>
+                <td class="num">{{ c.threads|number }}</td>
+                <td class="num">{{ c.posts|number }}</td>
+                <td class="muted">{{ c.last_post_at ? c.last_post_at|ago : 'never' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    {{ m.empty('No categories yet', currentuser and role_at_least(currentuser, 'admin') ? 'Make the first one in the admin panel.' : 'Check back soon.', 3) }}
+    {% if currentuser and role_at_least(currentuser, 'admin') %}<p><a class="watr-btn" href="/admin/categories">Make a category</a></p>{% endif %}
+{% endif %}
+
+{% if recent %}
+<section class="section">
+    <h2>Latest threads</h2>
+    {% include 'snippets/thread_table.twig' with {threads: recent, show_category: true} %}
+</section>
+{% endif %}
+{% endblock %}

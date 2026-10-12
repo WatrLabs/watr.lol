@@ -1,0 +1,11 @@
+{# the app layout: bar on top, sidebar on the left, page beside it #}
+{% extends "models/base.twig" %}
+{% set has_sidebar = true %}
+{% block page %}
+<div class="watr-shell" id="app">
+    {% include 'snippets/sidebar.twig' %}
+    <main class="watr-shell__main page {% block pageClass %}{% endblock %}">
+        {% block body %}{% endblock %}
+    </main>
+</div>
+{% endblock %}

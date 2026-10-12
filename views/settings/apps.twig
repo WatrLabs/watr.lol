@@ -1,0 +1,28 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Connected apps{% endblock %}
+{% block body %}
+{% include 'settings/tabs.twig' %}
+
+<p class="measure muted">Sites you've signed in to with {{ env('APP_NAME') }}. Disconnecting one logs you out of it and makes it ask again next time.</p>
+
+{% if grants %}
+<div class="watr-table-wrap measure-wide">
+    <table class="watr-table watr-table--stack">
+        <thead><tr><th>app</th><th>can see</th><th>since</th><th></th></tr></thead>
+        <tbody>
+        {% for g in grants %}
+            <tr>
+                <td class="is-main">{{ g.app_name }}{% if g.app_homepage %} <a class="muted small" href="{{ g.app_homepage }}" rel="noopener" target="_blank">site</a>{% endif %}</td>
+                <td>{{ g.scope|split(' ')|join(', ') }}</td>
+                <td class="muted">{{ g.created|day }}</td>
+                <td class="num">{{ m.action('/settings/apps/' ~ g.app_id ~ '/revoke', 'Disconnect', {confirm: g.app_name ~ " will be logged out and has to ask before it can sign you in again.", title: 'disconnect ' ~ g.app_name, button: 'Disconnect'}) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    {{ m.empty('No apps yet', 'When you sign in to a site with ' ~ env('APP_NAME') ~ ', it shows up here.', 0) }}
+{% endif %}
+{% endblock %}

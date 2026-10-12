@@ -1,0 +1,31 @@
+{% extends "models/plain.twig" %}
+{% block pageName %}Sign up{% endblock %}
+{% block body %}
+<div class="watr-split auth">
+    <div class="watr-split__aside">
+        <h1>Sign up</h1>
+        {% include 'snippets/auth_quote.twig' %}
+    </div>
+    <div class="watr-split__main auth__main">
+        {% if env('REGISTRATION_OPEN', 'true') != 'true' %}
+            <div class="watr-msg watr-msg--warning">Sign ups are closed right now. If you already have an account, <a href="/auth/login">log in</a>.</div>
+        {% else %}
+            {% if error is defined %}<div class="watr-msg" role="alert">{{ error }}</div>{% endif %}
+            <form method="post" action="/auth/register" class="watr-stack auth__form">
+                {{ csrf_field() }}
+                <input type="hidden" name="continue" value="{{ continue }}">
+                <label class="sr-only" for="username">username</label>
+                <input type="text" name="username" id="username" placeholder="username" value="{{ username ?? '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" minlength="3" maxlength="20" pattern="[A-Za-z0-9_.\-]+" required autofocus>
+                <label class="sr-only" for="password">password</label>
+                <input type="password" name="password" id="password" placeholder="password" autocomplete="new-password" minlength="8" required>
+                <label class="sr-only" for="password_confirm">password again</label>
+                <input type="password" name="password_confirm" id="password_confirm" placeholder="password again" autocomplete="new-password" minlength="8" required>
+                <p class="hint">3 to 20 letters, numbers, dots, dashes or underscores. Passwords need 8 characters.</p>
+                <button type="submit" class="watr-btn auth__submit">Sign up</button>
+            </form>
+            {% include 'snippets/providers.twig' with {verb: 'sign up'} %}
+        {% endif %}
+        <p class="auth__switch">Have an account? <a href="/auth/login{% if continue != '/' %}?continue={{ continue|url_encode }}{% endif %}">Log in</a></p>
+    </div>
+</div>
+{% endblock %}

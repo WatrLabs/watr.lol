@@ -1,0 +1,6 @@
+<h1>Settings</h1>
+<nav class="watr-tabs settings-tabs" aria-label="settings">
+    {% for href, label in {'/settings': 'profile', '/settings/password': 'password', '/settings/connections': 'linked accounts', '/settings/apps': 'connected apps', '/settings/sessions': 'devices'} %}
+        <a class="watr-tab" href="{{ href }}"{% if request_path == href %} aria-current="page"{% endif %}>{{ label }}</a>
+    {% endfor %}
+</nav>

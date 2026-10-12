@@ -1,0 +1,31 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}{{ profile.display_name ?: profile.username }} (@{{ profile.username }}){% endblock %}
+{% block body %}
+<section class="profile">
+    {{ m.avatar(profile, 'big') }}
+    <div class="profile__text">
+        <h1>{{ profile.display_name ?: profile.username }}</h1>
+        <div class="watr-row">
+            <span class="muted">@{{ profile.username }}</span>
+            {{ m.role_tag(profile) }}
+        </div>
+        {% if profile.bio %}<p class="profile__bio">{{ profile.bio }}</p>{% endif %}
+        <p class="muted small">Joined {{ profile.created|day }} &middot; {{ post_count|number }} {{ post_count == 1 ? 'post' : 'posts' }}{% if profile.last_seen %} &middot; last seen {{ profile.last_seen|ago }}{% endif %}</p>
+        {% if currentuser and currentuser.id == profile.id %}
+            <a class="watr-btn watr-btn--quiet" href="/settings">Edit profile</a>
+        {% elseif currentuser and role_at_least(currentuser, 'admin') %}
+            <a class="watr-btn watr-btn--quiet" href="/admin/users/{{ profile.id }}">Manage in admin</a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section">
+    <h2>Threads</h2>
+    {% if threads %}
+        {% include 'snippets/thread_table.twig' with {show_category: true} %}
+    {% else %}
+        <p class="muted">{{ profile.username }} hasn't started any threads.</p>
+    {% endif %}
+</section>
+{% endblock %}

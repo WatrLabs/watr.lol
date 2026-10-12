@@ -1,0 +1,6 @@
+<h1>Admin</h1>
+<nav class="watr-tabs settings-tabs" aria-label="admin">
+    {% for href, label in {'/admin': 'overview', '/admin/users': 'people', '/admin/categories': 'categories', '/admin/apps': 'apps'} %}
+        <a class="watr-tab" href="{{ href }}"{% if request_path == href or (href != '/admin' and request_path starts with href) %} aria-current="page"{% endif %}>{{ label }}</a>
+    {% endfor %}
+</nav>

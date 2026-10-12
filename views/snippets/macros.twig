@@ -1,0 +1,62 @@
+{# little bits used everywhere. import with: {% import "snippets/macros.twig" as m %} #}
+
+{# square avatar with one of the six blob faces, picked from the user id so it never changes #}
+{% macro avatar(user, size) %}
+<span class="watr-avatar watr-avatar--blob{% if size %} watr-avatar--{{ size }}{% endif %}" data-watr-blob="{{ user ? user.id % 6 : 3 }}" aria-hidden="true"></span>
+{% endmacro %}
+
+{% macro name(user) %}
+{%- if user -%}
+<a href="/u/{{ user.username }}" class="person">{{ user.display_name ?: user.username }}</a>
+{%- else -%}
+<span class="person muted">deleted</span>
+{%- endif -%}
+{% endmacro %}
+
+{% macro role_tag(user) %}
+{%- if user and user.banned -%}<span class="watr-tag watr-tag--danger">banned</span>
+{%- elseif user and user.role == 'admin' -%}<span class="watr-tag watr-tag--bright">admin</span>
+{%- elseif user and user.role == 'mod' -%}<span class="watr-tag watr-tag--deep">mod</span>
+{%- endif -%}
+{% endmacro %}
+
+{# page numbers. shows the first, the last, and two either side of where you are #}
+{% macro pages(pager, base) %}
+{% if pager.pages > 1 %}
+{% set glue = '?' in base ? '&' : '?' %}
+<nav class="watr-pages" aria-label="pages">
+    {% if pager.page > 1 %}<a href="{{ base }}{{ glue }}page={{ pager.page - 1 }}" aria-label="previous page">&lsaquo;</a>{% endif %}
+    {% set shown_gap = false %}
+    {% for p in 1..pager.pages %}
+        {% if p == 1 or p == pager.pages or (p >= pager.page - 2 and p <= pager.page + 2) %}
+            {% if p == pager.page %}<span aria-current="page">{{ p }}</span>{% else %}<a href="{{ base }}{{ glue }}page={{ p }}">{{ p }}</a>{% endif %}
+            {% set shown_gap = false %}
+        {% elseif not shown_gap %}
+            <span class="is-gap">&hellip;</span>
+            {% set shown_gap = true %}
+        {% endif %}
+    {% endfor %}
+    {% if pager.page < pager.pages %}<a href="{{ base }}{{ glue }}page={{ pager.page + 1 }}" aria-label="next page">&rsaquo;</a>{% endif %}
+</nav>
+{% endif %}
+{% endmacro %}
+
+{# a one-button form. data-confirm makes site.js ask first, using the danger dialog #}
+{% macro action(url, label, opts) %}
+<form method="post" action="{{ url }}" class="inline-form"{% if opts.confirm is defined %} data-confirm="{{ opts.confirm }}" data-confirm-title="{{ opts.title ?? 'are you sure?' }}" data-confirm-button="{{ opts.button ?? label }}"{% endif %}>
+    {{ csrf_field() }}
+    {% for key, value in opts.fields ?? {} %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
+    <button type="submit" class="{{ opts.class ?? 'watr-btn watr-btn--quiet' }}">{{ label }}</button>
+</form>
+{% endmacro %}
+
+{# empty states get a blob, same as errors do #}
+{% macro empty(title, text, face) %}
+<div class="watr-blob empty">
+    <div>
+        <h2>{{ title }}</h2>
+        <p>{{ text }}</p>
+    </div>
+    <span class="watr-avatar watr-avatar--blob watr-avatar--big" data-watr-blob="{{ face ?? 3 }}" aria-hidden="true"></span>
+</div>
+{% endmacro %}

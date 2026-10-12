@@ -1,0 +1,58 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}{{ app.name }}{% endblock %}
+{% block body %}
+<ol class="watr-crumbs">
+    <li><a href="/developers">your apps</a></li>
+    <li aria-current="page">{{ app.name|lower }}</li>
+</ol>
+
+<div class="page__head">
+    <div>
+        <h1>{{ app.name }}</h1>
+        {% if app.description %}<p class="muted lede-tight">{{ app.description }}</p>{% endif %}
+    </div>
+    <div class="watr-row">
+        <a class="watr-btn watr-btn--quiet" href="/developers/{{ app.id }}/edit">Edit</a>
+        {{ m.action('/developers/' ~ app.id ~ '/delete', 'Delete app', {class: 'watr-btn watr-btn--danger', confirm: 'Deleting ' ~ app.name ~ ' logs everyone out of it and breaks "Sign in with ' ~ env('APP_NAME') ~ '" on your site. It can\'t be undone.', title: 'delete ' ~ app.name, button: 'Delete app'}) }}
+    </div>
+</div>
+
+{% if secret %}
+<div class="watr-msg watr-msg--warning secret-note">
+    <b>Copy your client secret now.</b> It won't be shown again. If you lose it, make a new one.
+</div>
+{% endif %}
+
+<section class="watr-panel creds">
+    <h2>Credentials</h2>
+    <dl class="facts facts--wide">
+        <dt>client id</dt>
+        <dd><code id="client-id">{{ app.client_id }}</code> <button type="button" class="link-button" data-copy="#client-id">copy</button></dd>
+        <dt>client secret</dt>
+        <dd>
+            {% if secret %}
+                <code id="client-secret">{{ secret }}</code> <button type="button" class="link-button" data-copy="#client-secret">copy</button>
+            {% else %}
+                <span class="muted">hidden</span>
+            {% endif %}
+        </dd>
+        <dt>callback urls</dt>
+        <dd>{% for uri in redirects %}<code>{{ uri }}</code><br>{% endfor %}</dd>
+        <dt>trusted</dt>
+        <dd>{{ app.trusted ? 'yes, people sign in without being asked' : 'no, people are asked to allow it once' }}</dd>
+    </dl>
+    {{ m.action('/developers/' ~ app.id ~ '/secret', 'Make a new secret', {confirm: 'The current secret stops working right away. Your site needs the new one before people can sign in again.', title: 'new client secret', button: 'Make new secret'}) }}
+</section>
+
+<section class="section">
+    <h2>Endpoints</h2>
+    <dl class="facts facts--wide">
+        <dt>authorize</dt><dd><code>{{ base }}/oauth/authorize</code></dd>
+        <dt>token</dt><dd><code>{{ base }}/oauth/token</code></dd>
+        <dt>user info</dt><dd><code>{{ base }}/api/v1/me</code></dd>
+        <dt>revoke</dt><dd><code>{{ base }}/oauth/revoke</code></dd>
+    </dl>
+    <p><a href="/developers/docs">How to use these</a></p>
+</section>
+{% endblock %}

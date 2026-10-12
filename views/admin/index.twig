@@ -1,0 +1,32 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Admin{% endblock %}
+{% block body %}
+{% include 'admin/tabs.twig' %}
+
+<div class="stats">
+    {% for label, value in stats %}
+        <div class="stat"><span class="stat__value">{{ value|number }}</span><span class="stat__label">{{ label }}</span></div>
+    {% endfor %}
+</div>
+
+<div class="cards">
+    <section class="card">
+        <h2>Newest people</h2>
+        <ul class="plain-list people">
+            {% for u in newest %}
+                <li>{{ m.avatar(u, 'small') }} <a href="/admin/users/{{ u.id }}">{{ u.username }}</a> {{ m.role_tag(u) }} <span class="muted small">{{ u.created|ago }}</span></li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section class="card">
+        <h2>Sign in with</h2>
+        {% if providers %}
+            <p>{{ providers|map(p => p.name)|join(', ') }} {{ providers|length == 1 ? 'is' : 'are' }} on.</p>
+        {% else %}
+            <p class="muted">Nothing's set up. Add a client id and secret for Discord, GitHub, Google or any OAuth provider in <code>.env</code>.</p>
+        {% endif %}
+        <p class="hint">Callback url to give each provider: <code>{{ env('APP_URL') }}/auth/callback/&lt;provider&gt;</code></p>
+    </section>
+</div>
+{% endblock %}

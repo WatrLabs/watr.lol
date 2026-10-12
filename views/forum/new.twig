@@ -1,0 +1,28 @@
+{% extends "models/app.twig" %}
+{% set active_category = category.slug %}
+{% block pageName %}New thread in {{ category.name }}{% endblock %}
+{% block body %}
+<ol class="watr-crumbs">
+    <li><a href="/forum">forum</a></li>
+    <li><a href="/forum/{{ category.slug }}">{{ category.name|lower }}</a></li>
+    <li aria-current="page">new thread</li>
+</ol>
+
+<h1>New thread</h1>
+
+<form method="post" action="/forum/{{ category.slug }}/new" class="watr-stack editor measure-wide">
+    {{ csrf_field() }}
+    {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
+    <label class="field-label" for="title">title</label>
+    <input type="text" name="title" id="title" class="full" maxlength="120" value="{{ title ?? '' }}" required autofocus>
+    <label class="field-label" for="body">post</label>
+    <textarea name="body" id="body" rows="12" maxlength="10000" required>{{ body ?? '' }}</textarea>
+    <div class="editor__foot">
+        {% include 'snippets/format_help.twig' %}
+        <div class="watr-row">
+            <a class="watr-btn watr-btn--quiet" href="/forum/{{ category.slug }}">Cancel</a>
+            <button type="submit" class="watr-btn">Post thread</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

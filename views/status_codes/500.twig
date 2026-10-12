@@ -1,0 +1,16 @@
+{% extends "models/plain.twig" %}
+{% block pageName %}An error occured{% endblock %}
+{% block body %}
+<div class="watr-blob">
+    <div>
+        <h1>500 - Server Error</h1>
+        <p>Something broke on our side. Try again in a minute.</p>
+        <div class="watr-row">
+            <a class="watr-btn" href="#" data-back>Go back</a>
+            <a class="watr-btn watr-btn--quiet" href="/">Go home</a>
+        </div>
+    </div>
+    <img class="watr-blob__face" src="/assets/images/blobs/blobpanic.png" alt="Screaming face emoji" width="180" height="180">
+</div>
+{% if debug is defined and debug %}<pre class="debug">{{ debug }}</pre>{% endif %}
+{% endblock %}

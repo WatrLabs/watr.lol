@@ -1,0 +1,28 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Settings{% endblock %}
+{% block body %}
+{% include 'settings/tabs.twig' %}
+
+<form method="post" action="/settings" class="watr-stack form measure">
+    {{ csrf_field() }}
+    {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
+
+    <div class="profile profile--small">
+        {{ m.avatar(user, 'big') }}
+        <p class="muted">Your picture is a blob, picked by your account number. Everyone gets one.</p>
+    </div>
+
+    <label class="field-label" for="username">username</label>
+    <input type="text" name="username" id="username" class="full" value="{{ user.username }}" minlength="3" maxlength="20" pattern="[A-Za-z0-9_.\-]+" autocapitalize="none" spellcheck="false" required>
+    <p class="hint">Changing it changes your profile link. Sites you signed in to keep knowing it's you.</p>
+
+    <label class="field-label" for="display_name">display name</label>
+    <input type="text" name="display_name" id="display_name" class="full" value="{{ user.display_name }}" maxlength="40" placeholder="{{ user.username }}">
+
+    <label class="field-label" for="bio">bio</label>
+    <textarea name="bio" id="bio" class="full" rows="4" maxlength="500">{{ user.bio }}</textarea>
+
+    <button type="submit" class="watr-btn">Save profile</button>
+</form>
+{% endblock %}

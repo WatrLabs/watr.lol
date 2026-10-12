@@ -1,0 +1,15 @@
+{% extends "models/plain.twig" %}
+{% block pageName %}Can't sign you in{% endblock %}
+{% block body %}
+<div class="watr-blob">
+    <div>
+        <h1>Can't sign you in</h1>
+        <p>{{ message }}</p>
+        <div class="watr-row">
+            <a class="watr-btn" href="#" data-back>Go back</a>
+            <a class="watr-btn watr-btn--quiet" href="/">Go home</a>
+        </div>
+    </div>
+    <img class="watr-blob__face" src="/assets/images/blobs/thinking.png" alt="Thinking face emoji" width="180" height="180">
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% import "snippets/macros.twig" as m %}
+<nav class="watr-bar" aria-label="site">
+    {% if has_sidebar ?? false %}<button type="button" class="watr-burger" data-watr-shell="app" aria-controls="side" aria-label="sidebar"></button>{% endif %}
+    <a href="/" class="watr-bar__home">{{ env('APP_NAME') }}</a>
+    <button type="button" class="watr-bar__toggle">menu</button>
+    <div class="watr-bar__links">
+        <div class="watr-bar__group">
+            <a href="/forum">forum</a>
+            <a href="/developers/docs">developers</a>
+        </div>
+        <div class="watr-bar__group">
+            {% if currentuser %}
+                {% if role_at_least(currentuser, 'admin') %}<a href="/admin">admin</a>{% endif %}
+                <a href="/settings">settings</a>
+                <a href="/u/{{ currentuser.username }}" class="watr-bar__me">{{ m.avatar(currentuser, 'small') }}{{ currentuser.username }}</a>
+            {% else %}
+                {% set back = request_path starts with '/auth' ? '' : '?continue=' ~ (request_path|url_encode) %}
+                <a href="/auth/register{{ back }}">sign up</a>
+                <a href="/auth/login{{ back }}">log in</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+{% if env('SITE_NOTICE') %}
+<div class="watr-strip watr-strip--warning"><p>{{ env('SITE_NOTICE') }}</p></div>
+{% endif %}

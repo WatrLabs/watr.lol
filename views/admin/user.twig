@@ -1,0 +1,34 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}{{ person.username }}{% endblock %}
+{% block body %}
+{% include 'admin/tabs.twig' %}
+
+<section class="profile">
+    {{ m.avatar(person, 'big') }}
+    <div class="profile__text">
+        <h2 class="profile__name">{{ person.display_name ?: person.username }}</h2>
+        <div class="watr-row"><a href="/u/{{ person.username }}">@{{ person.username }}</a> {{ m.role_tag(person) }}</div>
+        <p class="muted small">
+            #{{ person.id }} &middot; joined {{ person.created|day }} &middot; {{ post_count|number }} posts &middot; {{ sessions }} signed-in {{ sessions == 1 ? 'device' : 'devices' }}
+            &middot; {{ person.password ? 'has a password' : 'no password' }}{% if links %} &middot; linked: {{ links|keys|join(', ') }}{% endif %}
+        </p>
+    </div>
+</section>
+
+<form method="post" action="/admin/users/{{ person.id }}" class="watr-stack form measure">
+    {{ csrf_field() }}
+    <label class="field-label" for="role">role</label>
+    <select name="role" id="role">
+        {% for r in roles %}<option value="{{ r }}"{% if r == person.role %} selected{% endif %}>{{ r }}</option>{% endfor %}
+    </select>
+    <p class="hint">Mods can pin, lock, move and delete anything on the forum. Admins can also run this page.</p>
+
+    <label class="watr-switch"><input type="checkbox" role="switch" name="banned" value="1"{% if person.banned %} checked{% endif %}> banned</label>
+    <label class="field-label" for="ban_reason">ban reason</label>
+    <input type="text" name="ban_reason" id="ban_reason" class="full" maxlength="255" value="{{ person.ban_reason }}" placeholder="shown to them when they try to log in">
+    <p class="hint">Banning logs them out here and on every site they signed in to with {{ env('APP_NAME') }}.</p>
+
+    <button type="submit" class="watr-btn">Save</button>
+</form>
+{% endblock %}

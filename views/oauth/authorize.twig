@@ -1,0 +1,41 @@
+{% extends "models/plain.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Sign in to {{ app.name }}{% endblock %}
+{% block body %}
+<div class="watr-split auth consent">
+    <div class="watr-split__aside">
+        <p class="consent__kicker">sign in with {{ env('APP_NAME') }}</p>
+        <h1>{{ app.name }}</h1>
+        <p class="lede">wants to know who you are.</p>
+        {% if app.description %}<p class="muted">{{ app.description }}</p>{% endif %}
+        <p class="muted consent__meta">
+            made by {{ m.name(owner) }}
+            {% if app.homepage %}&middot; <a href="{{ app.homepage }}" rel="noopener" target="_blank">{{ app.homepage|replace({'https://': '', 'http://': ''})|trim('/') }}</a>{% endif %}
+        </p>
+    </div>
+    <div class="watr-split__main auth__main">
+        <div class="consent__who">
+            {{ m.avatar(currentuser) }}
+            <span><b>{{ currentuser.display_name ?: currentuser.username }}</b><small>@{{ currentuser.username }}</small></span>
+        </div>
+
+        <p><b>{{ app.name }} will be able to:</b></p>
+        <ul class="consent__scopes">
+            {% for scope, text in scopes %}<li>{{ text }}</li>{% endfor %}
+        </ul>
+        <p class="hint">It never sees your password. You can disconnect it any time in settings. After this you'll go to <b>{{ redirect_host }}</b>.</p>
+
+        <form method="post" action="/oauth/authorize" class="watr-row consent__buttons">
+            {{ csrf_field() }}
+            {% for key, value in params %}{% if value %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endif %}{% endfor %}
+            <button type="submit" name="decision" value="allow" class="watr-btn">Allow</button>
+            <button type="submit" name="decision" value="deny" class="watr-btn watr-btn--quiet">Cancel</button>
+        </form>
+
+        <form method="post" action="/auth/logout" class="consent__switch">
+            {{ csrf_field() }}
+            Not you? <button type="submit" class="link-button">Log out</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

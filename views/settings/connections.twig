@@ -1,0 +1,42 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Linked accounts{% endblock %}
+{% block body %}
+{% include 'settings/tabs.twig' %}
+
+<p class="measure muted">Link an account and you can log in with it instead of your password.</p>
+
+{% if rows %}
+<div class="watr-table-wrap measure-wide">
+    <table class="watr-table watr-table--stack">
+        <thead><tr><th>service</th><th>account</th><th>linked</th><th></th></tr></thead>
+        <tbody>
+        {% for row in rows %}
+            <tr>
+                <td class="is-main">{{ row.name }}{% if not row.enabled %} <span class="watr-tag">switched off</span>{% endif %}</td>
+                <td>{{ row.link ? (row.link.provider_username ?: 'linked') : '' }}{% if not row.link %}<span class="muted">not linked</span>{% endif %}</td>
+                <td class="muted">{{ row.link ? row.link.created|day : '' }}</td>
+                <td class="num">
+                    {% if row.link %}
+                        {% if can_unlink %}
+                            {{ m.action('/settings/connections/' ~ row.slug ~ '/unlink', 'Unlink', {confirm: "You won't be able to log in with " ~ row.name ~ " until you link it again.", title: 'unlink ' ~ row.name|lower, button: 'Unlink'}) }}
+                        {% else %}
+                            <span class="muted small" data-watr-tip="Set a password first, or you won't be able to log in" data-watr-tip-end>only way in</span>
+                        {% endif %}
+                    {% elseif row.enabled %}
+                        <form method="post" action="/auth/connect/{{ row.slug }}" class="inline-form">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="continue" value="/settings/connections">
+                            <button type="submit" class="watr-btn">Link</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    {{ m.empty('Nothing to link yet', "This site hasn't set up Discord, GitHub or anything else yet.", 3) }}
+{% endif %}
+{% endblock %}

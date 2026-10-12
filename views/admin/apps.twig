@@ -1,0 +1,28 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Apps{% endblock %}
+{% block body %}
+{% include 'admin/tabs.twig' %}
+
+<p class="measure muted">Every app that can sign people in with {{ env('APP_NAME') }}. Trust only watrlabs' own sites: trusted apps skip the "allow this?" screen.</p>
+
+{% if apps %}
+<div class="watr-table-wrap">
+    <table class="watr-table watr-table--stack">
+        <thead><tr><th>app</th><th>owner</th><th>made</th><th>trusted</th></tr></thead>
+        <tbody>
+        {% for a in apps %}
+            <tr>
+                <td class="is-main"><a href="/developers/{{ a.id }}">{{ a.name }}</a></td>
+                <td>{{ m.name(a.owner) }}</td>
+                <td class="muted">{{ a.created|day }}</td>
+                <td>{{ m.action('/admin/apps/' ~ a.id ~ '/trust', a.trusted ? 'Stop trusting' : 'Trust', {class: a.trusted ? 'watr-btn' : 'watr-btn watr-btn--quiet'}) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    {{ m.empty('No apps yet', 'When someone makes one on the developers page it shows up here.', 0) }}
+{% endif %}
+{% endblock %}

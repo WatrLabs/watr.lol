@@ -1,0 +1,15 @@
+{
+    "name": "watrlabs/watr.lol",
+    "description": "one account for every watr thing, plus a forum",
+    "license": "Apache-2.0",
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "vlucas/phpdotenv": "^5.6",
+        "usmanhalalit/pixie": "^2.0",
+        "robmorgan/phinx": "^0.16.10",
+        "twig/twig": "^3.0"
+    }
+}

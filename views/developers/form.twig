@@ -1,0 +1,34 @@
+{% extends "models/app.twig" %}
+{% block pageName %}{{ app ? 'Edit ' ~ app.name : 'New app' }}{% endblock %}
+{% block body %}
+<ol class="watr-crumbs">
+    <li><a href="/developers">your apps</a></li>
+    {% if app %}<li><a href="/developers/{{ app.id }}">{{ app.name|lower }}</a></li><li aria-current="page">edit</li>{% else %}<li aria-current="page">new</li>{% endif %}
+</ol>
+
+<h1>{{ app ? 'Edit ' ~ app.name : 'New app' }}</h1>
+
+<form method="post" action="{{ app ? '/developers/' ~ app.id ~ '/edit' : '/developers/new' }}" class="watr-stack form measure">
+    {{ csrf_field() }}
+    {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
+
+    <label class="field-label" for="name">name</label>
+    <input type="text" name="name" id="name" class="full" maxlength="40" value="{{ form.name ?? '' }}" required>
+    <p class="hint">People see this on the "allow this app?" screen.</p>
+
+    <label class="field-label" for="description">description</label>
+    <input type="text" name="description" id="description" class="full" maxlength="255" value="{{ form.description ?? '' }}">
+
+    <label class="field-label" for="homepage">homepage</label>
+    <input type="url" name="homepage" id="homepage" class="full" maxlength="255" placeholder="https://" value="{{ form.homepage ?? '' }}">
+
+    <label class="field-label" for="redirect_uris">callback urls</label>
+    <textarea name="redirect_uris" id="redirect_uris" class="full mono" rows="4" placeholder="https://yoursite.com/auth/callback" required>{{ form.redirect_uris ?? '' }}</textarea>
+    <p class="hint">One per line. Where people land after signing in. Has to match exactly. https:// only, except http://localhost for testing.</p>
+
+    <div class="watr-row">
+        <a class="watr-btn watr-btn--quiet" href="{{ app ? '/developers/' ~ app.id : '/developers' }}">Cancel</a>
+        <button type="submit" class="watr-btn">{{ app ? 'Save app' : 'Make app' }}</button>
+    </div>
+</form>
+{% endblock %}

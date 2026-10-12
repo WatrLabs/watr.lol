@@ -1,0 +1,31 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Your apps{% endblock %}
+{% block body %}
+<div class="page__head">
+    <div>
+        <h1>Your apps</h1>
+        <p class="muted lede-tight">Sites that let people sign in with {{ env('APP_NAME') }}. <a href="/developers/docs">How it works</a>.</p>
+    </div>
+    <a class="watr-btn" href="/developers/new">New app</a>
+</div>
+
+{% if apps %}
+<div class="watr-table-wrap">
+    <table class="watr-table watr-table--stack">
+        <thead><tr><th>app</th><th>client id</th><th>made</th></tr></thead>
+        <tbody>
+        {% for a in apps %}
+            <tr>
+                <td class="is-main"><a href="/developers/{{ a.id }}" class="thread-link">{{ a.name }}</a>{% if a.trusted %} <span class="watr-tag watr-tag--bright">trusted</span>{% endif %}</td>
+                <td><code>{{ a.client_id }}</code></td>
+                <td class="muted">{{ a.created|day }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    {{ m.empty('No apps yet', 'Make one to add "Sign in with ' ~ env('APP_NAME') ~ '" to your site.', 5) }}
+{% endif %}
+{% endblock %}

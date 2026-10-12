@@ -1,0 +1,31 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% set active_category = category.slug %}
+{% block pageName %}{{ category.name }}{% endblock %}
+{% block description %}{{ category.description ?: category.name }}{% endblock %}
+{% block body %}
+<ol class="watr-crumbs">
+    <li><a href="/forum">forum</a></li>
+    <li aria-current="page">{{ category.name|lower }}</li>
+</ol>
+
+<div class="page__head">
+    <div>
+        <h1>{{ category.name }}</h1>
+        {% if category.description %}<p class="muted lede-tight">{{ category.description }}</p>{% endif %}
+    </div>
+    {% if not category.staff_only or role_at_least(currentuser, 'mod') %}
+        <a class="watr-btn" href="/forum/{{ category.slug }}/new">New thread</a>
+    {% endif %}
+</div>
+
+{% if threads %}
+    {% include 'snippets/thread_table.twig' %}
+    <div class="list-foot">
+        <span class="muted">{{ pager.total|number }} {{ pager.total == 1 ? 'thread' : 'threads' }}</span>
+        {{ m.pages(pager, '/forum/' ~ category.slug) }}
+    </div>
+{% else %}
+    {{ m.empty('No threads yet', category.staff_only ? 'Staff post here. Nothing so far.' : 'Start one. Someone has to go first.', 0) }}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Home{% endblock %}
+{% block body %}
+<div class="page__head">
+    <h1>Hey, {{ currentuser.display_name ?: currentuser.username }}</h1>
+    <a class="watr-btn" href="/forum">Go to the forum</a>
+</div>
+
+<div class="cards">
+    <section class="watr-panel card">
+        <h2>Your account</h2>
+        <dl class="facts">
+            <dt>username</dt><dd>@{{ currentuser.username }}</dd>
+            <dt>joined</dt><dd>{{ currentuser.created|day }}</dd>
+            <dt>password</dt><dd>{{ currentuser.password ? 'set' : 'not set' }}</dd>
+            <dt>linked</dt><dd>{{ links ? links|keys|join(', ') : 'nothing yet' }}</dd>
+        </dl>
+        <div class="watr-row">
+            <a class="watr-btn watr-btn--quiet" href="/settings">Edit profile</a>
+            <a class="watr-btn watr-btn--quiet" href="/settings/connections">Linked accounts</a>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Sites you use watr.lol for</h2>
+        {% if apps %}
+            <ul class="plain-list">
+                {% for a in apps %}
+                    <li><b>{{ a.app_name }}</b> <span class="muted">since {{ a.created|day }}</span></li>
+                {% endfor %}
+            </ul>
+            <a class="watr-btn watr-btn--quiet" href="/settings/apps">Manage</a>
+        {% else %}
+            <p class="muted">None yet. When a site asks you to sign in with {{ env('APP_NAME') }}, it shows up here.</p>
+        {% endif %}
+    </section>
+</div>
+
+<section class="section">
+    <h2>New on the forum</h2>
+    {% if recent %}
+        {% include 'snippets/thread_table.twig' with {threads: recent, show_category: true} %}
+    {% else %}
+        {{ m.empty('Nothing here yet', "Nobody has posted. Pick a category and start a thread.", 2) }}
+    {% endif %}
+</section>
+{% endblock %}

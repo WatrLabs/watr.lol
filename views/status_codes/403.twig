@@ -1,0 +1,15 @@
+{% extends "models/plain.twig" %}
+{% block pageName %}Not allowed{% endblock %}
+{% block body %}
+<div class="watr-blob">
+    <div>
+        <h1>403 - Not allowed</h1>
+        <p>{{ message ?? "You can't see this page." }}</p>
+        <div class="watr-row">
+            <a class="watr-btn" href="#" data-back>Go back</a>
+            <a class="watr-btn watr-btn--quiet" href="/">Go home</a>
+        </div>
+    </div>
+    <span class="watr-avatar watr-avatar--blob watr-avatar--big blob-face" data-watr-blob="1" role="img" aria-label="Surprised blob"></span>
+</div>
+{% endblock %}

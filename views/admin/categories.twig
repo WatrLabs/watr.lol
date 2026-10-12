@@ -1,0 +1,53 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Categories{% endblock %}
+{% block body %}
+{% include 'admin/tabs.twig' %}
+
+{% if categories %}
+<div class="watr-table-wrap">
+    <table class="watr-table watr-table--stack">
+        <thead><tr><th>category</th><th>url</th><th class="num">threads</th><th>order</th><th></th></tr></thead>
+        <tbody>
+        {% for c in categories %}
+            <tr>
+                <td class="is-main">{{ c.name }}{% if c.staff_only %} <span class="watr-tag">staff posts</span>{% endif %}</td>
+                <td><code>/forum/{{ c.slug }}</code></td>
+                <td class="num">{{ c.threads|number }}</td>
+                <td>
+                    <div class="watr-row">
+                        {% if not loop.first %}{{ m.action('/admin/categories/' ~ c.id ~ '/move', 'up', {fields: {direction: 'up'}}) }}{% endif %}
+                        {% if not loop.last %}{{ m.action('/admin/categories/' ~ c.id ~ '/move', 'down', {fields: {direction: 'down'}}) }}{% endif %}
+                    </div>
+                </td>
+                <td class="num">
+                    <div class="watr-row row-end">
+                        <a class="watr-btn watr-btn--quiet" href="/admin/categories/{{ c.id }}">Edit</a>
+                        {% if c.threads == 0 %}
+                            {{ m.action('/admin/categories/' ~ c.id ~ '/delete', 'Delete', {class: 'watr-btn watr-btn--danger', confirm: 'The ' ~ c.name ~ ' category goes away. It has no threads, so nothing else is lost.', title: 'delete category', button: 'Delete category'}) }}
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<section class="section">
+    <h2>New category</h2>
+    <form method="post" action="/admin/categories" class="watr-stack form measure">
+        {{ csrf_field() }}
+        {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
+        <label class="field-label" for="name">name</label>
+        <input type="text" name="name" id="name" class="full" maxlength="60" value="{{ form.name ?? '' }}" required>
+        <label class="field-label" for="slug">url name</label>
+        <input type="text" name="slug" id="slug" class="full" maxlength="40" pattern="[a-z0-9\-]+" value="{{ form.slug ?? '' }}" placeholder="made from the name if you leave it empty">
+        <label class="field-label" for="description">description</label>
+        <input type="text" name="description" id="description" class="full" maxlength="255" value="{{ form.description ?? '' }}">
+        <label class="watr-check"><input type="checkbox" name="staff_only" value="1"{% if form.staff_only ?? false %} checked{% endif %}> only staff can start threads</label>
+        <button type="submit" class="watr-btn">Make category</button>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,291 @@
+/*
+    watr.lol, on top of watr.css (0.5).
+    the kit does the look. this file sets the knobs and lays out the pages.
+*/
+
+/* ---------- knobs ---------- */
+:root {
+    --watr-hue: 150;           /* green. watrfiles is 196, the logo is 237, so 46° clear of the nearest */
+    --watr-chroma: 1.1;        /* a touch louder than watrfiles */
+    --watr-head-weight: 800;   /* and heavier headings */
+    --watr-sidebar-w: 240px;
+}
+
+/* ---------- page ---------- */
+.page {
+    box-sizing: border-box;
+    padding: 24px 28px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+.page > h1, .page__head h1 { margin: 0; }
+.page--center {
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding-block: 48px;
+}
+@media (max-width: 600px) {
+    .page { padding: 16px 16px 40px; }
+}
+
+.page__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+.section { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.section h2 { margin: 0; }
+
+.measure { max-width: 34rem; }
+.measure-wide { max-width: 52rem; }
+.lede { font-size: 1.1rem; line-height: 1.5; margin: 0.5rem 0; }
+.lede-tight { margin: 4px 0 0; }
+.muted { color: var(--watr-muted); }
+.small { font-size: 0.85rem; }
+.hint { margin: 0; font-size: 0.85rem; color: var(--watr-muted); line-height: 1.4; }
+.full { width: 100%; box-sizing: border-box; }
+.mono { font-family: ui-monospace, "Cascadia Mono", Menlo, monospace; font-size: 0.9rem; }
+code { font-family: ui-monospace, "Cascadia Mono", Menlo, monospace; font-size: 0.9em; overflow-wrap: anywhere; }
+.sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* a button that reads like a link, for small actions next to text */
+.link-button {
+    font: inherit;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+.link-button:hover { color: var(--watr-mid); }
+
+.inline-form { display: inline; margin: 0; }
+.row-end { justify-content: flex-end; }
+
+/* ---------- forms ---------- */
+.form { gap: 6px; width: 100%; }
+.form .watr-btn, .form .watr-row { margin-top: 10px; }
+.form .watr-check, .form .watr-switch { margin-top: 8px; }
+.field-label {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: lowercase;
+}
+.form .field-label:first-of-type { margin-top: 0; }
+textarea { resize: vertical; line-height: 1.5; }
+select { cursor: pointer; }
+
+/* ---------- auth: the split ---------- */
+.auth { width: min(100%, 760px); }
+.auth .watr-split__aside { flex: 1; max-width: 300px; }
+.auth .watr-split__aside h1 { margin-top: 0; }
+.auth__main { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; max-width: 320px; }
+.auth__form { align-items: stretch; }
+.auth__form input { width: 100%; box-sizing: border-box; }
+.auth__submit { margin-top: 10px; align-self: flex-start; }
+.auth__switch { margin: 4px 0 0; font-size: 0.9rem; }
+.auth .watr-msg { margin: 0; }
+
+.providers { display: flex; flex-direction: column; gap: 8px; }
+.providers__label { margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--watr-muted); text-transform: lowercase; }
+
+/* the consent screen */
+.consent__kicker { margin: 0 0 6px; font-size: 0.85rem; font-weight: 600; text-transform: lowercase; color: var(--watr-muted); }
+.consent .watr-split__aside h1 { margin: 0; overflow-wrap: anywhere; }
+.consent .lede { margin-top: 2px; }
+.consent__meta { font-size: 0.9rem; }
+.consent__who { display: flex; align-items: center; gap: 12px; }
+.consent__who small { display: block; color: var(--watr-muted); }
+.consent__scopes { margin: 0; padding-left: 1.2em; line-height: 1.5; }
+.consent__scopes li::marker { color: var(--watr-mid); }
+.consent__buttons { margin-top: 6px; }
+.consent__switch { font-size: 0.9rem; color: var(--watr-muted); }
+.consent p { margin: 0; }
+
+@media (max-width: 480px) {
+    .auth .watr-split__aside, .auth__main { max-width: none; }
+}
+
+/* ---------- landing ---------- */
+.hero { justify-content: flex-start; padding-block: 24px 8px; }
+.hero .watr-split__aside { max-width: 30rem; }
+.hero h1 { margin-top: 0; font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.1; }
+.hero__actions { align-items: stretch; min-width: 200px; }
+.hero__actions .watr-btn { text-align: center; }
+
+/* ---------- blobs: errors and empty states ---------- */
+.watr-blob h1, .watr-blob h2 { margin-top: 0; }
+.watr-blob p { max-width: 34ch; line-height: 1.5; }
+.empty { justify-content: flex-start; padding: 24px 0; }
+.empty .watr-avatar { flex: none; }
+.blob-face { width: 180px; height: 180px; }
+@media (max-width: 480px) {
+    .blob-face { width: 120px; height: 120px; }
+    .empty { align-items: center; }
+}
+.debug {
+    max-width: min(100%, 900px);
+    overflow: auto;
+    padding: 12px;
+    font-size: 0.8rem;
+    background-color: var(--watr-surface);
+    box-shadow: var(--watr-drop);
+}
+
+/* ---------- sidebar bits ---------- */
+.watr-side__nav form { display: contents; }
+/* .muted above is unlayered, so it would beat the kit's white-on-color rule */
+.watr-side--color .muted { color: rgb(255 255 255 / 0.75); }
+.watr-side__foot .watr-btn { padding: 8px 10px; }
+
+/* ---------- cards, facts, stats ---------- */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 24px;
+    align-items: start;
+}
+.card { display: flex; flex-direction: column; gap: 12px; }
+.card h2 { margin: 0; font-size: 1.15rem; }
+.card > p { margin: 0; }
+
+.facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 16px; margin: 0; }
+.facts dt { font-size: 0.85rem; font-weight: 600; text-transform: lowercase; color: var(--watr-muted); padding-top: 1px; }
+.facts dd { margin: 0; overflow-wrap: anywhere; }
+.facts--wide dt { min-width: 7rem; }
+@media (max-width: 480px) {
+    .facts--wide { grid-template-columns: minmax(0, 1fr); }
+    .facts--wide dd { margin-bottom: 6px; }
+}
+
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
+.stat { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; background-color: var(--watr-surface); }
+.stat__value { font-size: 1.8rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stat__label { font-size: 0.85rem; font-weight: 600; text-transform: lowercase; color: var(--watr-muted); }
+
+.plain-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.people li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.user-cell { display: inline-flex; align-items: center; gap: 10px; }
+
+.creds { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+.creds h2 { margin: 0; }
+.creds .facts { width: 100%; }
+.secret-note { max-width: 52rem; }
+
+/* ---------- tables ---------- */
+.watr-table a { color: inherit; }
+.thread-link { font-weight: 700; text-decoration: none; }
+.thread-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.thread-by { display: block; margin-top: 2px; font-weight: 400; }
+.threads .watr-tag { margin-left: 4px; vertical-align: 2px; }
+.list-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.search input { min-width: 0; flex: 1; max-width: 300px; }
+.person { font-weight: 700; text-decoration: none; }
+.person:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- profile ---------- */
+.profile { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.profile h1, .profile__name { margin: 0; }
+.profile__text { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; min-width: 0; }
+.profile__text p { margin: 0; }
+.profile__bio { max-width: 60ch; line-height: 1.5; white-space: pre-line; }
+.profile--small { gap: 16px; flex-wrap: nowrap; margin-bottom: 8px; }
+.profile--small p { margin: 0; font-size: 0.9rem; }
+
+/* ---------- threads and posts ---------- */
+.thread-title { overflow-wrap: anywhere; }
+.posts { display: flex; flex-direction: column; }
+.post {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 24px;
+    padding: 20px 0;
+    border-top: 1px solid var(--watr-field-over);
+    scroll-margin-top: 16px;
+}
+.post:first-child { border-top: none; padding-top: 4px; }
+.post:target .post__main { box-shadow: inset var(--watr-rule-w) 0 0 var(--watr-bright); padding-left: 16px; }
+.post__author { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; min-width: 0; }
+.post__who { display: flex; flex-direction: column; gap: 3px; min-width: 0; overflow-wrap: anywhere; }
+.post__who .watr-row:empty { display: none; }
+.post__count { font-size: 0.8rem; }
+.post__main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.post__meta { display: flex; gap: 10px; font-size: 0.85rem; }
+.post__meta a { text-decoration: none; }
+.post__meta a:hover { text-decoration: underline; }
+.post__actions { display: flex; gap: 14px; font-size: 0.85rem; color: var(--watr-muted); }
+.post__actions a { text-underline-offset: 3px; }
+
+@media (max-width: 700px) {
+    .post { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+    .post__author { flex-direction: row; align-items: center; }
+    .post__author .watr-avatar { width: 36px; height: 36px; }
+    .post__who { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+}
+
+/* what people write */
+.prose { line-height: 1.6; overflow-wrap: anywhere; }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p { margin: 0 0 0.9em; }
+.prose a { text-underline-offset: 3px; }
+.prose a:hover { color: var(--watr-mid); }
+.prose .mention { font-weight: 700; text-decoration: none; }
+.prose blockquote {
+    margin: 0 0 0.9em;
+    padding: 2px 0 2px 14px;
+    border-left: var(--watr-rule-w) solid var(--watr-bright);
+    color: var(--watr-muted);
+}
+.prose :not(pre) > code { padding: 1px 5px; background-color: var(--watr-field); border-radius: var(--watr-field-radius); }
+.prose pre {
+    margin: 0 0 0.9em;
+    padding: 12px 14px;
+    overflow-x: auto;
+    background-color: var(--watr-surface);
+    box-shadow: var(--watr-drop);
+}
+.prose pre code { overflow-wrap: normal; white-space: pre; }
+
+.reply { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; padding-top: 20px; border-top: var(--watr-rule-w) solid var(--watr-rule); }
+.reply h2 { margin: 0; }
+.reply .watr-msg { max-width: 52rem; }
+.editor { align-items: stretch; max-width: 52rem; width: 100%; }
+.editor textarea { width: 100%; box-sizing: border-box; }
+.editor__foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 10px; margin-top: 6px; }
+.format-help { font-size: 0.85rem; color: var(--watr-muted); max-width: 32rem; }
+.format-help summary { cursor: pointer; font-weight: 600; text-transform: lowercase; }
+.format-help p { margin: 6px 0 0; line-height: 1.8; }
+.format-help code { padding: 1px 4px; background-color: var(--watr-field); }
+
+.settings-tabs { margin-bottom: 8px; }
+
+/* ---------- docs ---------- */
+.docs { max-width: 46rem; line-height: 1.6; }
+.docs h1 { margin-top: 0; }
+.docs h2 { margin: 1.6em 0 0.4em; }
+.docs p { margin: 0 0 0.9em; }
+.docs pre {
+    margin: 0 0 1em;
+    padding: 12px 14px;
+    overflow-x: auto;
+    line-height: 1.45;
+    background-color: var(--watr-surface);
+    box-shadow: var(--watr-drop);
+}
+.docs pre code { overflow-wrap: normal; }
+.docs__list { padding-left: 1.2em; }
+.docs__list li { margin-bottom: 0.6em; }
+.docs .watr-table-wrap { margin-bottom: 1em; }

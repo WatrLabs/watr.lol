@@ -1,0 +1,21 @@
+<footer class="watr-footer">
+    <div>&copy;{{ env('APP_NAME') }} - {{ "now"|date("Y") }}</div>
+</footer>
+
+{# one shared "are you sure?" dialog. site.js fills it in from the form's data-confirm #}
+<dialog class="watr-dialog watr-dialog--danger" id="confirm">
+    <form method="dialog">
+        <div class="watr-dialog__head"><h2 id="confirm-title">are you sure?</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
+        <div class="watr-dialog__body"><p id="confirm-text"></p></div>
+        <div class="watr-dialog__foot">
+            <button type="button" class="watr-btn watr-btn--quiet" data-watr-close>Cancel</button>
+            <button class="watr-btn watr-btn--danger" value="yes" id="confirm-button">Delete</button>
+        </div>
+    </form>
+</dialog>
+
+{% set note = flash() %}
+{% if note %}<div id="flash" hidden data-message="{{ note.message }}" data-type="{{ note.type }}"></div>{% endif %}
+
+<script src="/assets/watr/watr.js?v=0.5"></script>
+<script src="/assets/site.js?v=1"></script>

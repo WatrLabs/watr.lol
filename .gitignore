@@ -1,0 +1,8 @@
+.env
+vendor
+public/.well-known
+public/.user.ini
+storage/cache/*
+!storage/cache/.gitkeep
+storage/*.log
+storage/*.sqlite

@@ -1,0 +1,53 @@
+{% import "snippets/macros.twig" as m %}
+{% set here = active_category ?? null %}
+<aside class="watr-side watr-side--color" id="side" aria-label="sections">
+    <div class="watr-side__inner">
+        <div>
+            <h2 class="watr-side__label">forum</h2>
+            <nav class="watr-side__nav">
+                <a href="/forum"{% if request_path == '/forum' %} aria-current="page"{% endif %}>all categories</a>
+                {% for c in sidebar_categories() %}
+                    <a href="/forum/{{ c.slug }}"{% if request_path == '/forum/' ~ c.slug or here == c.slug %} aria-current="page"{% endif %}>{{ c.name|lower }} <span class="watr-side__count">{{ c.threads|number }}</span></a>
+                {% endfor %}
+            </nav>
+        </div>
+
+        {% if currentuser %}
+        <div>
+            <h2 class="watr-side__label">you</h2>
+            <nav class="watr-side__nav">
+                <a href="/"{% if request_path == '/' %} aria-current="page"{% endif %}>home</a>
+                <a href="/u/{{ currentuser.username }}"{% if request_path|lower == '/u/' ~ currentuser.username|lower %} aria-current="page"{% endif %}>profile</a>
+                <a href="/settings"{% if request_path starts with '/settings' %} aria-current="page"{% endif %}>settings</a>
+                <a href="/developers"{% if request_path starts with '/developers' and request_path != '/developers/docs' %} aria-current="page"{% endif %}>your apps</a>
+                <a href="/developers/docs"{% if request_path == '/developers/docs' %} aria-current="page"{% endif %}>developer docs</a>
+                {% if role_at_least(currentuser, 'admin') %}
+                    <a href="/admin"{% if request_path starts with '/admin' %} aria-current="page"{% endif %}>admin</a>
+                {% endif %}
+                <form method="post" action="/auth/logout">{{ csrf_field() }}<button type="submit">log out</button></form>
+            </nav>
+        </div>
+        <div class="watr-side__foot">
+            <div class="watr-side__me">
+                {{ m.avatar(currentuser) }}
+                <span>{{ currentuser.display_name ?: currentuser.username }}<small>@{{ currentuser.username }}</small></span>
+            </div>
+        </div>
+        {% else %}
+        <div>
+            <h2 class="watr-side__label">more</h2>
+            <nav class="watr-side__nav">
+                <a href="/"{% if request_path == '/' %} aria-current="page"{% endif %}>home</a>
+                <a href="/developers/docs"{% if request_path == '/developers/docs' %} aria-current="page"{% endif %}>developer docs</a>
+            </nav>
+        </div>
+        <div class="watr-side__foot">
+            <span class="muted">Log in to start threads and reply.</span>
+            <div class="watr-row">
+                <a class="watr-btn" href="/auth/login?continue={{ request_path|url_encode }}">Log in</a>
+                <a class="watr-btn watr-btn--quiet" href="/auth/register?continue={{ request_path|url_encode }}">Sign up</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</aside>

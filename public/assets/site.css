@@ -99,6 +99,7 @@ select { cursor: pointer; }
 .auth__row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 10px; }
 .auth__row .auth__submit { margin-top: 0; }
 .auth__forgot { font-size: 0.85rem; text-underline-offset: 3px; }
+.turnstile { margin-top: 10px; min-height: 65px; }  /* holds the space so the button doesn't jump when it loads */
 .auth .watr-msg { margin: 0; }
 
 .auth__logo {

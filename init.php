@@ -90,6 +90,7 @@ $twig->addFunction(new \Twig\TwigFunction('role_at_least', fn ($user, $role) => 
 $twig->addFunction(new \Twig\TwigFunction('sidebar_categories', fn () => (new categories())->all()));
 $twig->addFunction(new \Twig\TwigFunction('login_providers', fn () => providers::enabled()));
 $twig->addFunction(new \Twig\TwigFunction('flash', fn () => take_flash()));
+$twig->addFunction(new \Twig\TwigFunction('turnstile', fn () => \watrlabs\turnstile::widget(), ['is_safe' => ['html']]));
 $twig->addFunction(new \Twig\TwigFunction('blob_avatar', fn ($user) => sitefunctions::blobAvatar($user)));
 
 $twig->addFilter(new \Twig\TwigFilter('ago', fn ($time) => sitefunctions::ago((int) $time)));

@@ -1,16 +1,17 @@
-{# "or log in with discord" buttons. only shows the ones set up in .env #}
+{# "log in with discord" and friends, one per row. only shows the ones set up in .env #}
 {% set providers = login_providers() %}
 {% if providers %}
 <div class="providers">
-    <p class="providers__label">or {{ verb ?? 'log in' }} with</p>
-    <div class="watr-row">
-        {% for p in providers %}
-        <form method="post" action="/auth/connect/{{ p.slug }}" class="inline-form">
-            {{ csrf_field() }}
-            <input type="hidden" name="continue" value="{{ continue ?? '/' }}">
-            <button type="submit" class="watr-btn watr-btn--quiet">{{ p.name }}</button>
-        </form>
-        {% endfor %}
-    </div>
+    <p class="providers__or"><span>or</span></p>
+    {% for p in providers %}
+    <form method="post" action="/auth/connect/{{ p.slug }}">
+        {{ csrf_field() }}
+        <input type="hidden" name="continue" value="{{ continue ?? '/' }}">
+        <button type="submit" class="provider-btn">
+            {% include 'snippets/provider_icon.twig' with {slug: p.slug} only %}
+            <span>{{ (verb ?? 'log in')|capitalize }} with {{ p.name }}</span>
+        </button>
+    </form>
+    {% endfor %}
 </div>
 {% endif %}

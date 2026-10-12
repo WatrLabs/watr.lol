@@ -3,8 +3,9 @@
 {% block body %}
 <div class="watr-split auth">
     <div class="watr-split__aside">
+        {% include 'snippets/auth_logo.twig' %}
         <h1>Sign up</h1>
-        {% include 'snippets/auth_quote.twig' %}
+        <p class="muted auth__tag">One account for every watr thing.</p>
     </div>
     <div class="watr-split__main auth__main">
         {% if env('REGISTRATION_OPEN', 'true') != 'true' %}

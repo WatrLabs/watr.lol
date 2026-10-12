@@ -150,12 +150,16 @@ select { cursor: pointer; }
 .watr-blob h1, .watr-blob h2 { margin-top: 0; }
 .watr-blob p { max-width: 34ch; line-height: 1.5; }
 .empty { justify-content: flex-start; padding: 24px 0; }
-.empty .watr-avatar { flex: none; }
-.blob-face { width: 180px; height: 180px; }
+.empty__face { flex: none; width: 120px; height: 120px; }
 @media (max-width: 480px) {
-    .blob-face { width: 120px; height: 120px; }
+    .empty__face { width: 90px; height: 90px; }
     .empty { align-items: center; }
 }
+
+/* ---------- avatars: google's blob emoji, no frame ---------- */
+.blob-avatar { flex: none; width: 48px; height: 48px; object-fit: contain; }
+.blob-avatar--small { width: 28px; height: 28px; }
+.blob-avatar--big { width: 120px; height: 120px; }
 .debug {
     max-width: min(100%, 900px);
     overflow: auto;
@@ -259,7 +263,7 @@ select { cursor: pointer; }
 @media (max-width: 700px) {
     .post { grid-template-columns: minmax(0, 1fr); gap: 12px; }
     .post__author { flex-direction: row; align-items: center; }
-    .post__author .watr-avatar { width: 36px; height: 36px; }
+    .post__author .blob-avatar { width: 36px; height: 36px; }
     .post__who { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
 }
 

@@ -31,6 +31,6 @@
     {{ m.pages(pager, '/admin/users' ~ (search ? '?q=' ~ search|url_encode : '')) }}
 </div>
 {% else %}
-    {{ m.empty('Nobody found', 'No usernames match "' ~ search ~ '".', 3) }}
+    {{ m.empty('Nobody found', 'No usernames match "' ~ search ~ '".', 'meh') }}
 {% endif %}
 {% endblock %}

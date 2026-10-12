@@ -25,7 +25,7 @@
     </table>
 </div>
 {% else %}
-    {{ m.empty('No categories yet', currentuser and role_at_least(currentuser, 'admin') ? 'Make the first one in the admin panel.' : 'Check back soon.', 3) }}
+    {{ m.empty('No categories yet', currentuser and role_at_least(currentuser, 'admin') ? 'Make the first one in the admin panel.' : 'Check back soon.', 'meh') }}
     {% if currentuser and role_at_least(currentuser, 'admin') %}<p><a class="watr-btn" href="/admin/categories">Make a category</a></p>{% endif %}
 {% endif %}
 

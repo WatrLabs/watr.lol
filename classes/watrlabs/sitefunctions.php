@@ -4,6 +4,18 @@ namespace watrlabs;
 
 class sitefunctions {
 
+    // google's blob emoji, the happy ones. everyone gets one picked by their account number
+    const BLOB_AVATARS = [
+        '1f600', '1f603', '1f604', '1f601', '1f606', '1f609', '1f60a', '1f60b', '1f60e',
+        '1f60d', '1f642', '1f643', '1f61b', '1f61c', '1f913', '1f917', '1f60f', '1f633',
+    ];
+
+    static function blobAvatar($user): string {
+        // nobody (a deleted account) gets the neutral face
+        $code = $user ? self::BLOB_AVATARS[((int) $user->id) % count(self::BLOB_AVATARS)] : '1f610';
+        return '/assets/images/blobs/u' . $code . '.png';
+    }
+
     static function format_number($int) {
 
         if ($int >= 1000000000) {

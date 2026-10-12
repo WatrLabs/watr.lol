@@ -23,6 +23,6 @@
     </table>
 </div>
 {% else %}
-    {{ m.empty('No apps yet', 'When you sign in to a site with ' ~ env('APP_NAME') ~ ', it shows up here.', 0) }}
+    {{ m.empty('No apps yet', 'When you sign in to a site with ' ~ env('APP_NAME') ~ ', it shows up here.', 'sleepy') }}
 {% endif %}
 {% endblock %}

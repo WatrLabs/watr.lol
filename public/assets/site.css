@@ -121,12 +121,30 @@ select { cursor: pointer; }
     .auth .watr-split__aside, .auth__main { max-width: none; }
 }
 
-/* ---------- landing ---------- */
-.hero { justify-content: flex-start; padding-block: 24px 8px; }
-.hero .watr-split__aside { max-width: 30rem; }
+/* ---------- home ---------- */
+.landing { gap: 64px; }
+.hero { width: min(100%, 46rem); justify-content: flex-start; }
+.hero .watr-split__aside { max-width: 26rem; }
 .hero h1 { margin-top: 0; font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.1; }
+.hero .lede { margin-bottom: 0; }
 .hero__actions { align-items: stretch; min-width: 200px; }
 .hero__actions .watr-btn { text-align: center; }
+
+.home { display: flex; flex-direction: column; gap: 28px; max-width: 46rem; }
+.home h1 { margin: 0; }
+.home .watr-msg a { color: inherit; font-weight: 700; }
+.home > p { margin: 0; }
+
+.home-latest { display: flex; flex-direction: column; gap: 6px; width: min(100%, 46rem); }
+.home-latest h2 { margin: 0 0 4px; font-size: 1rem; text-transform: lowercase; color: var(--watr-muted); }
+.more-link { align-self: flex-start; margin-top: 8px; font-size: 0.9rem; text-underline-offset: 3px; }
+
+/* threads as plain rows: title, then a quiet line under it */
+.thread-list { list-style: none; margin: 0; padding: 0; }
+.thread-list li { padding: 12px 0; border-bottom: 1px solid var(--watr-field); }
+.thread-list li:first-child { padding-top: 4px; }
+.thread-list .watr-tag { margin-left: 6px; vertical-align: 2px; }
+.thread-list__meta { display: block; margin-top: 3px; font-size: 0.85rem; color: var(--watr-muted); }
 
 /* ---------- blobs: errors and empty states ---------- */
 .watr-blob h1, .watr-blob h2 { margin-top: 0; }
@@ -146,6 +164,9 @@ select { cursor: pointer; }
     background-color: var(--watr-surface);
     box-shadow: var(--watr-drop);
 }
+
+/* ---------- footer ---------- */
+.watr-footer a { color: inherit; text-underline-offset: 3px; }
 
 /* ---------- sidebar bits ---------- */
 .watr-side__nav form { display: contents; }
@@ -212,7 +233,7 @@ select { cursor: pointer; }
 .posts { display: flex; flex-direction: column; }
 .post {
     display: grid;
-    grid-template-columns: 150px minmax(0, 1fr);
+    grid-template-columns: 130px minmax(0, 1fr);
     gap: 24px;
     padding: 20px 0;
     border-top: 1px solid var(--watr-field-over);
@@ -223,13 +244,17 @@ select { cursor: pointer; }
 .post__author { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; min-width: 0; }
 .post__who { display: flex; flex-direction: column; gap: 3px; min-width: 0; overflow-wrap: anywhere; }
 .post__who .watr-row:empty { display: none; }
-.post__count { font-size: 0.8rem; }
 .post__main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .post__meta { display: flex; gap: 10px; font-size: 0.85rem; }
 .post__meta a { text-decoration: none; }
 .post__meta a:hover { text-decoration: underline; }
 .post__actions { display: flex; gap: 14px; font-size: 0.85rem; color: var(--watr-muted); }
 .post__actions a { text-underline-offset: 3px; }
+/* with a mouse, edit and delete only show on the post you're pointing at */
+@media (hover: hover) {
+    .post__actions { opacity: 0; }
+    .post:hover .post__actions, .post__actions:focus-within { opacity: 1; }
+}
 
 @media (max-width: 700px) {
     .post { grid-template-columns: minmax(0, 1fr); gap: 12px; }

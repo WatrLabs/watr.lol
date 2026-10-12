@@ -44,10 +44,7 @@ function forum_post_too_fast($user): bool {
 $router->group('/forum', function ($router) {
 
     $router->get('/', function () {
-        render('forum/index.twig', [
-            'categories' => (new categories())->all(),
-            'recent' => (new threads())->recent(10),
-        ]);
+        render('forum/index.twig', ['categories' => (new categories())->all()]);
     });
 
     $router->get('/t/{id}', function ($id) {

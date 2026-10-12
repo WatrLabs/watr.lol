@@ -1,33 +1,23 @@
-{% extends "models/app.twig" %}
-{% import "snippets/macros.twig" as m %}
+{% extends "models/plain.twig" %}
 {% block pageName %}One account for every watr thing{% endblock %}
+{% block pageClass %}landing{% endblock %}
 {% block body %}
 <section class="watr-split hero">
     <div class="watr-split__aside">
         <h1>One account for every watr thing.</h1>
-        <p class="lede">Make a watr.lol account once, then use it to sign in to the other watrlabs sites. There's a forum here too.</p>
+        <p class="lede">Sign up once, then use it on every watrlabs site.</p>
     </div>
     <div class="watr-split__main watr-stack hero__actions">
         <a class="watr-btn" href="/auth/register">Make an account</a>
         <a class="watr-btn watr-btn--quiet" href="/auth/login">Log in</a>
-        {% if login_providers() %}<p class="hint">Or use {{ login_providers()|map(p => p.name)|join(', ', ' or ') }}.</p>{% endif %}
     </div>
 </section>
 
-<section class="section">
-    <div class="page__head">
-        <h2>On the forum</h2>
-        <a class="watr-btn watr-btn--quiet" href="/forum">All categories</a>
-    </div>
-    {% if recent %}
-        {% include 'snippets/thread_table.twig' with {threads: recent, show_category: true} %}
-    {% else %}
-        {{ m.empty('Nothing here yet', 'Nobody has posted. Make an account and be first.', 2) }}
-    {% endif %}
+{% if recent %}
+<section class="home-latest">
+    <h2>Latest on the forum</h2>
+    {% include 'snippets/thread_list.twig' with {threads: recent|slice(0, 5)} %}
+    <a href="/forum" class="more-link">See the forum</a>
 </section>
-
-<section class="section">
-    <h2>Running a site?</h2>
-    <p class="measure">Add "Sign in with watr.lol" to it. Register an app, send people to watr.lol to log in, and get back who they are. <a href="/developers/docs">Read the developer docs</a>.</p>
-</section>
+{% endif %}
 {% endblock %}

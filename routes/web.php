@@ -1,7 +1,6 @@
 <?php
 use watrlabs\forum\threads;
 use watrlabs\oauth\server;
-use watrlabs\connections\linked;
 
 global $router; // IMPORTANT: KEEP THIS HERE!
 
@@ -17,7 +16,6 @@ $router->get('/', function () {
     render('home/dashboard.twig', [
         'recent' => $recent,
         'apps' => (new server())->grantsForUser($user->id),
-        'links' => (new linked())->forUser($user->id),
     ]);
 });
 

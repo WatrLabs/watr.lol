@@ -2,9 +2,7 @@
 {% import "snippets/macros.twig" as m %}
 {% block pageName %}Forum{% endblock %}
 {% block body %}
-<div class="page__head">
-    <h1>Forum</h1>
-</div>
+<h1>Forum</h1>
 
 {% if categories %}
 <div class="watr-table-wrap">
@@ -31,10 +29,4 @@
     {% if currentuser and role_at_least(currentuser, 'admin') %}<p><a class="watr-btn" href="/admin/categories">Make a category</a></p>{% endif %}
 {% endif %}
 
-{% if recent %}
-<section class="section">
-    <h2>Latest threads</h2>
-    {% include 'snippets/thread_table.twig' with {threads: recent, show_category: true} %}
-</section>
-{% endif %}
 {% endblock %}

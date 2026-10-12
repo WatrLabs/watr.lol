@@ -24,6 +24,7 @@
                 <label class="sr-only" for="password_confirm">password again</label>
                 <input type="password" name="password_confirm" id="password_confirm" placeholder="password again" autocomplete="new-password" minlength="8" required>
                 <p class="hint">3 to 20 letters, numbers, dots, dashes or underscores. Passwords need 8 characters. An email lets you reset your password.</p>
+                {{ turnstile() }}
                 <button type="submit" class="watr-btn auth__submit">Sign up</button>
             </form>
             {% include 'snippets/providers.twig' with {verb: 'sign up'} %}

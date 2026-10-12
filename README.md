@@ -57,6 +57,16 @@ so the mail doesn't land in spam, add zoho's spf, dkim and dmarc records to your
 
 until `MAIL_HOST` is set, emails get written to `storage/mail.log` instead, so you can click the links while testing.
 
+## turnstile (bot check)
+log in, sign up and forgot password can ask cloudflare turnstile whether the visitor is a person. make a widget at dash.cloudflare.com → Turnstile, add your domain (and `localhost` if you test there), then put the keys in `.env`:
+
+```
+TURNSTILE_SITE_KEY="0x4AAAA..."
+TURNSTILE_SECRET_KEY="0x4AAAA..."
+```
+
+leave them empty and the check is off. if cloudflare can't be reached the forms say no rather than letting everyone through, and the reason goes to `storage/errorlog.log` (so does a wrong secret key). "log in with discord" and the other providers don't show it, they run their own checks.
+
 ## signing in with other sites
 make an app on each provider and give it the callback url `APP_URL/auth/callback/<provider>`:
 

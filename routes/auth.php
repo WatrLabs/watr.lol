@@ -6,6 +6,7 @@ use watrlabs\mail;
 use watrlabs\sessions;
 use watrlabs\sitefunctions;
 use watrlabs\throttle;
+use watrlabs\turnstile;
 
 global $router; // IMPORTANT: KEEP THIS HERE!
 
@@ -26,7 +27,9 @@ $router->group('/auth', function ($router) {
 
         $continue = safe_continue(post('continue'));
         $username = post('username');
-        $result = (new authentication())->attemptLogin($username, (string) ($_POST['password'] ?? ''));
+        $result = turnstile::verify()
+            ? (new authentication())->attemptLogin($username, (string) ($_POST['password'] ?? ''))
+            : ['error' => turnstile::FAILED];
 
         if (isset($result['error'])) {
             http_response_code(422);
@@ -58,6 +61,8 @@ $router->group('/auth', function ($router) {
         $error = null;
         if (($_ENV['REGISTRATION_OPEN'] ?? 'true') !== 'true') {
             $error = 'Sign ups are closed right now.';
+        } elseif (!turnstile::verify()) {
+            $error = turnstile::FAILED;
         } elseif ($email !== '' && !mail::valid($email)) {
             $error = "That email address doesn't look right.";
         } elseif ($password !== (string) ($_POST['password_confirm'] ?? '')) {
@@ -105,6 +110,12 @@ $router->group('/auth', function ($router) {
             render('auth/forgot.twig', ['login' => $login, 'error' => 'Too many reset requests from your network. Wait 15 minutes and try again.']);
             return;
         }
+        if (!turnstile::verify()) {
+            http_response_code(422);
+            render('auth/forgot.twig', ['login' => $login, 'error' => turnstile::FAILED]);
+            return;
+        }
+
         throttle::hit('forgot', $ip);
 
         $user = $login !== '' ? (new authentication())->getByLogin($login) : null;

@@ -16,6 +16,7 @@
                 {{ csrf_field() }}
                 <label class="sr-only" for="login">username or email</label>
                 <input type="text" name="login" id="login" placeholder="username or email" value="{{ login ?? '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus>
+                {{ turnstile() }}
                 <button type="submit" class="watr-btn auth__submit">Send reset link</button>
             </form>
             <p class="hint">No email on your account? Log in with a linked account if you have one, or ask an admin.</p>

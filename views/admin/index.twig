@@ -28,5 +28,15 @@
         {% endif %}
         <p class="hint">Callback url to give each provider: <code>{{ env('APP_URL') }}/auth/callback/&lt;provider&gt;</code></p>
     </section>
+    <section class="card">
+        <h2>Mail</h2>
+        {% if mail_ready %}
+            <p>Sending through <code>{{ env('MAIL_HOST') }}:{{ env('MAIL_PORT', '465') }}</code> as <code>{{ env('MAIL_FROM') ?: env('MAIL_USERNAME') }}</code>.</p>
+        {% else %}
+            <p class="muted">Not set up. Emails go to <code>storage/mail.log</code> until you fill in the <code>MAIL_</code> settings in <code>.env</code>.</p>
+        {% endif %}
+        <div>{{ m.action('/admin/mail-test', 'Send a test email') }}</div>
+        <p class="hint">Goes to your own confirmed email{% if currentuser.email %} ({{ currentuser.email }}){% endif %}.</p>
+    </section>
 </div>
 {% endblock %}

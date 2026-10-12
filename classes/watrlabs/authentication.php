@@ -43,6 +43,17 @@ class authentication {
         return $db->table('users')->where('username_lower', strtolower($username))->first();
     }
 
+    // only finds verified addresses, those are the only ones users ever have
+    public function getByEmail(string $email) {
+        global $db;
+        return $db->table('users')->where('email_lower', strtolower(trim($email)))->first();
+    }
+
+    // usernames can't have an @ in them, so anything with one is an email
+    public function getByLogin(string $login) {
+        return str_contains($login, '@') ? $this->getByEmail($login) : $this->getByUsername($login);
+    }
+
     public function isLoggedIn() {
         return (bool) $this->getUserInfo();
     }
@@ -117,7 +128,7 @@ class authentication {
             return ['error' => 'Too many tries from your network. Wait 15 minutes and try again.'];
         }
 
-        $user = $this->getByUsername($username);
+        $user = $this->getByLogin($username);
 
         // check a hash even when there's no user, so timing doesn't say who exists
         $hash = $user && $user->password ? $user->password : '$2y$10$KBTjuZ4s1bIu8ciO9vzY.uc1yeIF4tNYTRyRWKmfJvmuC/san0xy.';

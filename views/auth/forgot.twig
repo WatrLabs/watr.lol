@@ -1,0 +1,26 @@
+{% extends "models/plain.twig" %}
+{% block pageName %}Forgot your password{% endblock %}
+{% block body %}
+<div class="watr-split auth">
+    <div class="watr-split__aside">
+        <h1>Forgot it?</h1>
+        <p class="muted">Happens. If your account has a confirmed email, we'll send a link to pick a new password.</p>
+    </div>
+    <div class="watr-split__main auth__main">
+        {% if sent is defined %}
+            <div class="watr-msg watr-msg--info">If that account has a confirmed email, a link is on its way. It works for an hour. Check your spam folder too.</div>
+            <p class="auth__switch"><a href="/auth/login">Back to log in</a></p>
+        {% else %}
+            {% if error is defined %}<div class="watr-msg" role="alert">{{ error }}</div>{% endif %}
+            <form method="post" action="/auth/forgot" class="watr-stack auth__form">
+                {{ csrf_field() }}
+                <label class="sr-only" for="login">username or email</label>
+                <input type="text" name="login" id="login" placeholder="username or email" value="{{ login ?? '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus>
+                <button type="submit" class="watr-btn auth__submit">Send reset link</button>
+            </form>
+            <p class="hint">No email on your account? Log in with a linked account if you have one, or ask an admin.</p>
+            <p class="auth__switch"><a href="/auth/login">Back to log in</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

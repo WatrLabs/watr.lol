@@ -1,0 +1,52 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Email{% endblock %}
+{% block body %}
+{% include 'settings/tabs.twig' %}
+
+<div class="watr-stack form measure">
+    {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
+
+    <dl class="facts">
+        <dt>email</dt>
+        <dd>{% if user.email %}{{ user.email }} <span class="watr-tag watr-tag--bright">confirmed</span>{% else %}<span class="muted">none</span>{% endif %}</dd>
+        {% if pending %}
+        <dt>waiting on</dt>
+        <dd>{{ pending }} <span class="watr-tag watr-tag--warning">not confirmed</span></dd>
+        {% endif %}
+    </dl>
+
+    {% if pending %}
+        <p class="hint">Check {{ pending }} for a link. It works for a day.</p>
+        <div class="watr-row">
+            {{ m.action('/settings/email/cancel', 'Cancel change') }}
+        </div>
+    {% endif %}
+
+    {% if not mail_ready and role_at_least(user, 'admin') %}
+        <div class="watr-msg watr-msg--warning full">Mail isn't set up yet (no MAIL_HOST in .env), so emails go to storage/mail.log instead of being sent.</div>
+    {% endif %}
+</div>
+
+<form method="post" action="/settings/email" class="watr-stack form measure">
+    {{ csrf_field() }}
+    <h2 class="form__title">{{ user.email ? 'Change email' : 'Add an email' }}</h2>
+    <p class="hint">Used to reset your password, and for warnings when something changes on your account. Nobody else sees it unless you let a site you sign in to ask for it.</p>
+
+    <label class="field-label" for="email">{{ user.email ? 'new email' : 'email' }}</label>
+    <input type="email" name="email" id="email" class="full" value="{{ email ?? '' }}" maxlength="254" autocomplete="email" required>
+
+    {% if user.password %}
+        <label class="field-label" for="current">your password</label>
+        <input type="password" name="current" id="current" class="full" autocomplete="current-password" required>
+    {% endif %}
+
+    <button type="submit" class="watr-btn">Send confirmation link</button>
+</form>
+
+{% if user.email %}
+<div class="section measure">
+    {{ m.action('/settings/email/remove', 'Remove email', {confirm: "You won't be able to reset your password by email until you add one again.", title: 'remove email', button: 'Remove email'}) }}
+</div>
+{% endif %}
+{% endblock %}

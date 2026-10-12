@@ -47,6 +47,7 @@
   "created": 1791763200,
   "profile_url": "{{ base }}/u/sword"
 }</code></pre>
+<p>Want their email too? Ask for <code>scope=profile email</code> and you also get <code>email</code> and <code>email_verified</code>. Only confirmed addresses ever show up, and <code>email</code> is <code>null</code> if they haven't added one.</p>
 <p>Store <code>id</code> on your side. Usernames can change, ids never do. <code>/oauth/userinfo</code> returns the same thing, for libraries that expect that name.</p>
 
 <h2>Scopes</h2>

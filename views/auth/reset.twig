@@ -1,0 +1,38 @@
+{% extends "models/plain.twig" %}
+{% block pageName %}Pick a new password{% endblock %}
+{% block body %}
+{% if not valid %}
+<div class="watr-blob">
+    <div>
+        <h1>That link doesn't work</h1>
+        <p>Reset links work once, for an hour. Ask for a new one.</p>
+        <div class="watr-row">
+            <a class="watr-btn" href="/auth/forgot">Send a new link</a>
+            <a class="watr-btn watr-btn--quiet" href="/auth/login">Log in</a>
+        </div>
+    </div>
+    <img class="watr-blob__face" src="/assets/images/blobs/thinking.png" alt="Thinking face emoji" width="180" height="180">
+</div>
+{% else %}
+<div class="watr-split auth">
+    <div class="watr-split__aside">
+        <h1>New password</h1>
+        <p class="muted">For <b>@{{ person.username }}</b>. Every device logged in to this account gets logged out.</p>
+    </div>
+    <div class="watr-split__main auth__main">
+        {% if error is defined %}<div class="watr-msg" role="alert">{{ error }}</div>{% endif %}
+        <form method="post" action="/auth/reset" class="watr-stack auth__form">
+            {{ csrf_field() }}
+            <input type="hidden" name="token" value="{{ token }}">
+            <input type="text" name="username" value="{{ person.username }}" autocomplete="username" hidden>
+            <label class="sr-only" for="password">new password</label>
+            <input type="password" name="password" id="password" placeholder="new password" autocomplete="new-password" minlength="8" required autofocus>
+            <label class="sr-only" for="password_confirm">new password again</label>
+            <input type="password" name="password_confirm" id="password_confirm" placeholder="new password again" autocomplete="new-password" minlength="8" required>
+            <p class="hint">At least 8 characters.</p>
+            <button type="submit" class="watr-btn auth__submit">Change password</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

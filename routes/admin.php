@@ -1,5 +1,6 @@
 <?php
 use watrlabs\authentication;
+use watrlabs\mail;
 use watrlabs\roles;
 use watrlabs\sessions;
 use watrlabs\forum\categories;
@@ -28,8 +29,27 @@ $router->group('/admin', function ($router) {
                 'signed in now' => $db->table('sessions')->where('last_seen', '>', time() - 900)->count(),
             ],
             'providers' => providers::enabled(),
+            'mail_ready' => mail::configured(),
             'newest' => $db->table('users')->orderBy('created', 'DESC')->limit(8)->get(),
         ]);
+    });
+
+    // checks the smtp settings by mailing the admin who pressed it
+    $router->post('/mail-test', function () {
+        require_csrf();
+        $me = require_role('admin');
+
+        if (!$me->email) {
+            flash('Add and confirm an email in settings first, the test goes there.', 'warning');
+            redirect('/admin');
+        }
+
+        if (mail::send($me->email, 'Test email from ' . ($_ENV['APP_NAME'] ?? 'watr.lol'), 'test', ['user' => $me])) {
+            flash(mail::configured() ? "Sent a test email to {$me->email}." : 'No MAIL_HOST set, so it went to storage/mail.log.');
+        } else {
+            flash("Couldn't send it. Check the MAIL_ settings in .env, and storage/errorlog.log or your php error log for what the server said.", 'danger');
+        }
+        redirect('/admin');
     });
 
     $router->get('/users', function () {

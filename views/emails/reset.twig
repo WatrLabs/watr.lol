@@ -1,0 +1,13 @@
+{% extends "emails/layout.twig" %}
+{% block html %}
+<h1 style="margin:0 0 12px;font-size:22px;font-weight:800;">Reset your password</h1>
+<p style="margin:0;">Someone asked to reset the password for <b>@{{ user.username }}</b>. If that was you, pick a new one here.</p>
+{% include "emails/button.twig" with {label: 'Pick a new password'} %}
+<p style="margin:18px 0 0;font-size:13px;color:#474e53;">The link works for an hour. If it wasn't you, ignore this email and your password stays the same. The request came from {{ ip }}.</p>
+{% endblock %}
+{% block text %}
+Someone asked to reset the password for @{{ user.username }} on {{ app_name }}. If that was you, pick a new one here:
+{{ link }}
+
+The link works for an hour. If it wasn't you, ignore this email and your password stays the same. The request came from {{ ip }}.
+{% endblock %}

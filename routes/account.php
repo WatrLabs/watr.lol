@@ -1,6 +1,10 @@
 <?php
+use watrlabs\accountmail;
 use watrlabs\authentication;
+use watrlabs\emailtokens;
+use watrlabs\mail;
 use watrlabs\sessions;
+use watrlabs\throttle;
 use watrlabs\forum\posts;
 use watrlabs\forum\threads;
 use watrlabs\oauth\server;
@@ -102,9 +106,77 @@ $router->group('/settings', function ($router) {
 
         // a new password logs out everything else, in case the old one leaked
         $sessions->revokeAllForUser($user->id, (int) $sessions->getCurrentSession()->id);
+        (new accountmail())->notifyPasswordChanged($user);
 
         flash($user->password ? 'Changed your password. Other devices were logged out.' : 'Set your password. You can log in with it now.');
         redirect('/settings/password');
+    });
+
+    $router->get('/email', function () {
+        $user = require_login();
+        render('settings/email.twig', [
+            'user' => $user,
+            'pending' => (new emailtokens())->pendingEmail($user->id),
+            'mail_ready' => mail::configured(),
+        ]);
+    });
+
+    $router->post('/email', function () {
+        require_csrf();
+        $user = require_login();
+        $email = post('email');
+
+        $error = null;
+        if (!mail::valid($email)) {
+            $error = "That email address doesn't look right.";
+        } elseif ($user->email && strtolower($email) === strtolower($user->email)) {
+            $error = "That's already your email.";
+        } elseif ($user->password && !password_verify((string) ($_POST['current'] ?? ''), $user->password)) {
+            // otherwise a stolen session could swap the email, then reset the password
+            $error = 'Your password is wrong.';
+        } elseif (throttle::tooMany('verify', (string) $user->id, 5, 3600)) {
+            $error = "You've asked for a lot of links. Wait an hour and try again.";
+        }
+
+        if ($error) {
+            http_response_code(422);
+            render('settings/email.twig', [
+                'user' => $user,
+                'pending' => (new emailtokens())->pendingEmail($user->id),
+                'mail_ready' => mail::configured(),
+                'email' => $email,
+                'error' => $error,
+            ]);
+            return;
+        }
+
+        throttle::hit('verify', (string) $user->id);
+
+        // taken by someone else: act like it went, so this can't be used to look people up
+        if (!(new authentication())->getByEmail($email) && !(new accountmail())->sendVerification($user, $email)) {
+            flash("Couldn't send the email. Try again in a few minutes.", 'danger');
+            redirect('/settings/email');
+        }
+
+        flash("Sent a link to $email. Click it to confirm the address.");
+        redirect('/settings/email');
+    });
+
+    $router->post('/email/cancel', function () {
+        require_csrf();
+        $user = require_login();
+        (new emailtokens())->cancelPending($user->id);
+        flash('Cancelled. That link won\'t work anymore.', 'plain');
+        redirect('/settings/email');
+    });
+
+    $router->post('/email/remove', function () {
+        global $db;
+        require_csrf();
+        $user = require_login();
+        $db->table('users')->where('id', $user->id)->update(['email' => null, 'email_lower' => null, 'updated' => time()]);
+        flash("Removed your email. You can't reset your password by email until you add one.", 'plain');
+        redirect('/settings/email');
     });
 
     $router->get('/sessions', function () {

@@ -1,0 +1,15 @@
+{% extends "emails/layout.twig" %}
+{% block html %}
+<h1 style="margin:0 0 12px;font-size:22px;font-weight:800;">Confirm your email</h1>
+<p style="margin:0;">Hey {{ user.username }}, click the button to use <b>{{ email }}</b> on your {{ app_name }} account. Then you can reset your password by email if you ever need to.</p>
+{% include "emails/button.twig" with {label: 'Confirm email'} %}
+<p style="margin:18px 0 0;font-size:13px;color:#474e53;">The link works for a day. If you didn't ask for this, ignore it and nothing changes.</p>
+{% endblock %}
+{% block text %}
+Hey {{ user.username }},
+
+Confirm {{ email }} for your {{ app_name }} account:
+{{ link }}
+
+The link works for a day. If you didn't ask for this, ignore it and nothing changes.
+{% endblock %}

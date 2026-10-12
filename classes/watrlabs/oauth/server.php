@@ -14,6 +14,7 @@ class server {
     // what an app can ask for, and how the consent screen describes it
     const SCOPES = [
         'profile' => 'See your username, display name, bio, role and when you joined',
+        'email' => 'See your email address, if you\'ve confirmed one',
     ];
 
     // splits "profile foo" into known scopes. null if any of them aren't real
@@ -191,6 +192,12 @@ class server {
                 'created' => (int) $user->created,
                 'profile_url' => rtrim($_ENV['APP_URL'] ?? '', '/') . '/u/' . $user->username,
             ];
+        }
+
+        if (in_array('email', $scopes, true)) {
+            // only confirmed addresses ever make it onto an account
+            $profile['email'] = $user->email;
+            $profile['email_verified'] = (bool) $user->email;
         }
 
         return $profile;

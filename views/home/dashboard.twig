@@ -13,6 +13,7 @@
         <dl class="facts">
             <dt>username</dt><dd>@{{ currentuser.username }}</dd>
             <dt>joined</dt><dd>{{ currentuser.created|day }}</dd>
+            <dt>email</dt><dd>{{ currentuser.email ?: 'none yet' }}{% if not currentuser.email %} <a href="/settings/email">add one</a>{% endif %}</dd>
             <dt>password</dt><dd>{{ currentuser.password ? 'set' : 'not set' }}</dd>
             <dt>linked</dt><dd>{{ links ? links|keys|join(', ') : 'nothing yet' }}</dd>
         </dl>

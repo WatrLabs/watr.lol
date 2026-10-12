@@ -11,11 +11,14 @@
         <form method="post" action="/auth/login" class="watr-stack auth__form">
             {{ csrf_field() }}
             <input type="hidden" name="continue" value="{{ continue }}">
-            <label class="sr-only" for="username">username</label>
-            <input type="text" name="username" id="username" placeholder="username" value="{{ username ?? '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" required{% if username is not defined %} autofocus{% endif %}>
+            <label class="sr-only" for="username">username or email</label>
+            <input type="text" name="username" id="username" placeholder="username or email" value="{{ username ?? '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" required{% if username is not defined %} autofocus{% endif %}>
             <label class="sr-only" for="password">password</label>
             <input type="password" name="password" id="password" placeholder="password" autocomplete="current-password" required{% if username is defined %} autofocus{% endif %}>
-            <button type="submit" class="watr-btn auth__submit">Log in</button>
+            <div class="auth__row">
+                <button type="submit" class="watr-btn auth__submit">Log in</button>
+                <a href="/auth/forgot" class="auth__forgot">Forgot your password?</a>
+            </div>
         </form>
         {% include 'snippets/providers.twig' %}
         <p class="auth__switch">No account? <a href="/auth/register{% if continue != '/' %}?continue={{ continue|url_encode }}{% endif %}">Sign up</a></p>

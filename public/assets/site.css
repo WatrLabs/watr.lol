@@ -5,7 +5,7 @@
 
 /* ---------- knobs ---------- */
 :root {
-    --watr-hue: 150;           /* green. watrfiles is 196, the logo is 237, so 46° clear of the nearest */
+    --watr-hue: 237;           /* blue, the watrlabs logo blue. 41° from watrfiles (196) */
     --watr-chroma: 1.1;        /* a touch louder than watrfiles */
     --watr-head-weight: 800;   /* and heavier headings */
     --watr-sidebar-w: 240px;
@@ -96,6 +96,9 @@ select { cursor: pointer; }
 .auth__form input { width: 100%; box-sizing: border-box; }
 .auth__submit { margin-top: 10px; align-self: flex-start; }
 .auth__switch { margin: 4px 0 0; font-size: 0.9rem; }
+.auth__row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 10px; }
+.auth__row .auth__submit { margin-top: 0; }
+.auth__forgot { font-size: 0.85rem; text-underline-offset: 3px; }
 .auth .watr-msg { margin: 0; }
 
 .providers { display: flex; flex-direction: column; gap: 8px; }
@@ -271,6 +274,7 @@ select { cursor: pointer; }
 .format-help code { padding: 1px 4px; background-color: var(--watr-field); }
 
 .settings-tabs { margin-bottom: 8px; }
+.form__title { margin: 16px 0 0; font-size: 1.15rem; }
 
 /* ---------- docs ---------- */
 .docs { max-width: 46rem; line-height: 1.6; }

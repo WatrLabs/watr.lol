@@ -40,9 +40,8 @@
             {{ m.avatar(post.author) }}
             <div class="post__who">
                 {{ m.name(post.author) }}
-                {% if post.author %}<small class="muted">@{{ post.author.username }}</small>{% endif %}
+                {% if post.author and post.author.display_name and post.author.display_name != post.author.username %}<small class="muted">@{{ post.author.username }}</small>{% endif %}
                 <div class="watr-row">{{ m.role_tag(post.author) }}{% if post.user_id == thread.user_id and post.id != first_post_id %}<span class="watr-tag">op</span>{% endif %}</div>
-                <small class="muted post__count">{{ post.author_posts|number }} {{ post.author_posts == 1 ? 'post' : 'posts' }}</small>
             </div>
         </aside>
         <div class="post__main">

@@ -1,0 +1,10 @@
+{# a short list of threads, for the home pages. the full table lives in the forum #}
+<ul class="thread-list">
+    {% for t in threads %}
+    <li>
+        <a href="/forum/t/{{ t.id }}" class="thread-link">{{ t.title }}</a>
+        {% if t.pinned %}<span class="watr-tag watr-tag--bright">pinned</span>{% endif %}
+        <span class="thread-list__meta">{{ t.category ? t.category.name|lower ~ ' · ' : '' }}{{ t.post_count - 1 }} {{ t.post_count - 1 == 1 ? 'reply' : 'replies' }} · {{ t.last_post_at|ago }}</span>
+    </li>
+    {% endfor %}
+</ul>

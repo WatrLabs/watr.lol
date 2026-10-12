@@ -29,34 +29,12 @@ class posts {
             ->get();
 
         $people = (new authentication())->mapByIds(array_map(fn ($p) => $p->user_id, $posts));
-        $counts = $this->countsFor(array_keys($people));
 
         foreach ($posts as $post) {
             $post->author = $people[$post->user_id] ?? null;
-            $post->author_posts = $counts[$post->user_id] ?? 0;
         }
 
         return $posts;
-    }
-
-    // how many posts each of these people has made, keyed by user id
-    public function countsFor(array $userIds): array {
-        global $db;
-
-        if (!$userIds) {
-            return [];
-        }
-
-        $counts = [];
-        $rows = $db->table('forum_posts')
-            ->select(['user_id', $db->raw('COUNT(*) AS c')])
-            ->whereIn('user_id', $userIds)
-            ->groupBy('user_id')
-            ->get();
-        foreach ($rows as $row) {
-            $counts[$row->user_id] = (int) $row->c;
-        }
-        return $counts;
     }
 
     // which page of the thread a post lands on

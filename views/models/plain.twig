@@ -1,7 +1,7 @@
 {# no sidebar. for log in, sign up, the consent screen and errors #}
 {% extends "models/base.twig" %}
 {% block page %}
-<main class="page page--center">
+<main class="page page--center {% block pageClass %}{% endblock %}">
     {% block body %}{% endblock %}
 </main>
 {% endblock %}

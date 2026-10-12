@@ -6,17 +6,14 @@
     <div class="watr-bar__links">
         <div class="watr-bar__group">
             <a href="/forum">forum</a>
-            <a href="/developers/docs">developers</a>
         </div>
         <div class="watr-bar__group">
             {% if currentuser %}
-                {% if role_at_least(currentuser, 'admin') %}<a href="/admin">admin</a>{% endif %}
-                <a href="/settings">settings</a>
                 <a href="/u/{{ currentuser.username }}" class="watr-bar__me">{{ m.avatar(currentuser, 'small') }}{{ currentuser.username }}</a>
             {% else %}
-                {% set back = request_path starts with '/auth' ? '' : '?continue=' ~ (request_path|url_encode) %}
-                <a href="/auth/register{{ back }}">sign up</a>
+                {% set back = request_path starts with '/auth' or request_path == '/' ? '' : '?continue=' ~ (request_path|url_encode) %}
                 <a href="/auth/login{{ back }}">log in</a>
+                <a href="/auth/register{{ back }}">sign up</a>
             {% endif %}
         </div>
     </div>

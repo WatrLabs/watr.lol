@@ -101,8 +101,53 @@ select { cursor: pointer; }
 .auth__forgot { font-size: 0.85rem; text-underline-offset: 3px; }
 .auth .watr-msg { margin: 0; }
 
-.providers { display: flex; flex-direction: column; gap: 8px; }
-.providers__label { margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--watr-muted); text-transform: lowercase; }
+.auth__logo {
+    display: inline-grid;
+    place-items: center;
+    width: 180px;
+    height: 180px;
+    margin-bottom: 18px;
+    background-color: var(--watr-deep);
+    box-shadow: var(--watr-drop);
+}
+.auth__logo img { width: 148px; height: 148px; }
+.auth .watr-split__aside h1 { margin-bottom: 4px; }
+.auth__tag { margin: 0; }
+
+/* "log in with ..." buttons: one per row, full width, logo then words. plain, like the kit's quiet button */
+.providers { display: flex; flex-direction: column; gap: 6px; }
+.providers form { margin: 0; }
+.providers__or {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0;
+    font-size: 0.85rem;
+    color: var(--watr-muted);
+}
+.providers__or::before, .providers__or::after { content: ""; flex: 1; border-top: 1px solid var(--watr-field-over); }
+.provider-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 14px;
+    font: inherit;
+    text-align: left;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    background-color: var(--watr-field);
+    color: var(--watr-text);
+}
+.provider-btn:hover { background-color: var(--watr-field-over); }
+.provider-btn:active { transform: translate(1px, 1px); }
+.provider-btn__icon { flex: none; width: 20px; height: 20px; }
+
+@media (max-width: 480px) {
+    .auth__logo { width: 120px; height: 120px; margin-bottom: 12px; }
+    .auth__logo img { width: 96px; height: 96px; }
+}
 
 /* the consent screen */
 .consent__kicker { margin: 0 0 6px; font-size: 0.85rem; font-weight: 600; text-transform: lowercase; color: var(--watr-muted); }
@@ -150,12 +195,16 @@ select { cursor: pointer; }
 .watr-blob h1, .watr-blob h2 { margin-top: 0; }
 .watr-blob p { max-width: 34ch; line-height: 1.5; }
 .empty { justify-content: flex-start; padding: 24px 0; }
-.empty .watr-avatar { flex: none; }
-.blob-face { width: 180px; height: 180px; }
+.empty__face { flex: none; width: 120px; height: 120px; }
 @media (max-width: 480px) {
-    .blob-face { width: 120px; height: 120px; }
+    .empty__face { width: 90px; height: 90px; }
     .empty { align-items: center; }
 }
+
+/* ---------- avatars: google's blob emoji, no frame ---------- */
+.blob-avatar { flex: none; width: 48px; height: 48px; object-fit: contain; }
+.blob-avatar--small { width: 28px; height: 28px; }
+.blob-avatar--big { width: 120px; height: 120px; }
 .debug {
     max-width: min(100%, 900px);
     overflow: auto;
@@ -259,7 +308,7 @@ select { cursor: pointer; }
 @media (max-width: 700px) {
     .post { grid-template-columns: minmax(0, 1fr); gap: 12px; }
     .post__author { flex-direction: row; align-items: center; }
-    .post__author .watr-avatar { width: 36px; height: 36px; }
+    .post__author .blob-avatar { width: 36px; height: 36px; }
     .post__who { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
 }
 

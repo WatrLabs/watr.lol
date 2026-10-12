@@ -26,6 +26,6 @@
         {{ m.pages(pager, '/forum/' ~ category.slug) }}
     </div>
 {% else %}
-    {{ m.empty('No threads yet', category.staff_only ? 'Staff post here. Nothing so far.' : 'Start one. Someone has to go first.', 0) }}
+    {{ m.empty('No threads yet', category.staff_only ? 'Staff post here. Nothing so far.' : 'Start one. Someone has to go first.', 'upside') }}
 {% endif %}
 {% endblock %}

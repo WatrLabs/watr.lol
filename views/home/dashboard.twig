@@ -15,7 +15,7 @@
             {% include 'snippets/thread_list.twig' with {threads: recent} %}
             <a href="/forum" class="more-link">See the forum</a>
         {% else %}
-            {{ m.empty('Nothing here yet', 'Nobody has posted. Pick a category and start a thread.', 2) }}
+            {{ m.empty('Nothing here yet', 'Nobody has posted. Pick a category and start a thread.', 'sleepy') }}
         {% endif %}
     </section>
 

@@ -1,8 +1,9 @@
 {# little bits used everywhere. import with: {% import "snippets/macros.twig" as m %} #}
 
-{# square avatar with one of the six blob faces, picked from the user id so it never changes #}
+{# a google blob emoji, picked from the user id so it never changes #}
 {% macro avatar(user, size) %}
-<span class="watr-avatar watr-avatar--blob{% if size %} watr-avatar--{{ size }}{% endif %}" data-watr-blob="{{ user ? user.id % 6 : 3 }}" aria-hidden="true"></span>
+{% set px = {small: 28, big: 120}[size] ?? 48 %}
+<img class="blob-avatar{% if size %} blob-avatar--{{ size }}{% endif %}" src="{{ blob_avatar(user) }}" alt="" width="{{ px }}" height="{{ px }}">
 {% endmacro %}
 
 {% macro name(user) %}
@@ -50,13 +51,14 @@
 </form>
 {% endmacro %}
 
-{# empty states get a blob, same as errors do #}
-{% macro empty(title, text, face) %}
+{# empty states get a blob, same as errors do. mood: sleepy, meh, upside or hug #}
+{% macro empty(title, text, mood) %}
+{% set faces = {sleepy: '1f634', meh: '1f610', upside: '1f643', hug: '1f917'} %}
 <div class="watr-blob empty">
     <div>
         <h2>{{ title }}</h2>
         <p>{{ text }}</p>
     </div>
-    <span class="watr-avatar watr-avatar--blob watr-avatar--big" data-watr-blob="{{ face ?? 3 }}" aria-hidden="true"></span>
+    <img class="empty__face" src="/assets/images/blobs/u{{ faces[mood] ?? '1f610' }}.png" alt="" width="120" height="120">
 </div>
 {% endmacro %}

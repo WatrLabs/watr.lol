@@ -1,6 +1,7 @@
 <?php
 use watrlabs\authentication;
 use watrlabs\mail;
+use watrlabs\projects;
 use watrlabs\roles;
 use watrlabs\sessions;
 use watrlabs\forum\categories;
@@ -26,6 +27,7 @@ $router->group('/admin', function ($router) {
                 'threads' => $db->table('forum_threads')->count(),
                 'posts' => $db->table('forum_posts')->count(),
                 'apps' => $db->table('oauth_apps')->count(),
+                'active projects' => $db->table('projects')->where('active', 1)->count(),
                 'signed in now' => $db->table('sessions')->where('last_seen', '>', time() - 900)->count(),
             ],
             'providers' => providers::enabled(),
@@ -218,6 +220,111 @@ $router->group('/admin', function ($router) {
             flash("Deleted {$category->name}.", 'plain');
         }
         redirect('/admin/categories');
+    });
+
+    $router->get('/projects', function () {
+        require_role('admin');
+        render('admin/projects.twig', ['projects' => (new projects())->all()]);
+    });
+
+    $router->post('/projects', function () {
+        require_csrf();
+        require_role('admin');
+        $projects = new projects();
+
+        $name = post('name');
+        $description = mb_substr(post('description'), 0, 255);
+        $url = post('url');
+
+        $error = $projects->validate($name, $url);
+        if ($error) {
+            http_response_code(422);
+            render('admin/projects.twig', [
+                'projects' => $projects->all(),
+                'error' => $error,
+                'form' => ['name' => $name, 'description' => $description, 'url' => $url, 'active' => post('active') === '1'],
+            ]);
+            return;
+        }
+
+        $projects->create($name, $description, $url, post('active') === '1');
+        flash("Added $name.");
+        redirect('/admin/projects');
+    });
+
+    $router->get('/projects/{id}', function ($id) {
+        require_role('admin');
+        $project = (new projects())->get((int) $id);
+        if (!$project) {
+            abort(404, "That project doesn't exist.");
+        }
+        render('admin/project.twig', ['project' => $project]);
+    });
+
+    $router->post('/projects/{id}', function ($id) {
+        require_csrf();
+        require_role('admin');
+        $projects = new projects();
+        $project = $projects->get((int) $id);
+        if (!$project) {
+            abort(404, "That project doesn't exist.");
+        }
+
+        $name = post('name');
+        $description = mb_substr(post('description'), 0, 255);
+        $url = post('url');
+
+        $error = $projects->validate($name, $url);
+        if ($error) {
+            http_response_code(422);
+            $project->name = $name;
+            $project->description = $description;
+            $project->url = $url;
+            $project->active = post('active') === '1';
+            render('admin/project.twig', ['project' => $project, 'error' => $error]);
+            return;
+        }
+
+        $projects->update($project->id, [
+            'name' => $name,
+            'description' => $description ?: null,
+            'url' => $url ?: null,
+            'active' => post('active') === '1' ? 1 : 0,
+        ]);
+        flash("Saved $name.");
+        redirect('/admin/projects');
+    });
+
+    // shows or hides it on /projects without opening the edit page
+    $router->post('/projects/{id}/active', function ($id) {
+        require_csrf();
+        require_role('admin');
+        $projects = new projects();
+        $project = $projects->get((int) $id);
+        if ($project) {
+            $projects->update($project->id, ['active' => $project->active ? 0 : 1]);
+            flash($project->active ? "{$project->name} is hidden from /projects." : "{$project->name} is on /projects.", 'plain');
+        }
+        redirect('/admin/projects');
+    });
+
+    $router->post('/projects/{id}/move', function ($id) {
+        require_csrf();
+        require_role('admin');
+        (new projects())->move((int) $id, post('direction') === 'up' ? -1 : 1);
+        redirect('/admin/projects');
+    });
+
+    $router->post('/projects/{id}/delete', function ($id) {
+        require_csrf();
+        require_role('admin');
+        $projects = new projects();
+        $project = $projects->get((int) $id);
+        if ($project) {
+            $projects->delete($project->id);
+            flash("Deleted {$project->name}.", 'plain');
+        }
+        redirect('/admin/projects');
     });
 
     $router->get('/apps', function () {

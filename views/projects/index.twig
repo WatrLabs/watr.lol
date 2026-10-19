@@ -1,0 +1,25 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Projects{% endblock %}
+{% block description %}Everything watrlabs is working on right now.{% endblock %}
+{% block body %}
+<div>
+    <h1>Projects</h1>
+    <p class="lede lede-tight">Everything watrlabs is working on right now. Your {{ env('APP_NAME') }} account works on all of them.</p>
+</div>
+
+{% if projects %}
+<ul class="projects">
+    {% for p in projects %}
+    <li class="project">
+        <h2>{% if p.url %}<a href="{{ p.url }}">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</h2>
+        {% if p.description %}<p>{{ p.description }}</p>{% endif %}
+        {% if p.url %}<a class="project__host" href="{{ p.url }}">{{ p.url|split('://')|last|trim('/', 'right') }}</a>{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+    {{ m.empty('Nothing here yet', currentuser and role_at_least(currentuser, 'admin') ? 'Add the first project in the admin panel.' : 'Check back soon.', 'sleepy') }}
+    {% if currentuser and role_at_least(currentuser, 'admin') %}<p><a class="watr-btn" href="/admin/projects">Add a project</a></p>{% endif %}
+{% endif %}
+{% endblock %}

@@ -4,8 +4,12 @@
 {% block body %}
 <section class="watr-split hero">
     <div class="watr-split__aside">
+        <picture>
+            <source srcset="/assets/images/logos/watrlabs-logo-dark.svg" media="(prefers-color-scheme: dark)">
+            <img class="hero__logo" src="/assets/images/logos/watrlabs-logo.svg" alt="watrLabs" width="283" height="80">
+        </picture>
         <h1>One account for every watr thing.</h1>
-        <p class="lede">Sign up once, then use it on every watrlabs site.</p>
+        <p class="lede">Sign up once, then use it on every watrlabs site. <a href="/projects">See what's running</a>.</p>
     </div>
     <div class="watr-split__main watr-stack hero__actions">
         <a class="watr-btn" href="/auth/register">Make an account</a>

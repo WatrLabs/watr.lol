@@ -1,0 +1,53 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Projects{% endblock %}
+{% block body %}
+{% include 'admin/tabs.twig' %}
+
+<p class="measure muted">What shows up on <a href="/projects">/projects</a>. Only active ones are listed there, in this order.</p>
+
+{% if projects %}
+<div class="watr-table-wrap">
+    <table class="watr-table watr-table--stack">
+        <thead><tr><th>project</th><th>link</th><th>on /projects</th><th>order</th><th></th></tr></thead>
+        <tbody>
+        {% for p in projects %}
+            <tr>
+                <td class="is-main">{{ p.name }}{% if not p.active %} <span class="watr-tag">hidden</span>{% endif %}</td>
+                <td>{% if p.url %}<a href="{{ p.url }}">{{ p.url|split('://')|last|trim('/', 'right') }}</a>{% else %}<span class="muted">none</span>{% endif %}</td>
+                <td>{{ m.action('/admin/projects/' ~ p.id ~ '/active', p.active ? 'Hide' : 'Show', {class: p.active ? 'watr-btn watr-btn--quiet' : 'watr-btn'}) }}</td>
+                <td>
+                    <div class="watr-row">
+                        {% if not loop.first %}{{ m.action('/admin/projects/' ~ p.id ~ '/move', 'up', {fields: {direction: 'up'}}) }}{% endif %}
+                        {% if not loop.last %}{{ m.action('/admin/projects/' ~ p.id ~ '/move', 'down', {fields: {direction: 'down'}}) }}{% endif %}
+                    </div>
+                </td>
+                <td class="num">
+                    <div class="watr-row row-end">
+                        <a class="watr-btn watr-btn--quiet" href="/admin/projects/{{ p.id }}">Edit</a>
+                        {{ m.action('/admin/projects/' ~ p.id ~ '/delete', 'Delete', {class: 'watr-btn watr-btn--danger', confirm: p.name ~ ' comes off the list for good. To take it down for a while, hide it instead.', title: 'delete project', button: 'Delete project'}) }}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<section class="section">
+    <h2>New project</h2>
+    <form method="post" action="/admin/projects" class="watr-stack form measure">
+        {{ csrf_field() }}
+        {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
+        <label class="field-label" for="name">name</label>
+        <input type="text" name="name" id="name" class="full" maxlength="60" value="{{ form.name ?? '' }}" required>
+        <label class="field-label" for="description">description</label>
+        <input type="text" name="description" id="description" class="full" maxlength="255" value="{{ form.description ?? '' }}" placeholder="one line about what it is">
+        <label class="field-label" for="url">link</label>
+        <input type="url" name="url" id="url" class="full" maxlength="255" value="{{ form.url ?? '' }}" placeholder="https://">
+        <label class="watr-check"><input type="checkbox" name="active" value="1"{% if form.active ?? true %} checked{% endif %}> show it on /projects</label>
+        <button type="submit" class="watr-btn">Add project</button>
+    </form>
+</section>
+{% endblock %}

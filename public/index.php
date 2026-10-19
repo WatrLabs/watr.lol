@@ -34,6 +34,7 @@ try {
         'connections',
         'account',
         'forum',
+        'projects',
         'oauth',
         'developers',
         'admin',

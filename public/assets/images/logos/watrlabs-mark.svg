@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="watrLabs">
+  <defs>
+    <linearGradient id="liq" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3FBBF7"/>
+      <stop offset="1" stop-color="#2AA6E8"/>
+    </linearGradient>
+    <clipPath id="in">
+      <path d="M40 14 V38 L18 78 Q14 88 26 88 H74 Q86 88 82 78 L60 38 V14 Z"/>
+    </clipPath>
+  </defs>
+  <g transform="translate(50 50) rotate(-15) scale(.92) translate(-50 -50)">
+    <g clip-path="url(#in)">
+      <path d="M0 47 Q13 40 26 46 T52 45 T78 44 T104 47 V100 H0 Z" fill="url(#liq)"/>
+      <circle cx="38" cy="66" r="5" fill="#fff" opacity=".95"/>
+      <circle cx="62" cy="56" r="4.2" fill="#fff" opacity=".95"/>
+      <circle cx="58" cy="74" r="3.4" fill="#fff" opacity=".9"/>
+      <circle cx="49" cy="58" r="2.2" fill="#fff" opacity=".8"/>
+      <circle cx="44" cy="80" r="2" fill="#fff" opacity=".8"/>
+    </g>
+    <path d="M40 14 V38 L18 78 Q14 88 26 88 H74 Q86 88 82 78 L60 38 V14" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M33 14 H67" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

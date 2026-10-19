@@ -1,11 +1,12 @@
 {% import "snippets/macros.twig" as m %}
 <nav class="watr-bar" aria-label="site">
     {% if has_sidebar ?? false %}<button type="button" class="watr-burger" data-watr-shell="app" aria-controls="side" aria-label="sidebar"></button>{% endif %}
-    <a href="/" class="watr-bar__home">{{ env('APP_NAME') }}</a>
+    <a href="/" class="watr-bar__home"><img src="/assets/images/logos/watrlabs-mark-dark.svg" alt="" width="26" height="26">{{ env('APP_NAME') }}</a>
     <button type="button" class="watr-bar__toggle">menu</button>
     <div class="watr-bar__links">
         <div class="watr-bar__group">
             <a href="/forum">forum</a>
+            <a href="/projects">projects</a>
         </div>
         <div class="watr-bar__group">
             {% if currentuser %}

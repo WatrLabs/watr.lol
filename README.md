@@ -9,7 +9,8 @@ built on [watrfiles](https://github.com/watrabi/watrfiles) (the newest watrkit) 
 - **sign in with discord, github, google, or any oauth2 provider**: log in with them, sign up with them (you just pick a username), or link them to an account you already have. each one turns on when you put its client id and secret in `.env`
 - **sign in with watr.lol**: other sites send people here to log in, like "sign in with discord" but it's us. plain oauth 2.0 authorization code flow, with optional pkce. anyone can register an app at `/developers`, docs are at `/developers/docs`
 - **forum**: categories, threads, replies, light formatting (`**bold**`, quotes, code, links, @mentions), pin, lock, move, edit, delete
-- **admin**: people (roles, bans), forum categories, apps (mark watrlabs' own sites as trusted so they skip the "allow?" screen)
+- **projects**: `/projects` lists every watrlabs thing that's running right now. admins add, edit, reorder and hide them in admin > projects
+- **admin**: people (roles, bans), forum categories, projects, apps (mark watrlabs' own sites as trusted so they skip the "allow?" screen)
 
 ## setup
 configure `.env.example` and rename it to `.env`. you need an `APP_KEY`:

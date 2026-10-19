@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block description %}{{ env('APP_DESC') }}{% endblock %}">
     <title>{% block pageName %}{% endblock %} - {{ env('APP_NAME') }}</title>
-    <link rel="icon" href="/assets/images/logos/WatrLabsIcon.png">
+    <link rel="icon" href="/assets/images/logos/watrlabs-favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/assets/images/logos/watrlabs-mark.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/assets/images/logos/watrlabs-mark-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="/assets/images/logos/watrlabs-favicon-180.png">
     <link rel="stylesheet" href="/assets/watr/watr.css?v=0.5">
-    <link rel="stylesheet" href="/assets/site.css?v=6">
+    <link rel="stylesheet" href="/assets/site.css?v=7">
     {% block headerGoodies %}{% endblock %}
   </head>
   <body>

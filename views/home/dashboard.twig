@@ -2,25 +2,86 @@
 {% import "snippets/macros.twig" as m %}
 {% block pageName %}Home{% endblock %}
 {% block body %}
-<div class="home">
-    <h1>Hey, {{ currentuser.display_name ?: currentuser.username }}</h1>
+{% set here = '/?feed=' ~ scope %}
+<div class="home-grid">
+    <div class="home">
+        <h1>Hey, {{ currentuser.display_name ?: currentuser.username }}</h1>
 
-    {% if not currentuser.email %}
-        <div class="watr-msg watr-msg--info">Add an email so you can reset your password if you forget it. <a href="/settings/email">Add email</a></div>
-    {% endif %}
+        {% if not currentuser.email %}
+            <div class="watr-msg watr-msg--info">Add an email so you can reset your password if you forget it. <a href="/settings/email">Add email</a></div>
+        {% endif %}
 
-    <section class="home-latest">
-        <h2>Latest on the forum</h2>
+        <form method="post" action="/updates" class="compose" id="compose">
+            {{ csrf_field() }}
+            <input type="hidden" name="continue" value="{{ here }}">
+            {{ m.avatar(currentuser) }}
+            <div class="compose__main">
+                <label class="sr-only" for="update-body">post an update</label>
+                <textarea name="body" id="update-body" rows="2" maxlength="500" placeholder="What's up?" required data-count="update-count"></textarea>
+                <div class="compose__foot">
+                    <span class="muted small" id="update-count" aria-live="polite">500 left</span>
+                    <button type="submit" class="watr-btn">Post</button>
+                </div>
+            </div>
+        </form>
+
+        <section class="feed">
+            <nav class="watr-tabs" aria-label="feed">
+                <a class="watr-tab" href="/?feed=following"{% if scope == 'following' %} aria-current="page"{% endif %}>following</a>
+                <a class="watr-tab" href="/?feed=everyone"{% if scope == 'everyone' %} aria-current="page"{% endif %}>everyone</a>
+            </nav>
+
+            {% for item in feed %}
+                {% include 'snippets/feed_item.twig' with {item: item, back: here} %}
+            {% else %}
+                {% if scope == 'following' and following_count == 0 %}
+                    {{ m.empty("You're not following anyone", 'Follow people to see their updates and forum posts here. Try the suggestions, or browse everyone.', 'hug') }}
+                {% elseif scope == 'following' %}
+                    {{ m.empty('All quiet', 'Nobody you follow has posted lately. See what everyone else is up to.', 'sleepy') }}
+                {% else %}
+                    {{ m.empty('Nothing here yet', 'Nobody has posted. Say hi up there.', 'sleepy') }}
+                {% endif %}
+            {% endfor %}
+
+            {% if next %}
+                <a href="{{ here }}&before={{ next }}" class="watr-btn watr-btn--quiet feed__more">Older</a>
+            {% endif %}
+        </section>
+    </div>
+
+    <aside class="home-aside">
+        {% if online %}
+        <section>
+            <h2>Around right now</h2>
+            <ul class="online">
+                {% for p in online %}
+                    <li><a href="/u/{{ p.username }}" title="{{ p.display_name ?: p.username }}">{{ m.avatar(p, 'small') }}<span class="sr-only">{{ p.username }}</span></a></li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+
+        {% if suggestions %}
+        <section>
+            <h2>People to follow</h2>
+            <ul class="plain-list people-list people-list--compact">
+                {% for p in suggestions %}{{ m.person_row(p, false, here) }}{% endfor %}
+            </ul>
+            <a href="/people" class="more-link">Everyone</a>
+        </section>
+        {% endif %}
+
         {% if recent %}
+        <section>
+            <h2>On the forum</h2>
             {% include 'snippets/thread_list.twig' with {threads: recent} %}
             <a href="/forum" class="more-link">See the forum</a>
-        {% else %}
-            {{ m.empty('Nothing here yet', 'Nobody has posted. Pick a category and start a thread.', 'sleepy') }}
+        </section>
         {% endif %}
-    </section>
 
-    {% if apps %}
-    <p class="muted small">You sign in to {{ apps|map(a => a.app_name)|join(', ', ' and ') }} with {{ env('APP_NAME') }}. <a href="/settings/apps">Manage</a></p>
-    {% endif %}
+        {% if apps %}
+        <p class="muted small">You sign in to {{ apps|map(a => a.app_name)|join(', ', ' and ') }} with {{ env('APP_NAME') }}. <a href="/settings/apps">Manage</a></p>
+        {% endif %}
+    </aside>
 </div>
 {% endblock %}

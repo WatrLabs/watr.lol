@@ -1,0 +1,24 @@
+{% extends "models/plain.twig" %}
+{% block pageName %}Two-factor code{% endblock %}
+{% block body %}
+<div class="watr-split auth">
+    <div class="watr-split__aside">
+        {% include 'snippets/auth_logo.twig' %}
+        <h1>One more step</h1>
+        <p class="muted auth__tag">Type the code from your authenticator app.</p>
+    </div>
+    <div class="watr-split__main auth__main">
+        {% if error is defined %}<div class="watr-msg" role="alert">{{ error }}</div>{% endif %}
+        <form method="post" action="/auth/2fa" class="watr-stack auth__form">
+            {{ csrf_field() }}
+            <label class="sr-only" for="code">code</label>
+            <input type="text" name="code" id="code" class="mono twofa-code" placeholder="123456" autocomplete="one-time-code" autocapitalize="none" spellcheck="false" maxlength="11" required autofocus>
+            <div class="auth__row">
+                <button type="submit" class="watr-btn auth__submit">Log in</button>
+            </div>
+        </form>
+        <p class="hint">Lost your phone? Type one of your backup codes instead, like <code>abcde-fghjk</code>.</p>
+        <p class="auth__switch"><a href="/auth/login">Start over</a></p>
+    </div>
+</div>
+{% endblock %}

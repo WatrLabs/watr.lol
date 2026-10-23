@@ -1,7 +1,10 @@
 <?php
 use watrlabs\accountmail;
 use watrlabs\authentication;
+use watrlabs\cookies;
 use watrlabs\emailtokens;
+use watrlabs\encryption;
+use watrlabs\twofactor;
 use watrlabs\mail;
 use watrlabs\sessions;
 use watrlabs\sitefunctions;
@@ -37,8 +40,47 @@ $router->group('/auth', function ($router) {
             return;
         }
 
-        (new sessions())->createSession($result['user']->id);
-        redirect($continue);
+        finish_login($result['user'], $continue);
+    });
+
+    // second step of logging in, for people with two-factor on
+    $router->get('/2fa', function () {
+        $pending = encryption::unsign(cookies::get(twofactor::PENDING_COOKIE));
+        if (!$pending) {
+            redirect('/auth/login');
+        }
+        render('auth/2fa.twig');
+    });
+
+    $router->post('/2fa', function () {
+        require_csrf();
+
+        $pending = encryption::unsign(cookies::get(twofactor::PENDING_COOKIE));
+        $user = $pending ? (new authentication())->getUserInfo($pending['u']) : null;
+        if (!$user || $user->banned || !twofactor::enabled($user)) {
+            cookies::destroy(twofactor::PENDING_COOKIE);
+            flash('That took too long. Log in again.', 'warning');
+            redirect('/auth/login');
+        }
+
+        // a code is only 6 digits, so not many guesses per account
+        if (throttle::tooMany('2fa', (string) $user->id, 5, 900)) {
+            http_response_code(429);
+            render('auth/2fa.twig', ['error' => 'Too many wrong codes. Wait 15 minutes and try again.']);
+            return;
+        }
+
+        if (!(new twofactor())->verify($user, post('code'))) {
+            throttle::hit('2fa', (string) $user->id);
+            http_response_code(422);
+            render('auth/2fa.twig', ['error' => "That code didn't work. Check your app's clock is right, or use a backup code."]);
+            return;
+        }
+
+        throttle::clear('2fa', (string) $user->id);
+        cookies::destroy(twofactor::PENDING_COOKIE);
+        (new sessions())->createSession($user->id);
+        redirect(safe_continue($pending['c'] ?? '/'));
     });
 
     $router->get('/register', function () {
@@ -167,13 +209,12 @@ $router->group('/auth', function ($router) {
         $auth->setPassword($person->id, $password);
 
         // whoever had the old password is out, everywhere
-        $sessions = new sessions();
-        $sessions->revokeAllForUser($person->id);
-        $sessions->createSession($person->id);
+        (new sessions())->revokeAllForUser($person->id);
 
         (new accountmail())->notifyPasswordChanged($person);
         flash('Changed your password. Every other device was logged out.');
-        redirect('/');
+        // a reset link proves the email, not the phone. two-factor still asks
+        finish_login($person, '/');
     });
 
     // the link in "confirm your email"

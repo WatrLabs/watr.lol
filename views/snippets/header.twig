@@ -6,10 +6,13 @@
     <div class="watr-bar__links">
         <div class="watr-bar__group">
             <a href="/forum">forum</a>
+            <a href="/people">people</a>
             <a href="/projects">projects</a>
         </div>
         <div class="watr-bar__group">
             {% if currentuser %}
+                {% set unread = unread_count(currentuser) %}
+                <a href="/notifications" class="bell{% if unread %} has-unread{% endif %}" aria-label="notifications{% if unread %}, {{ unread }} new{% endif %}"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm7-6V11a7 7 0 0 0-5.5-6.84V3.5a1.5 1.5 0 0 0-3 0v.66A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Z"/></svg>{% if unread %}<span class="bell__count">{{ unread > 99 ? '99+' : unread }}</span>{% endif %}</a>
                 <a href="/u/{{ currentuser.username }}" class="watr-bar__me">{{ m.avatar(currentuser, 'small') }}{{ currentuser.username }}</a>
             {% else %}
                 {% set back = request_path starts with '/auth' or request_path == '/' ? '' : '?continue=' ~ (request_path|url_encode) %}

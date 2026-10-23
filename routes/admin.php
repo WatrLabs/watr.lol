@@ -130,6 +130,20 @@ $router->group('/admin', function ($router) {
         redirect('/admin/users/' . $person->id);
     });
 
+    // for someone who lost their phone and their backup codes. check it's really them first
+    $router->post('/users/{id}/2fa-off', function ($id) {
+        require_csrf();
+        require_role('admin');
+        $person = (new authentication())->getUserInfo((int) $id);
+        if (!$person) {
+            abort(404, "That account doesn't exist.");
+        }
+        (new \watrlabs\twofactor())->disable((int) $person->id);
+        (new \watrlabs\accountmail())->notifyTwoFactor($person, false);
+        flash("Turned off two-factor for {$person->username}.", 'plain');
+        redirect('/admin/users/' . $person->id);
+    });
+
     $router->get('/categories', function () {
         require_role('admin');
         render('admin/categories.twig', ['categories' => (new categories())->all()]);

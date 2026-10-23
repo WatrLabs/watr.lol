@@ -5,6 +5,7 @@
             <h2 class="watr-side__label">forum</h2>
             <nav class="watr-side__nav">
                 <a href="/forum"{% if request_path == '/forum' %} aria-current="page"{% endif %}>all categories</a>
+                <a href="/forum/search"{% if request_path == '/forum/search' %} aria-current="page"{% endif %}>search</a>
                 {% for c in sidebar_categories() %}
                     <a href="/forum/{{ c.slug }}"{% if request_path == '/forum/' ~ c.slug or here == c.slug %} aria-current="page"{% endif %}>{{ c.name|lower }} <span class="watr-side__count">{{ c.threads|number }}</span></a>
                 {% endfor %}
@@ -15,6 +16,8 @@
         <div>
             <h2 class="watr-side__label">you</h2>
             <nav class="watr-side__nav">
+                <a href="/"{% if request_path == '/' %} aria-current="page"{% endif %}>home</a>
+                <a href="/notifications"{% if request_path starts with '/notifications' %} aria-current="page"{% endif %}>notifications{% set unread = unread_count(currentuser) %}{% if unread %} <span class="watr-side__count">{{ unread|number }}</span>{% endif %}</a>
                 <a href="/u/{{ currentuser.username }}"{% if request_path|lower == '/u/' ~ currentuser.username|lower %} aria-current="page"{% endif %}>profile</a>
                 <a href="/settings"{% if request_path starts with '/settings' %} aria-current="page"{% endif %}>settings</a>
                 <a href="/developers"{% if request_path starts with '/developers' %} aria-current="page"{% endif %}>developers</a>

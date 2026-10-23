@@ -3,6 +3,8 @@
 namespace watrlabs\forum;
 
 use watrlabs\authentication;
+use watrlabs\social\notifications;
+use watrlabs\social\reactions;
 
 class threads {
 
@@ -106,6 +108,9 @@ class threads {
 
     public function delete(int $id): void {
         global $db;
+        $postIds = array_map(fn ($p) => (int) $p->id, $db->table('forum_posts')->select('id')->where('thread_id', $id)->get());
+        (new reactions())->forget('post', $postIds);
+        (new notifications())->forget('post', $postIds);
         $db->table('forum_posts')->where('thread_id', $id)->delete();
         $db->table('forum_threads')->where('id', $id)->delete();
     }

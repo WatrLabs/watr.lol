@@ -62,3 +62,50 @@
     <img class="empty__face" src="/assets/images/blobs/u{{ faces[mood] ?? '1f610' }}.png" alt="" width="120" height="120">
 </div>
 {% endmacro %}
+
+{# blob reactions under a post or update. one form, each emoji is its own submit button.
+   site.js sends it in the background and redraws the counts. summary comes from reactions::summarize #}
+{% macro reactions(target, id, summary, back) %}
+<form method="post" action="/react" class="reacts" data-react>
+    {{ csrf_field() }}
+    <input type="hidden" name="target" value="{{ target }}">
+    <input type="hidden" name="id" value="{{ id }}">
+    <input type="hidden" name="continue" value="{{ back }}">
+    {% for emoji, r in summary %}
+        <button type="submit" name="emoji" value="{{ emoji }}" class="react{% if r.mine %} is-mine{% endif %}" aria-pressed="{{ r.mine ? 'true' : 'false' }}" title="{{ emoji }}"{% if not currentuser %} disabled{% endif %}><img src="{{ reaction_image(emoji) }}" alt="{{ emoji }}" width="20" height="20"><span>{{ r.count }}</span></button>
+    {% endfor %}
+    {% if currentuser %}
+    <details class="watr-dropdown react-pick">
+        <summary class="react react--add" aria-label="add a reaction" title="react">+</summary>
+        <div class="watr-menu react-menu">
+            {% for emoji in reaction_emoji() %}<button type="submit" name="emoji" value="{{ emoji }}" title="{{ emoji }}"><img src="{{ reaction_image(emoji) }}" alt="{{ emoji }}" width="28" height="28"></button>{% endfor %}
+        </div>
+    </details>
+    {% endif %}
+</form>
+{% endmacro %}
+
+{# follow / unfollow, or nothing when it's you or you're logged out #}
+{% macro follow_button(person, following, back) %}
+{% if currentuser and currentuser.id != person.id %}
+<form method="post" action="/u/{{ person.username }}/{{ following ? 'unfollow' : 'follow' }}" class="inline-form">
+    {{ csrf_field() }}
+    <input type="hidden" name="continue" value="{{ back }}">
+    <button type="submit" class="watr-btn{% if following %} watr-btn--quiet{% endif %}">{{ following ? 'Following' : 'Follow' }}</button>
+</form>
+{% endif %}
+{% endmacro %}
+
+{# a person in a list: blob, name, @handle, and a follow button #}
+{% macro person_row(person, following, back) %}
+{% import _self as m %}
+<li class="person-row">
+    <a href="/u/{{ person.username }}" class="person-row__pic">{{ m.avatar(person) }}</a>
+    <div class="person-row__text">
+        {{ m.name(person) }} {{ m.role_tag(person) }}
+        <small class="muted">@{{ person.username }}{% if person.pronouns %} &middot; {{ person.pronouns }}{% endif %}</small>
+        {% if person.bio %}<small class="person-row__bio">{{ person.bio|length > 120 ? person.bio|slice(0, 120) ~ '…' : person.bio }}</small>{% endif %}
+    </div>
+    {{ m.follow_button(person, following, back) }}
+</li>
+{% endmacro %}

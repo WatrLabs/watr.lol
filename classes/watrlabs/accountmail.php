@@ -83,6 +83,30 @@ class accountmail {
         ]);
     }
 
+    public function notifyTwoFactor($user, bool $on): void {
+        if (!$user->email) {
+            return;
+        }
+        $app = $_ENV['APP_NAME'] ?? 'watr.lol';
+        mail::send($user->email, $on ? "Two-factor login is on for $app" : "Two-factor login was turned off on $app", 'twofactor_changed', [
+            'user' => $user,
+            'on' => $on,
+            'ip' => sitefunctions::getip(),
+            'link' => $this->link('/settings/security'),
+        ]);
+    }
+
+    // sent before the account goes, it's the last time we have their address
+    public function notifyDeleted($user): void {
+        if (!$user->email) {
+            return;
+        }
+        mail::send($user->email, 'Your ' . ($_ENV['APP_NAME'] ?? 'watr.lol') . ' account was deleted', 'account_deleted', [
+            'user' => $user,
+            'ip' => sitefunctions::getip(),
+        ]);
+    }
+
     // goes to the old address, that's the one that can say "wait, that wasn't me"
     public function notifyEmailChanged($user, string $oldEmail, string $newEmail): void {
         mail::send($oldEmail, 'Your ' . ($_ENV['APP_NAME'] ?? 'watr.lol') . ' email was changed', 'email_changed', [

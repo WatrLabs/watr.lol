@@ -12,7 +12,11 @@
         <p class="muted small">
             #{{ person.id }} &middot; joined {{ person.created|day }} &middot; {{ post_count|number }} posts &middot; {{ sessions }} signed-in {{ sessions == 1 ? 'device' : 'devices' }}
             &middot; {{ person.password ? 'has a password' : 'no password' }}{% if links %} &middot; linked: {{ links|keys|join(', ') }}{% endif %}
+            &middot; two-factor {{ person.totp_secret ? 'on' : 'off' }}
         </p>
+        {% if person.totp_secret %}
+            {{ m.action('/admin/users/' ~ person.id ~ '/2fa-off', 'Turn off two-factor', {confirm: "Only do this if they've lost their phone and backup codes, and you're sure it's really them. They get an email about it.", title: 'turn off two-factor', button: 'Turn it off'}) }}
+        {% endif %}
     </div>
 </section>
 

@@ -50,6 +50,7 @@
                 {% if post.edited %}<span class="muted" title="{{ post.edited|date('j M Y, H:i') }}">edited</span>{% endif %}
             </div>
             <div class="prose">{{ post.body|markup }}</div>
+            {{ m.reactions('post', post.id, reactions[post.id] ?? [], '/forum/t/' ~ thread.id ~ (pager.page > 1 ? '?page=' ~ pager.page : '') ~ '#p' ~ post.id) }}
             {% if currentuser and (is_staff or (post.user_id == currentuser.id and not thread.locked)) %}
             <div class="post__actions">
                 <a href="/forum/p/{{ post.id }}/edit">edit</a>

@@ -2,7 +2,14 @@
 {% import "snippets/macros.twig" as m %}
 {% block pageName %}Forum{% endblock %}
 {% block body %}
-<h1>Forum</h1>
+<div class="page__head">
+    <h1>Forum</h1>
+    <form method="get" action="/forum/search" class="watr-row search" role="search">
+        <label class="sr-only" for="forum-q">search the forum</label>
+        <input type="search" name="q" id="forum-q" placeholder="search the forum" maxlength="100">
+        <button type="submit" class="watr-btn watr-btn--quiet">Search</button>
+    </form>
+</div>
 
 {% if categories %}
 <div class="watr-table-wrap">

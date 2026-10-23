@@ -33,6 +33,7 @@ try {
         'auth',
         'connections',
         'account',
+        'social',
         'forum',
         'projects',
         'oauth',

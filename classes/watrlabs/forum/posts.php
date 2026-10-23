@@ -3,6 +3,8 @@
 namespace watrlabs\forum;
 
 use watrlabs\authentication;
+use watrlabs\social\notifications;
+use watrlabs\social\reactions;
 
 class posts {
 
@@ -90,6 +92,8 @@ class posts {
         }
 
         $db->table('forum_posts')->where('id', $post->id)->delete();
+        (new reactions())->forget('post', [(int) $post->id]);
+        (new notifications())->forget('post', [(int) $post->id]);
         (new threads())->recount($post->thread_id);
     }
 

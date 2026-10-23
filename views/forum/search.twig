@@ -1,0 +1,46 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}{{ q ? 'Search: ' ~ q : 'Search the forum' }}{% endblock %}
+{% block body %}
+<ol class="watr-crumbs">
+    <li><a href="/forum">forum</a></li>
+    <li aria-current="page">search</li>
+</ol>
+
+<form method="get" action="/forum/search" class="watr-row search search--big" role="search">
+    <label class="sr-only" for="search-q">search the forum</label>
+    <input type="search" name="q" id="search-q" value="{{ q }}" placeholder="search the forum" maxlength="100" autofocus>
+    <button type="submit" class="watr-btn">Search</button>
+</form>
+
+{% if q|length >= 2 %}
+    {% if threads %}
+    <section class="section measure-wide">
+        <h2>Threads</h2>
+        {% include 'snippets/thread_list.twig' with {threads: threads} %}
+    </section>
+    {% endif %}
+
+    <section class="section measure-wide">
+        <h2>Posts{% if pager and pager.total %} <span class="muted small">{{ pager.total|number }}</span>{% endif %}</h2>
+        {% if results %}
+            <ul class="plain-list search-results">
+            {% for r in results %}
+                <li>
+                    <a href="/forum/p/{{ r.id }}" class="thread-link">{{ r.title }}</a>
+                    <p class="search-results__snip">{{ r.snippet }}</p>
+                    <small class="muted">{{ m.name(r.author) }} &middot; {{ r.created|ago }}</small>
+                </li>
+            {% endfor %}
+            </ul>
+            {{ m.pages(pager, '/forum/search?q=' ~ (q|url_encode)) }}
+        {% elseif not threads %}
+            {{ m.empty('Nothing found', 'No posts mention "' ~ q ~ '". Try fewer or different words.', 'upside') }}
+        {% else %}
+            <p class="muted">No posts mention it, just the thread titles above.</p>
+        {% endif %}
+    </section>
+{% elseif q %}
+    <p class="muted">Type at least 2 characters.</p>
+{% endif %}
+{% endblock %}

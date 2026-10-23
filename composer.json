@@ -11,6 +11,7 @@
         "usmanhalalit/pixie": "^2.0",
         "robmorgan/phinx": "^0.16.10",
         "twig/twig": "^3.0",
-        "phpmailer/phpmailer": "^6.10"
+        "phpmailer/phpmailer": "^6.10",
+        "chillerlan/php-qrcode": "^5.0"
     }
 }

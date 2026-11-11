@@ -9,6 +9,7 @@
     --watr-chroma: 1.1;        /* a touch louder than watrfiles */
     --watr-head-weight: 800;   /* and heavier headings */
     --watr-sidebar-w: 240px;
+    --watr-bar-h: 52px;        /* a touch taller than the kit's 45, like watrfall's bar */
 }
 
 /* ---------- page ---------- */
@@ -219,9 +220,6 @@ select { cursor: pointer; }
 /* ---------- footer ---------- */
 .watr-footer a { color: inherit; text-underline-offset: 3px; }
 
-/* ---------- bar ---------- */
-.watr-bar__home { display: inline-flex; align-items: center; gap: 7px; }
-.watr-bar__home img { width: 26px; height: 26px; flex: none; }
 
 /* ---------- projects ---------- */
 .projects {
@@ -248,8 +246,6 @@ select { cursor: pointer; }
 
 /* ---------- sidebar bits ---------- */
 .watr-side__nav form { display: contents; }
-/* .muted above is unlayered, so it would beat the kit's white-on-color rule */
-.watr-side--color .muted { color: rgb(255 255 255 / 0.75); }
 .watr-side__foot .watr-btn { padding: 8px 10px; }
 
 /* ---------- cards, facts, stats ---------- */
@@ -582,3 +578,54 @@ select { cursor: pointer; }
 .search-results { gap: 0; }
 .search-results li { padding: 12px 0; border-bottom: 1px solid var(--watr-field); }
 .search-results__snip { margin: 4px 0; line-height: 1.5; overflow-wrap: anywhere; }
+
+/* =====================================================================
+   the look, after watrfall (watr.css 0.6 carries most of it: the surface bar,
+   the waterline, sidebar icons, the columned footer, quiet tables). these are
+   the bits that are only watr.lol's.
+   ===================================================================== */
+
+/* ---------- montserrat, served from here (the csp only allows our own fonts) ---------- */
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 100 900; font-display: swap;
+    src: url("/assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 100 900; font-display: swap;
+    src: url("/assets/fonts/montserrat-latin.woff2") format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- the bar stays put, and the sidebar sits under it ---------- */
+.watr-bar { position: sticky; top: 0; z-index: 50; gap: 0 8px; }
+.watr-bar .watr-bar__me { color: var(--watr-text); }
+.watr-bar .bell { color: var(--watr-muted); padding: 6px 8px; }
+.watr-bar .bell:hover { color: var(--watr-text); }
+.watr-side__inner {
+    top: var(--watr-bar-h);
+    max-height: calc(100vh - var(--watr-bar-h));
+    gap: 10px;
+    padding-block: 14px 20px;
+}
+.watr-side__nav :not([aria-current]) > .watr-side__item svg { opacity: 0.85; }
+.watr-side__promo .watr-btn svg { width: 18px; height: 18px; }
+/* links to a post land below the sticky bar */
+.post, .feed-item { scroll-margin-top: calc(var(--watr-bar-h) + 16px); }
+
+/* the notice under the bar: still yellow, just not a second bar */
+.site-notice { min-height: 34px; justify-content: center; text-align: center; font-size: 0.9rem; font-weight: 600; }
+
+/* ---------- waterlines on our own parts ---------- */
+.reply { border-top: var(--watr-rule-w) solid; border-image: var(--watr-waterline-across) 1; }
+.danger-zone { border-image: linear-gradient(to right, var(--watr-danger), transparent) 1; }
+
+/* ---------- project cards float up toward the light when you point at them ---------- */
+.project { position: relative; transition: transform var(--watr-speed), box-shadow var(--watr-speed); }
+.project:hover { transform: translate(-2px, -2px); box-shadow: var(--watr-drop-big); }
+.project h2 a { text-decoration: none; }
+.project h2 a::after { content: ""; position: absolute; inset: 0; }   /* the whole card is the link */
+.project__host { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+    .project:hover { transform: none; }
+}

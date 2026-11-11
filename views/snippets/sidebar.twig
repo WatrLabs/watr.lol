@@ -1,13 +1,14 @@
+{% import "snippets/macros.twig" as m %}
 {% set here = active_category ?? null %}
-<aside class="watr-side watr-side--color" id="side" aria-label="sections">
+<aside class="watr-side" id="side" aria-label="sections">
     <div class="watr-side__inner">
         <div>
             <h2 class="watr-side__label">forum</h2>
             <nav class="watr-side__nav">
-                <a href="/forum"{% if request_path == '/forum' %} aria-current="page"{% endif %}>all categories</a>
-                <a href="/forum/search"{% if request_path == '/forum/search' %} aria-current="page"{% endif %}>search</a>
+                <a href="/forum"{% if request_path == '/forum' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('forum') }}all categories</span></a>
+                <a href="/forum/search"{% if request_path == '/forum/search' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('search') }}search</span></a>
                 {% for c in sidebar_categories() %}
-                    <a href="/forum/{{ c.slug }}"{% if request_path == '/forum/' ~ c.slug or here == c.slug %} aria-current="page"{% endif %}>{{ c.name|lower }} <span class="watr-side__count">{{ c.threads|number }}</span></a>
+                    <a href="/forum/{{ c.slug }}"{% if request_path == '/forum/' ~ c.slug or here == c.slug %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('hash') }}{{ c.name|lower }}</span> <span class="watr-side__count">{{ c.threads|number }}</span></a>
                 {% endfor %}
             </nav>
         </div>
@@ -16,17 +17,30 @@
         <div>
             <h2 class="watr-side__label">you</h2>
             <nav class="watr-side__nav">
-                <a href="/"{% if request_path == '/' %} aria-current="page"{% endif %}>home</a>
-                <a href="/notifications"{% if request_path starts with '/notifications' %} aria-current="page"{% endif %}>notifications{% set unread = unread_count(currentuser) %}{% if unread %} <span class="watr-side__count">{{ unread|number }}</span>{% endif %}</a>
-                <a href="/u/{{ currentuser.username }}"{% if request_path|lower == '/u/' ~ currentuser.username|lower %} aria-current="page"{% endif %}>profile</a>
-                <a href="/settings"{% if request_path starts with '/settings' %} aria-current="page"{% endif %}>settings</a>
-                <a href="/developers"{% if request_path starts with '/developers' %} aria-current="page"{% endif %}>developers</a>
+                <a href="/"{% if request_path == '/' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('home') }}home</span></a>
+                <a href="/notifications"{% if request_path starts with '/notifications' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('bell') }}notifications</span>{% set unread = unread_count(currentuser) %}{% if unread %} <span class="watr-side__count">{{ unread|number }}</span>{% endif %}</a>
+                <a href="/u/{{ currentuser.username }}"{% if request_path|lower == '/u/' ~ currentuser.username|lower %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('user') }}profile</span></a>
+                <a href="/settings"{% if request_path starts with '/settings' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('gear') }}settings</span></a>
+                <a href="/developers"{% if request_path starts with '/developers' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('code') }}developers</span></a>
                 {% if role_at_least(currentuser, 'admin') %}
-                    <a href="/admin"{% if request_path starts with '/admin' %} aria-current="page"{% endif %}>admin</a>
+                    <a href="/admin"{% if request_path starts with '/admin' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('shield') }}admin</span></a>
                 {% endif %}
-                <form method="post" action="/auth/logout">{{ csrf_field() }}<button type="submit">log out</button></form>
+                <form method="post" action="/auth/logout">{{ csrf_field() }}<button type="submit"><span class="watr-side__item">{{ m.icon('logout') }}log out</span></button></form>
             </nav>
         </div>
+        {% else %}
+        <div class="watr-side__promo">
+            <p>Log in to post, react and follow people. One account works on every watr site.</p>
+            {% set back = request_path starts with '/auth' or request_path == '/' ? '' : '?continue=' ~ (request_path|url_encode) %}
+            <a href="/auth/login{{ back }}" class="watr-btn watr-btn--quiet">{{ m.icon('login') }}Log in</a>
+        </div>
         {% endif %}
+
+        <nav class="watr-side__links" aria-label="more">
+            <a href="/people">People</a>
+            <a href="/projects">Projects</a>
+            <a href="/developers/docs">Developer docs</a>
+            <span>&copy; {{ "now"|date("Y") }} {{ env('APP_NAME') }}</span>
+        </nav>
     </div>
 </aside>

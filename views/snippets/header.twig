@@ -2,18 +2,18 @@
 {% set in_forum_search = request_path == '/forum' or request_path == '/forum/search' %}
 <nav class="watr-bar" aria-label="site">
     {% if has_sidebar ?? false %}<button type="button" class="watr-burger" data-watr-shell="app" aria-controls="side" aria-label="sidebar"></button>{% endif %}
-    <a href="/" class="watr-bar__home"><span class="watr-mark"><img src="/assets/images/logos/watrlabs-mark-dark.svg" alt="" width="24" height="24"></span>{{ env('APP_NAME') }}</a>
-    <button type="button" class="watr-bar__toggle">menu</button>
+    <a href="/" class="watr-bar__home"><span class="watr-mark"><picture><source srcset="/assets/images/logos/watrlabs-mark-dark.svg" media="(prefers-color-scheme: dark)"><img src="/assets/images/logos/watrlabs-mark.svg" alt="" width="28" height="28"></picture></span>{{ env('APP_NAME') }}</a>
+    <button type="button" class="watr-bar__toggle">Menu</button>
     <div class="watr-bar__links">
         <div class="watr-bar__group">
-            <a href="/forum"{% if request_path starts with '/forum' %} aria-current="page"{% endif %}>forum</a>
-            <a href="/people"{% if request_path starts with '/people' %} aria-current="page"{% endif %}>people</a>
-            <a href="/projects"{% if request_path starts with '/projects' %} aria-current="page"{% endif %}>projects</a>
+            <a href="/forum"{% if request_path starts with '/forum' %} aria-current="page"{% endif %}>Forum</a>
+            <a href="/people"{% if request_path starts with '/people' %} aria-current="page"{% endif %}>People</a>
+            <a href="/projects"{% if request_path starts with '/projects' %} aria-current="page"{% endif %}>Projects</a>
         </div>
         {% if not in_forum_search %}
         <form method="get" action="/forum/search" class="watr-bar__search" role="search">
-            <label class="sr-only" for="bar-q">search the forum</label>
-            <input type="search" name="q" id="bar-q" placeholder="search the forum" maxlength="100">
+            <label class="sr-only" for="bar-q">Search the forum</label>
+            <input type="search" name="q" id="bar-q" placeholder="Search the forum" maxlength="100">
             <button type="submit" aria-label="search">{{ m.icon('search') }}</button>
         </form>
         {% endif %}
@@ -24,8 +24,8 @@
                 <a href="/u/{{ currentuser.username }}" class="watr-bar__me">{{ m.avatar(currentuser, 'small') }}{{ currentuser.username }}</a>
             {% else %}
                 {% set back = request_path starts with '/auth' or request_path == '/' ? '' : '?continue=' ~ (request_path|url_encode) %}
-                <a href="/auth/login{{ back }}">log in</a>
-                <a href="/auth/register{{ back }}" class="watr-bar__cta">sign up</a>
+                <a href="/auth/login{{ back }}">Log in</a>
+                <a href="/auth/register{{ back }}" class="watr-bar__cta">Sign up</a>
             {% endif %}
         </div>
     </div>

@@ -5,7 +5,7 @@
 {% block body %}
 <ol class="watr-crumbs">
     <li><a href="/u/{{ status.author.username }}">@{{ status.author.username }}</a></li>
-    <li aria-current="page">update</li>
+    <li aria-current="page">Update</li>
 </ol>
 <div class="measure-wide">
     {% include 'snippets/feed_item.twig' with {item: {kind: 'status', id: status.id, user_id: status.user_id, body: status.body, created: status.created, author: status.author, reactions: status.reactions}, back: '/updates/' ~ status.id} %}

@@ -11,7 +11,7 @@
             <span class="muted">@{{ profile.username }}</span>
             {% if profile.pronouns %}<span class="muted">&middot; {{ profile.pronouns }}</span>{% endif %}
             {{ m.role_tag(profile) }}
-            {% if follows_me %}<span class="watr-tag">follows you</span>{% endif %}
+            {% if follows_me %}<span class="watr-tag">Follows you</span>{% endif %}
         </div>
         {% if profile.bio %}<p class="profile__bio">{{ profile.bio }}</p>{% endif %}
         {% if profile.location or profile.website %}

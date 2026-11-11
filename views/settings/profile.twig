@@ -13,23 +13,23 @@
         <p class="muted">Your picture is a blob, picked by your account number. Everyone gets one.</p>
     </div>
 
-    <label class="field-label" for="username">username</label>
+    <label class="field-label" for="username">Username</label>
     <input type="text" name="username" id="username" class="full" value="{{ user.username }}" minlength="3" maxlength="20" pattern="[A-Za-z0-9_.\-]+" autocapitalize="none" spellcheck="false" required>
     <p class="hint">Changing it changes your profile link. Sites you signed in to keep knowing it's you.</p>
 
-    <label class="field-label" for="display_name">display name</label>
+    <label class="field-label" for="display_name">Display name</label>
     <input type="text" name="display_name" id="display_name" class="full" value="{{ user.display_name }}" maxlength="40" placeholder="{{ user.username }}">
 
-    <label class="field-label" for="pronouns">pronouns</label>
+    <label class="field-label" for="pronouns">Pronouns</label>
     <input type="text" name="pronouns" id="pronouns" class="full" value="{{ user.pronouns }}" maxlength="30" placeholder="they/them">
 
-    <label class="field-label" for="bio">bio</label>
+    <label class="field-label" for="bio">Bio</label>
     <textarea name="bio" id="bio" class="full" rows="4" maxlength="500">{{ user.bio }}</textarea>
 
-    <label class="field-label" for="location">location</label>
-    <input type="text" name="location" id="location" class="full" value="{{ user.location }}" maxlength="60" placeholder="the internet">
+    <label class="field-label" for="location">Location</label>
+    <input type="text" name="location" id="location" class="full" value="{{ user.location }}" maxlength="60" placeholder="The internet">
 
-    <label class="field-label" for="website">website</label>
+    <label class="field-label" for="website">Website</label>
     <input type="url" name="website" id="website" class="full" value="{{ user.website }}" maxlength="255" placeholder="https://" autocapitalize="none" spellcheck="false">
     <p class="hint">All of these show on your profile, and are optional.</p>
 

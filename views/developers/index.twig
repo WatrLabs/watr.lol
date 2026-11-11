@@ -13,11 +13,11 @@
 {% if apps %}
 <div class="watr-table-wrap">
     <table class="watr-table watr-table--stack">
-        <thead><tr><th>app</th><th>client id</th><th>made</th></tr></thead>
+        <thead><tr><th>App</th><th>Client ID</th><th>Made</th></tr></thead>
         <tbody>
         {% for a in apps %}
             <tr>
-                <td class="is-main"><a href="/developers/{{ a.id }}" class="thread-link">{{ a.name }}</a>{% if a.trusted %} <span class="watr-tag watr-tag--bright">trusted</span>{% endif %}</td>
+                <td class="is-main"><a href="/developers/{{ a.id }}" class="thread-link">{{ a.name }}</a>{% if a.trusted %} <span class="watr-tag watr-tag--bright">Trusted</span>{% endif %}</td>
                 <td><code>{{ a.client_id }}</code></td>
                 <td class="muted">{{ a.created|day }}</td>
             </tr>

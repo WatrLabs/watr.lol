@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>watr style</title>
+<title>Watr style</title>
 <link rel="icon" href="assets/WatrLabsIcon.png">
-<link rel="stylesheet" href="watr.css?v=0.6.1">
+<link rel="stylesheet" href="watr.css?v=0.6.2">
 <style>
     /* layout for this page only. the look itself all comes from watr.css */
     .page {
@@ -64,7 +64,7 @@
     .ramp-demo { display: flex; height: 60px; width: 180px; }
     .ramp-demo i { flex: 1; }
     .rule-demo { display: flex; align-items: center; font-size: 0.8rem; }
-    .rule-demo div:first-child { border-right: var(--watr-rule-w) solid; border-image: var(--watr-waterline-down) 1; padding: 10px 14px 10px 0; text-align: right; }
+    .rule-demo div:first-child { border-right: var(--watr-waterline-w) solid var(--watr-waterline); padding: 10px 14px 10px 0; text-align: right; }
     .rule-demo div:last-child { padding-left: 14px; display: grid; gap: 4px; }
     .rule-demo span { display: block; width: 70px; height: 12px; background-color: var(--watr-field); border-radius: var(--watr-field-radius); }
     .rule-demo span:last-child { background-color: var(--watr-bright); border-radius: 0; width: 40px; }
@@ -132,7 +132,7 @@
     .mock__foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; color: var(--watr-muted); font-size: 0.9rem; }
     .mock .watr-table td:first-child, .mock .watr-table th:first-child { width: 20px; padding-right: 0; }
 
-    .theme-btn { font: inherit; font-weight: 600; background: none; border: none; color: var(--watr-on-bar); cursor: pointer; padding: 5px; text-transform: lowercase; }
+    .theme-btn { font: inherit; font-weight: 600; background: none; border: none; color: inherit; cursor: pointer; padding: 5px; }
     .theme-btn:hover { text-decoration: underline; text-underline-offset: 4px; }
     @media (max-width: 600px) { .theme-btn { padding: 0 20px; } }
 
@@ -147,18 +147,18 @@
 
 <nav class="watr-bar" aria-label="sections">
     <a href="#top" class="watr-bar__home"><span class="watr-mark"><img src="assets/WatrLabsIcon.png" alt=""></span>watr style</a>
-    <button type="button" class="watr-bar__toggle">menu</button>
+    <button type="button" class="watr-bar__toggle">Menu</button>
     <div class="watr-bar__links">
     <div class="watr-bar__group">
-        <a href="#knobs">knobs</a>
-        <a href="#keep">keep</a>
-        <a href="#parts">parts</a>
-        <a href="#mockup">mockup</a>
-        <a href="#voice">voice</a>
-        <a href="#new-site">new site</a>
+        <a href="#knobs">Knobs</a>
+        <a href="#keep">Keep</a>
+        <a href="#parts">Parts</a>
+        <a href="#mockup">Mockup</a>
+        <a href="#voice">Voice</a>
+        <a href="#new-site">New site</a>
     </div>
     <div class="watr-bar__group">
-        <button class="theme-btn" id="theme-toggle" type="button">dark</button>
+        <button class="theme-btn" id="theme-toggle" type="button">Dark</button>
     </div>
     </div>
 </nav>
@@ -169,53 +169,53 @@
 <main class="page" id="top">
 
     <section>
-        <h1>the watr style</h1>
+        <h1>The watr style</h1>
         <p class="lede">How my sites look, written down so every new one starts from the same place. One hue at four depths, square buttons, soft fields, and shadows that always fall down and to the right. The hue, the intensity and the depth change from site to site. The rest stays put, and that's how you can tell it's mine.</p>
     </section>
 
     <section id="knobs">
-        <h2>knobs</h2>
+        <h2>Knobs</h2>
         <p class="lede">These change per site. Drag them and the whole page follows. When it feels right, copy the snippet into the new site's CSS after <code>watr.css</code>.</p>
 
         <div class="tuner">
             <div>
                 <div class="knob">
-                    <label for="k-hue">hue</label>
+                    <label for="k-hue">Hue</label>
                     <input type="range" id="k-hue" min="0" max="359" step="1" value="196">
                     <output for="k-hue" id="o-hue">196</output>
                 </div>
                 <div class="knob">
-                    <label for="k-chroma">intensity</label>
+                    <label for="k-chroma">Intensity</label>
                     <input type="range" id="k-chroma" min="0.3" max="1.4" step="0.05" value="1">
                     <output for="k-chroma" id="o-chroma">1</output>
                 </div>
                 <div class="knob">
-                    <label for="k-lift">lift</label>
+                    <label for="k-lift">Lift</label>
                     <input type="range" id="k-lift" min="0" max="12" step="1" value="5">
                     <output for="k-lift" id="o-lift">5px</output>
                 </div>
                 <div class="knob">
-                    <label for="k-weight">heading weight</label>
+                    <label for="k-weight">Heading weight</label>
                     <input type="range" id="k-weight" min="400" max="900" step="100" value="700">
                     <output for="k-weight" id="o-weight">700</output>
                 </div>
                 <div class="knob">
-                    <label for="k-side">sidebar width</label>
+                    <label for="k-side">Sidebar width</label>
                     <input type="range" id="k-side" min="180" max="320" step="10" value="250">
                     <output for="k-side" id="o-side">250px</output>
                 </div>
 
                 <div class="presets">
-                    <p>real sites</p>
+                    <p>Real sites</p>
                     <div class="watr-row" id="presets-real">
-                        <button type="button" class="watr-btn" data-hue="196" data-chroma="1" data-lift="5" data-weight="700">watrfiles</button>
-                        <button type="button" class="watr-btn" data-hue="237" data-chroma="1.05" data-lift="5" data-weight="700">watrlabs logo</button>
+                        <button type="button" class="watr-btn" data-hue="196" data-chroma="1" data-lift="5" data-weight="700">Watrfiles</button>
+                        <button type="button" class="watr-btn" data-hue="237" data-chroma="1.05" data-lift="5" data-weight="700">Watrlabs logo</button>
                     </div>
-                    <p style="margin-top: 12px;">made-up examples, to show how far the knobs go</p>
+                    <p style="margin-top: 12px;">Made-up examples, to show how far the knobs go</p>
                     <div class="watr-row" id="presets-example">
-                        <button type="button" class="watr-btn" data-hue="32" data-chroma="1.1" data-lift="8" data-weight="900">loud orange</button>
-                        <button type="button" class="watr-btn" data-hue="150" data-chroma="0.55" data-lift="3" data-weight="500">calm green</button>
-                        <button type="button" class="watr-btn" data-hue="300" data-chroma="0.9" data-lift="6" data-weight="800">purple</button>
+                        <button type="button" class="watr-btn" data-hue="32" data-chroma="1.1" data-lift="8" data-weight="900">Loud orange</button>
+                        <button type="button" class="watr-btn" data-hue="150" data-chroma="0.55" data-lift="3" data-weight="500">Calm green</button>
+                        <button type="button" class="watr-btn" data-hue="300" data-chroma="0.9" data-lift="6" data-weight="800">Purple</button>
                     </div>
                 </div>
             </div>
@@ -223,92 +223,92 @@
             <div class="snippet">
                 <pre id="snippet" aria-label="CSS for these settings"></pre>
                 <div class="watr-row">
-                    <small id="copy-note">paste after watr.css</small>
-                    <button type="button" class="watr-btn watr-btn--quiet" id="copy">copy</button>
+                    <small id="copy-note">Paste after watr.css</small>
+                    <button type="button" class="watr-btn watr-btn--quiet" id="copy">Copy</button>
                 </div>
             </div>
         </div>
 
         <div class="ramp" aria-label="the water ramp">
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-bright)"></div><div class="chip__text"><b>bright</b><span data-swatch="78% 0.13">-</span></div></div>
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-mid)"></div><div class="chip__text"><b>mid</b><span data-swatch="69% 0.11">-</span></div></div>
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-bar)"></div><div class="chip__text"><b>bar</b><span data-swatch="64% 0.10">-</span></div></div>
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-deep)"></div><div class="chip__text"><b>deep</b><span data-swatch="41% 0.07">-</span></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-bright)"></div><div class="chip__text"><b>Bright</b><span data-swatch="78% 0.13">-</span></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-mid)"></div><div class="chip__text"><b>Mid</b><span data-swatch="69% 0.11">-</span></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-bar)"></div><div class="chip__text"><b>Bar</b><span data-swatch="64% 0.10">-</span></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-deep)"></div><div class="chip__text"><b>Deep</b><span data-swatch="41% 0.07">-</span></div></div>
         </div>
         <div class="ramp ramp--small">
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-page)"></div><div class="chip__text"><b>page</b></div></div>
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-surface)"></div><div class="chip__text"><b>surface</b></div></div>
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-panel)"></div><div class="chip__text"><b>panel</b></div></div>
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-field)"></div><div class="chip__text"><b>field</b></div></div>
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-text)"></div><div class="chip__text"><b>text</b></div></div>
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-danger)"></div><div class="chip__text"><b>danger</b><span>#cc2828</span></div></div>
-            <div class="chip"><div class="chip__fill" style="background: var(--watr-warning)"></div><div class="chip__text"><b>warning</b><span>#ffc800</span></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-page)"></div><div class="chip__text"><b>Page</b></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-surface)"></div><div class="chip__text"><b>Surface</b></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-panel)"></div><div class="chip__text"><b>Panel</b></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-field)"></div><div class="chip__text"><b>Field</b></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-text)"></div><div class="chip__text"><b>Text</b></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-danger)"></div><div class="chip__text"><b>Danger</b><span>#cc2828</span></div></div>
+            <div class="chip"><div class="chip__fill" style="background: var(--watr-warning)"></div><div class="chip__text"><b>Warning</b><span>#ffc800</span></div></div>
         </div>
     </section>
 
     <section id="keep">
-        <h2>keep</h2>
+        <h2>Keep</h2>
         <p class="lede">The signature. Every site gets all of these, whatever the knobs say.</p>
 
         <div class="sigs">
             <div class="sig">
                 <div class="sig__demo"><div class="ramp-demo"><i style="background: var(--watr-bright)"></i><i style="background: var(--watr-mid)"></i><i style="background: var(--watr-bar)"></i><i style="background: var(--watr-deep)"></i></div></div>
-                <h3>one hue, four depths</h3>
+                <h3>One hue, four depths</h3>
                 <p>Bright for buttons, mid for hover, bar for the frame, deep for disabled. No second accent. Red and yellow only ever mean danger and warning.</p>
             </div>
             <div class="sig">
                 <div class="sig__demo"><div class="lift-demo"></div><div class="lift-demo"></div></div>
-                <h3>light from the top-left</h3>
+                <h3>Light from the top-left</h3>
                 <p>Every raised thing casts its shadow down and to the right, equal x, y and blur. Never a soft glow all around.</p>
             </div>
             <div class="sig">
                 <div class="sig__demo"><div class="mini-page"><i class="b"></i><i class="s"></i><i class="l"></i><i class="l"></i><i class="f"></i></div></div>
-                <h3>framed by bars</h3>
+                <h3>Framed by bars</h3>
                 <p>A full-width bar on top, optional notice strips stacked under it, a footer at the bottom. The bars are the surface color with normal text, so the page doesn't shout; the hue is saved for what you can press. The bar and its strips are one block, so only the bottom of the stack casts a shadow.</p>
             </div>
             <div class="sig">
-                <div class="sig__demo"><div class="rule-demo"><div><b>login</b><br>the watr files</div><div><span></span><span></span><span></span></div></div></div>
-                <h3>the waterline</h3>
-                <p>Two-sided layouts put words on the left and the thing on the right, split by a 3px line that fades through the ramp, bright to mid and out. On phones it goes flat and runs left to right. The same line sits under table headers and tabs.</p>
+                <div class="sig__demo"><div class="rule-demo"><div><b>Login</b><br>the watr files</div><div><span></span><span></span><span></span></div></div></div>
+                <h3>The waterline</h3>
+                <p>Two-sided layouts put words on the left and the thing on the right, split by one thin solid line in the hue. On phones it goes flat. The same line sits under table headers and tabs.</p>
             </div>
             <div class="sig">
                 <div class="sig__demo"><div class="rule-demo"><div style="border: none; padding: 0;"><span style="background: var(--watr-field); border-radius: var(--watr-field-radius); width: 90px; height: 28px;"></span></div><div><span style="width: 70px; height: 28px;"></span></div></div></div>
-                <h3>square buttons, soft fields</h3>
+                <h3>Square buttons, soft fields</h3>
                 <p>Buttons have hard corners and black text on bright. Fields are filled grey, no border, slightly rounded. The contrast between the two is the point.</p>
             </div>
             <div class="sig">
                 <div class="sig__demo"><img src="assets/thinking.png" alt="" width="80" height="80"><img src="assets/blobpanic.png" alt="" width="80" height="80"></div>
-                <h3>the blob</h3>
+                <h3>The blob</h3>
                 <p>Error and empty states get a big expressive blob emoji beside the message. Each site can pick its own face.</p>
             </div>
             <div class="sig">
-                <div class="sig__demo"><div class="voice-demo"><b>home &nbsp;files &nbsp;accounts</b><i>- sword 2026</i></div></div>
-                <h3>lowercase, deadpan</h3>
-                <p>Nav and labels in lowercase. Copy says what happened in plain words, with one in-joke per page at most.</p>
+                <div class="sig__demo"><div class="voice-demo"><b>Home &nbsp;Files &nbsp;Accounts</b><i>- sword 2026</i></div></div>
+                <h3>Plain, deadpan</h3>
+                <p>Everything in normal sentence case. Copy says what happened in plain words, with one in-joke per page at most.</p>
             </div>
             <div class="sig">
                 <div class="sig__demo"><div class="speed-demo"></div></div>
-                <h3>everything moves at 0.2s</h3>
+                <h3>Everything moves at 0.2s</h3>
                 <p>Hover, open, close, theme change: one speed for all of it. Hover this box. Turned off for people who ask for reduced motion.</p>
             </div>
         </div>
     </section>
 
     <section id="parts">
-        <h2>parts</h2>
+        <h2>Parts</h2>
         <p class="lede">The pieces in <code>watr.css</code>. Class names are under each heading.</p>
 
         <div class="parts">
             <div class="part">
-                <h3>frame <code>.watr-bar</code> <code>__search</code> <code>__cta</code> <code>.watr-mark</code> <code>.watr-strip</code> <code>.watr-footer--cols</code></h3>
+                <h3>Frame <code>.watr-bar</code> <code>__search</code> <code>__cta</code> <code>.watr-mark</code> <code>.watr-strip</code> <code>.watr-footer--cols</code></h3>
                 <div class="stage stage--flush">
                     <nav class="watr-bar" aria-label="example">
                         <a href="#" class="watr-bar__home"><span class="watr-mark"><img src="assets/WatrLabsIcon.png" alt=""></span>watrfiles</a>
-                        <button type="button" class="watr-bar__toggle">menu</button>
+                        <button type="button" class="watr-bar__toggle">Menu</button>
                         <div class="watr-bar__links">
-                            <div class="watr-bar__group"><a href="#" aria-current="page">home</a><a href="#">files</a></div>
-                            <form class="watr-bar__search" role="search" onsubmit="event.preventDefault()"><input type="search" placeholder="search files" aria-label="search files"><button type="submit" aria-label="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
-                            <div class="watr-bar__group"><a href="#">log in</a><a href="#" class="watr-bar__cta">sign up</a></div>
+                            <div class="watr-bar__group"><a href="#" aria-current="page">Home</a><a href="#">Files</a></div>
+                            <form class="watr-bar__search" role="search" onsubmit="event.preventDefault()"><input type="search" placeholder="Search files" aria-label="search files"><button type="submit" aria-label="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
+                            <div class="watr-bar__group"><a href="#">Log in</a><a href="#" class="watr-bar__cta">Sign up</a></div>
                         </div>
                     </nav>
                     <div class="watr-strip"><p>This site is incomplete!</p></div>
@@ -317,9 +317,9 @@
                     <footer class="watr-footer watr-footer--cols">
                         <div class="watr-footer__cols">
                             <div class="watr-footer__brand"><a href="#"><span class="watr-mark"><img src="assets/WatrLabsIcon.png" alt=""></span>watrfiles</a><p>files, but watr.</p></div>
-                            <nav aria-label="explore"><h2>explore</h2><a href="#">home</a><a href="#">files</a></nav>
-                            <nav aria-label="account"><h2>account</h2><a href="#">log in</a><a href="#">sign up</a></nav>
-                            <nav aria-label="help"><h2>help</h2><a href="#">status</a><a href="#">contact</a></nav>
+                            <nav aria-label="explore"><h2>Explore</h2><a href="#">Home</a><a href="#">Files</a></nav>
+                            <nav aria-label="account"><h2>Account</h2><a href="#">Log in</a><a href="#">Sign up</a></nav>
+                            <nav aria-label="help"><h2>Help</h2><a href="#">Status</a><a href="#">Contact</a></nav>
                         </div>
                         <div class="watr-footer__base">&copy; 2026 watrLabs</div>
                     </footer>
@@ -328,7 +328,7 @@
             </div>
 
             <div class="part">
-                <h3>buttons and fields <code>.watr-btn</code></h3>
+                <h3>Buttons and fields <code>.watr-btn</code></h3>
                 <div class="stage watr-stack" style="gap: 15px;">
                     <div class="watr-row">
                         <button type="button" class="watr-btn">Upload</button>
@@ -337,14 +337,14 @@
                         <button type="button" class="watr-btn" disabled>Uploading...</button>
                     </div>
                     <div class="fields">
-                        <input type="text" id="demo-user" placeholder="username" autocomplete="off">
-                        <input type="password" id="demo-pass" placeholder="password" autocomplete="off">
+                        <input type="text" id="demo-user" placeholder="Username" autocomplete="off">
+                        <input type="password" id="demo-pass" placeholder="Password" autocomplete="off">
                     </div>
                 </div>
             </div>
 
             <div class="part">
-                <h3>checks and switches <code>.watr-check .watr-switch</code></h3>
+                <h3>Checks and switches <code>.watr-check .watr-switch</code></h3>
                 <div class="stage checks">
                     <div class="watr-stack">
                         <label class="watr-check"><input type="checkbox" id="c-public" checked> public link</label>
@@ -360,32 +360,32 @@
                         <label class="watr-switch"><input type="checkbox" role="switch" id="s-email" checked> email me when someone shares</label>
                         <label class="watr-switch"><input type="checkbox" role="switch" id="s-hidden"> show hidden files</label>
                         <select id="sel-keep" aria-label="keep files for">
-                            <option>keep files forever</option>
-                            <option>delete after 30 days</option>
-                            <option>delete after a year</option>
+                            <option>Keep files forever</option>
+                            <option>Delete after 30 days</option>
+                            <option>Delete after a year</option>
                         </select>
                     </div>
                 </div>
             </div>
 
             <div class="part">
-                <h3>tabs and dropdowns <code>.watr-tabs .watr-dropdown .watr-menu</code></h3>
+                <h3>Tabs and dropdowns <code>.watr-tabs .watr-dropdown .watr-menu</code></h3>
                 <div class="stage watr-stack" style="gap: 25px; align-items: stretch;">
                     <div class="watr-tabs" role="tablist" aria-label="file filters">
-                        <button type="button" class="watr-tab" role="tab" aria-selected="true">all files</button>
-                        <button type="button" class="watr-tab" role="tab" aria-selected="false">mine</button>
-                        <button type="button" class="watr-tab" role="tab" aria-selected="false">shared with me</button>
-                        <button type="button" class="watr-tab" role="tab" aria-selected="false">trash</button>
+                        <button type="button" class="watr-tab" role="tab" aria-selected="true">All files</button>
+                        <button type="button" class="watr-tab" role="tab" aria-selected="false">Mine</button>
+                        <button type="button" class="watr-tab" role="tab" aria-selected="false">Shared with me</button>
+                        <button type="button" class="watr-tab" role="tab" aria-selected="false">Trash</button>
                     </div>
                     <div style="min-height: 200px;">
                         <details class="watr-dropdown" open>
-                            <summary class="watr-btn">more</summary>
+                            <summary class="watr-btn">More</summary>
                             <div class="watr-menu">
-                                <a href="#">rename</a>
-                                <a href="#">move to...</a>
-                                <a href="#">copy link</a>
+                                <a href="#">Rename</a>
+                                <a href="#">Move to...</a>
+                                <a href="#">Copy link</a>
                                 <hr>
-                                <button type="button" class="is-danger">delete</button>
+                                <button type="button" class="is-danger">Delete</button>
                             </div>
                         </details>
                     </div>
@@ -393,7 +393,7 @@
             </div>
 
             <div class="part">
-                <h3>messages <code>.watr-msg</code></h3>
+                <h3>Messages <code>.watr-msg</code></h3>
                 <div class="stage watr-stack" style="align-items: stretch;">
                     <div class="watr-msg">Your passwords do not match.</div>
                     <div class="watr-msg watr-msg--warning">This file is over 50 MB and will take a while.</div>
@@ -402,7 +402,7 @@
             </div>
 
             <div class="part">
-                <h3>toasts <code>.watr-toast</code> <code>watr.toast()</code></h3>
+                <h3>Toasts <code>.watr-toast</code> <code>watr.toast()</code></h3>
                 <div class="stage toast-demo">
                     <div class="watr-stack" style="gap: 15px;">
                         <p class="note">They stack in the bottom-right corner, where the shadows fall. The line along the bottom is the timer: hover a toast to pause it. Danger toasts stay until you close them.</p>
@@ -414,16 +414,16 @@
                         </div>
                     </div>
                     <div class="watr-toasts" data-watr-static>
-                        <div class="watr-toast"><p>Uploaded backup.zip</p><button type="button" class="watr-toast__action">undo</button><button type="button" class="watr-toast__close" aria-label="dismiss">&times;</button><i class="watr-toast__timer" style="animation: none; transform: scaleX(0.6);"></i></div>
+                        <div class="watr-toast"><p>Uploaded backup.zip</p><button type="button" class="watr-toast__action">Undo</button><button type="button" class="watr-toast__close" aria-label="dismiss">&times;</button><i class="watr-toast__timer" style="animation: none; transform: scaleX(0.6);"></i></div>
                         <div class="watr-toast watr-toast--plain"><p>Link copied</p><button type="button" class="watr-toast__close" aria-label="dismiss">&times;</button><i class="watr-toast__timer" style="animation: none; transform: scaleX(0.3);"></i></div>
                         <div class="watr-toast watr-toast--warning"><p>You've used 90% of your storage.</p><button type="button" class="watr-toast__close" aria-label="dismiss">&times;</button><i class="watr-toast__timer" style="animation: none; transform: scaleX(0.8);"></i></div>
-                        <div class="watr-toast watr-toast--danger"><p>Upload failed. The file is over 2 GB.</p><button type="button" class="watr-toast__action">retry</button><button type="button" class="watr-toast__close" aria-label="dismiss">&times;</button></div>
+                        <div class="watr-toast watr-toast--danger"><p>Upload failed. The file is over 2 GB.</p><button type="button" class="watr-toast__action">Retry</button><button type="button" class="watr-toast__close" aria-label="dismiss">&times;</button></div>
                     </div>
                 </div>
             </div>
 
             <div class="part">
-                <h3>modals <code>.watr-dialog</code> <code>--danger</code> <code>--blob</code></h3>
+                <h3>Modals <code>.watr-dialog</code> <code>--danger</code> <code>--blob</code></h3>
                 <div class="stage stage--dim" id="dialog-stage" aria-label="modal examples"></div>
                 <div class="watr-row" style="margin-top: 15px;">
                     <button type="button" class="watr-btn" data-watr-open="dlg-rename">Open rename</button>
@@ -433,21 +433,21 @@
             </div>
 
             <div class="part">
-                <h3>table <code>.watr-table</code> <code>--compact</code> <code>--stack</code> <code>--color</code></h3>
+                <h3>Table <code>.watr-table</code> <code>--compact</code> <code>--stack</code> <code>--color</code></h3>
                 <div class="watr-table-wrap">
                     <table class="watr-table watr-table--compact watr-table--stack">
                         <thead><tr>
-                            <th aria-sort="ascending"><button type="button">user</button></th>
-                            <th>role</th>
-                            <th class="num"><button type="button">files</button></th>
-                            <th class="num"><button type="button">joined</button></th>
+                            <th aria-sort="ascending"><button type="button">User</button></th>
+                            <th>Role</th>
+                            <th class="num"><button type="button">Files</button></th>
+                            <th class="num"><button type="button">Joined</button></th>
                         </tr></thead>
                         <tbody>
-                        <tr><td class="is-main" data-sort="sword"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="sword" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--online"></i></span>sword</span></td><td><span class="watr-tag watr-tag--deep">admin</span></td><td class="num">214</td><td class="num">2025-03-14</td></tr>
-                        <tr><td class="is-main" data-sort="watrboi"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="watrboi" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--away"></i></span>watrboi</span></td><td><span class="watr-tag watr-tag--deep">admin</span></td><td class="num">1,032</td><td class="num">2024-11-02</td></tr>
-                        <tr><td class="is-main" data-sort="bubbles"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="bubbles" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--online"></i></span>bubbles</span></td><td><span class="watr-tag">member</span></td><td class="num">87</td><td class="num">2026-01-18</td></tr>
-                        <tr><td class="is-main" data-sort="centipede"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="centipede" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--busy"></i></span>centipede</span></td><td><span class="watr-tag">member</span></td><td class="num">12</td><td class="num">2026-09-30</td></tr>
-                        <tr><td class="is-main" data-sort="lurker"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--person" data-watr-name="lurker" aria-hidden="true"><i class="watr-avatar__status"></i></span>lurker</span></td><td><span class="watr-tag watr-tag--danger">banned</span></td><td class="num">0</td><td class="num">2026-05-05</td></tr>
+                        <tr><td class="is-main" data-sort="sword"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="sword" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--online"></i></span>sword</span></td><td><span class="watr-tag watr-tag--deep">Admin</span></td><td class="num">214</td><td class="num">2025-03-14</td></tr>
+                        <tr><td class="is-main" data-sort="watrboi"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="watrboi" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--away"></i></span>watrboi</span></td><td><span class="watr-tag watr-tag--deep">Admin</span></td><td class="num">1,032</td><td class="num">2024-11-02</td></tr>
+                        <tr><td class="is-main" data-sort="bubbles"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="bubbles" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--online"></i></span>bubbles</span></td><td><span class="watr-tag">Member</span></td><td class="num">87</td><td class="num">2026-01-18</td></tr>
+                        <tr><td class="is-main" data-sort="centipede"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="centipede" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--busy"></i></span>centipede</span></td><td><span class="watr-tag">Member</span></td><td class="num">12</td><td class="num">2026-09-30</td></tr>
+                        <tr><td class="is-main" data-sort="lurker"><span class="user-cell"><span class="watr-avatar watr-avatar--small watr-avatar--person" data-watr-name="lurker" aria-hidden="true"><i class="watr-avatar__status"></i></span>lurker</span></td><td><span class="watr-tag watr-tag--danger">Banned</span></td><td class="num">0</td><td class="num">2026-05-05</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -455,16 +455,16 @@
             </div>
 
             <div class="part">
-                <h3>small stuff <code>.watr-tag .watr-avatar .watr-crumbs .watr-pages .watr-progress .watr-loading [data-watr-tip]</code></h3>
+                <h3>Small stuff <code>.watr-tag .watr-avatar .watr-crumbs .watr-pages .watr-progress .watr-loading [data-watr-tip]</code></h3>
                 <div class="stage small-grid">
                     <div>
-                        <h4>tags</h4>
+                        <h4>Tags</h4>
                         <div class="watr-row">
-                            <span class="watr-tag watr-tag--bright">public</span>
-                            <span class="watr-tag">private</span>
-                            <span class="watr-tag watr-tag--deep">admin</span>
-                            <span class="watr-tag watr-tag--warning">expires friday</span>
-                            <span class="watr-tag watr-tag--danger">banned</span>
+                            <span class="watr-tag watr-tag--bright">Public</span>
+                            <span class="watr-tag">Private</span>
+                            <span class="watr-tag watr-tag--deep">Admin</span>
+                            <span class="watr-tag watr-tag--warning">Expires friday</span>
+                            <span class="watr-tag watr-tag--danger">Banned</span>
                         </div>
                     </div>
                     <div>
@@ -472,10 +472,10 @@
                         <div class="watr-row" style="gap: 12px; align-items: flex-end;">
                             <span class="watr-avatar watr-avatar--big watr-avatar--blob" data-watr-name="sword" role="img" aria-label="sword, online"><i class="watr-avatar__status watr-avatar__status--online"></i></span>
                             <span class="watr-avatar watr-avatar--person" role="img" aria-label="no picture, away"><i class="watr-avatar__status watr-avatar__status--away"></i></span>
-                            <span class="watr-avatar" role="img" aria-label="watrboi, busy">wb<i class="watr-avatar__status watr-avatar__status--busy"></i></span>
+                            <span class="watr-avatar" role="img" aria-label="watrboi, busy">Wb<i class="watr-avatar__status watr-avatar__status--busy"></i></span>
                             <span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-blob="2" role="img" aria-label="offline"><i class="watr-avatar__status"></i></span>
                         </div>
-                        <h4 style="margin-top: 18px;">the six blobs</h4>
+                        <h4 style="margin-top: 18px;">The six blobs</h4>
                         <div class="watr-row" style="gap: 8px;">
                             <span class="watr-avatar watr-avatar--blob" data-watr-blob="0" role="img" aria-label="happy blob"></span>
                             <span class="watr-avatar watr-avatar--blob" data-watr-blob="1" role="img" aria-label="surprised blob"></span>
@@ -486,15 +486,15 @@
                         </div>
                     </div>
                     <div>
-                        <h4>breadcrumbs</h4>
+                        <h4>Breadcrumbs</h4>
                         <ol class="watr-crumbs">
-                            <li><a href="#">files</a></li>
-                            <li><a href="#">backups</a></li>
+                            <li><a href="#">Files</a></li>
+                            <li><a href="#">Backups</a></li>
                             <li aria-current="page">2026</li>
                         </ol>
                     </div>
                     <div>
-                        <h4>pagination</h4>
+                        <h4>Pagination</h4>
                         <nav class="watr-pages" aria-label="pages">
                             <a href="#" aria-label="previous page">&lsaquo;</a>
                             <a href="#">1</a>
@@ -506,36 +506,36 @@
                         </nav>
                     </div>
                     <div>
-                        <h4>progress</h4>
+                        <h4>Progress</h4>
                         <progress class="watr-progress" value="62" max="100" aria-label="upload progress"></progress>
                         <p class="note" style="margin-top: 6px;">uploading old-site.tar.gz, 62%</p>
                     </div>
                     <div>
-                        <h4>loading and tooltip</h4>
+                        <h4>Loading and tooltip</h4>
                         <div class="watr-row" style="gap: 20px;">
                             <span class="watr-loading" role="status" aria-label="loading"><i></i><i></i><i></i></span>
-                            <button type="button" class="watr-btn watr-btn--quiet" data-watr-tip="Anyone with the link can download">copy link</button>
+                            <button type="button" class="watr-btn watr-btn--quiet" data-watr-tip="Anyone with the link can download">Copy link</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="part">
-                <h3>split <code>.watr-split</code></h3>
+                <h3>Split <code>.watr-split</code></h3>
                 <div class="stage">
                     <div class="watr-split">
                         <div class="watr-split__aside">
                             <h1>Login</h1>
                             <blockquote class="watr-quote">
-                                <b>the watr files</b><br>
+                                <b>The watr files</b><br>
                                 so basically like you<br>
                                 know when like the centipedes<br>🐛
-                                <cite>sword 2026</cite>
+                                <cite>Sword 2026</cite>
                             </blockquote>
                         </div>
                         <form class="watr-split__main watr-stack" onsubmit="event.preventDefault()">
-                            <input type="text" id="split-user" placeholder="username" autocomplete="off">
-                            <input type="password" id="split-pass" placeholder="password" autocomplete="off">
+                            <input type="text" id="split-user" placeholder="Username" autocomplete="off">
+                            <input type="password" id="split-pass" placeholder="Password" autocomplete="off">
                             <button type="submit" class="watr-btn" style="margin-top: 10px;">Login</button>
                         </form>
                     </div>
@@ -543,7 +543,7 @@
             </div>
 
             <div class="part">
-                <h3>blob <code>.watr-blob</code></h3>
+                <h3>Blob <code>.watr-blob</code></h3>
                 <div class="stage">
                     <div class="watr-blob">
                         <div>
@@ -560,16 +560,16 @@
             </div>
 
             <div class="part">
-                <h3>sidebar <code>.watr-shell .watr-side</code> <code>__item</code> <code>__promo</code> <code>__links</code> <code>--color</code> <code>.watr-burger</code></h3>
+                <h3>Sidebar <code>.watr-shell .watr-side</code> <code>__item</code> <code>__promo</code> <code>__links</code> <code>--color</code> <code>.watr-burger</code></h3>
                 <div class="stage side-demo" id="side-demo" aria-label="sidebar examples"></div>
                 <p class="note" style="margin-top: 10px;">Light on the left, <code>--color</code> on the right. Always on the left side of the page, so its shadow falls onto the content. See it working in the mockup.</p>
             </div>
 
             <div class="part">
-                <h3>panel <code>.watr-panel</code></h3>
+                <h3>Panel <code>.watr-panel</code></h3>
                 <div class="stage">
                     <div class="watr-panel" style="max-width: 360px;">
-                        <b>backup.zip</b>
+                        <b>Backup.zip</b>
                         <p style="margin: 4px 0 12px; color: var(--watr-muted);">12.4 MB · uploaded by sword</p>
                         <div class="watr-row"><a class="watr-btn" href="#parts">Download</a><a class="watr-btn watr-btn--quiet" href="#parts">Share</a></div>
                     </div>
@@ -579,7 +579,7 @@
     </section>
 
     <section id="mockup">
-        <h2>mockup</h2>
+        <h2>Mockup</h2>
         <p class="lede">A watrfiles page made only from the parts above. It works: pick a folder in the sidebar, switch tabs, sort the columns, tick rows, try Upload, or use the more menu.</p>
 
         <div class="mock-controls">
@@ -591,11 +591,11 @@
             <nav class="watr-bar" aria-label="watrfiles">
                 <button type="button" class="watr-burger" data-watr-shell="mock-shell" aria-controls="mock-side" aria-label="sidebar"></button>
                 <a href="#" class="watr-bar__home"><span class="watr-mark"><img src="assets/WatrLabsIcon.png" alt=""></span>watrfiles</a>
-                <button type="button" class="watr-bar__toggle">menu</button>
+                <button type="button" class="watr-bar__toggle">Menu</button>
                 <div class="watr-bar__links">
-                    <div class="watr-bar__group"><a href="#">home</a><a href="#" aria-current="page">files</a></div>
-                    <form class="watr-bar__search" role="search" onsubmit="event.preventDefault()"><input type="search" placeholder="search files" aria-label="search files"><button type="submit" aria-label="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
-                    <div class="watr-bar__group"><a href="#">accounts</a><a href="#" class="watr-bar__me"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="sword" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--online"></i></span>sword</a></div>
+                    <div class="watr-bar__group"><a href="#">Home</a><a href="#" aria-current="page">files</a></div>
+                    <form class="watr-bar__search" role="search" onsubmit="event.preventDefault()"><input type="search" placeholder="Search files" aria-label="search files"><button type="submit" aria-label="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
+                    <div class="watr-bar__group"><a href="#">Accounts</a><a href="#" class="watr-bar__me"><span class="watr-avatar watr-avatar--small watr-avatar--blob" data-watr-name="sword" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--online"></i></span>sword</a></div>
                 </div>
             </nav>
             <div class="watr-strip"><p>This site is incomplete!</p></div>
@@ -604,7 +604,7 @@
                 <aside class="watr-side" id="mock-side" aria-label="folders">
                     <div class="watr-side__inner">
                         <div>
-                            <h2 class="watr-side__label">files</h2>
+                            <h2 class="watr-side__label">Files</h2>
                             <nav class="watr-side__nav" id="mock-folders">
                                 <a href="#"><span class="watr-side__item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M3 6h7l2 2h9v11H3Z"/></svg>all files</span> <span class="watr-side__count">128</span></a>
                                 <a href="#" aria-current="page"><span class="watr-side__item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5v-9Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></svg>backups</span> <span class="watr-side__count">5</span></a>
@@ -614,7 +614,7 @@
                             </nav>
                         </div>
                         <div>
-                            <h2 class="watr-side__label">you</h2>
+                            <h2 class="watr-side__label">You</h2>
                             <nav class="watr-side__nav">
                                 <a href="#"><span class="watr-side__item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>accounts</span></a>
                                 <a href="#"><span class="watr-side__item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>settings</span></a>
@@ -623,12 +623,12 @@
                         </div>
                         <div class="watr-side__foot">
                             <div>
-                                <div class="side-meter"><b>storage</b><span class="muted">4.1 of 10 GB</span></div>
+                                <div class="side-meter"><b>Storage</b><span class="muted">4.1 of 10 GB</span></div>
                                 <progress class="watr-progress" value="41" max="100" aria-label="storage used"></progress>
                             </div>
                             <div class="watr-side__me">
                                 <span class="watr-avatar watr-avatar--blob" data-watr-name="sword" aria-hidden="true"><i class="watr-avatar__status watr-avatar__status--online"></i></span>
-                                <span>sword<small>online</small></span>
+                                <span>Sword<small>online</small></span>
                             </div>
                         </div>
                     </div>
@@ -636,55 +636,55 @@
 
                 <div class="watr-shell__main mock__body">
                 <ol class="watr-crumbs">
-                    <li><a href="#">files</a></li>
-                    <li aria-current="page" id="mock-crumb">backups</li>
+                    <li><a href="#">Files</a></li>
+                    <li aria-current="page" id="mock-crumb">Backups</li>
                 </ol>
 
                 <div class="mock__head">
-                    <h1 id="mock-title">backups</h1>
+                    <h1 id="mock-title">Backups</h1>
                     <div class="watr-row">
                         <button type="button" class="watr-btn" id="mock-upload">Upload</button>
                         <details class="watr-dropdown watr-dropdown--right">
-                            <summary class="watr-btn watr-btn--quiet">more</summary>
+                            <summary class="watr-btn watr-btn--quiet">More</summary>
                             <div class="watr-menu">
-                                <button type="button" data-watr-open="dlg-rename">rename</button>
-                                <button type="button" id="mock-copy">copy link</button>
+                                <button type="button" data-watr-open="dlg-rename">Rename</button>
+                                <button type="button" id="mock-copy">Copy link</button>
                                 <hr>
-                                <button type="button" class="is-danger" data-watr-open="dlg-delete">delete</button>
+                                <button type="button" class="is-danger" data-watr-open="dlg-delete">Delete</button>
                             </div>
                         </details>
                     </div>
                 </div>
 
                 <div class="mock__upload" id="mock-progress-row" hidden>
-                    <span>uploading notes-2.txt</span>
+                    <span>Uploading notes-2.txt</span>
                     <progress class="watr-progress" id="mock-progress" value="0" max="100" aria-label="upload progress"></progress>
                     <output id="mock-progress-text">0%</output>
                 </div>
 
                 <div class="watr-tabs" role="tablist" aria-label="file filters">
-                    <button type="button" class="watr-tab" role="tab" aria-selected="true">all files</button>
-                    <button type="button" class="watr-tab" role="tab" aria-selected="false">mine</button>
-                    <button type="button" class="watr-tab" role="tab" aria-selected="false">shared with me</button>
-                    <button type="button" class="watr-tab" role="tab" aria-selected="false">trash</button>
+                    <button type="button" class="watr-tab" role="tab" aria-selected="true">All files</button>
+                    <button type="button" class="watr-tab" role="tab" aria-selected="false">Mine</button>
+                    <button type="button" class="watr-tab" role="tab" aria-selected="false">Shared with me</button>
+                    <button type="button" class="watr-tab" role="tab" aria-selected="false">Trash</button>
                 </div>
 
                 <div class="watr-table-wrap">
                     <table class="watr-table watr-table--stack">
                         <thead><tr>
                             <th><label class="watr-check"><input type="checkbox" id="mf-all" aria-label="select all files"></label></th>
-                            <th aria-sort="ascending"><button type="button">name</button></th>
-                            <th class="num"><button type="button">size</button></th>
-                            <th><button type="button">owner</button></th>
-                            <th class="num"><button type="button">uploaded</button></th>
-                            <th>sharing</th>
+                            <th aria-sort="ascending"><button type="button">Name</button></th>
+                            <th class="num"><button type="button">Size</button></th>
+                            <th><button type="button">Owner</button></th>
+                            <th class="num"><button type="button">Uploaded</button></th>
+                            <th>Sharing</th>
                         </tr></thead>
                         <tbody>
-                                <tr class="is-selected"><td><label class="watr-check"><input type="checkbox" id="mf-0" aria-label="select backup.zip" checked></label></td><td class="is-main">backup.zip</td><td class="num" data-sort="13002342">12.4 MB</td><td class="muted">sword</td><td class="num">2026-10-02</td><td><span class="watr-tag watr-tag--bright">public</span></td></tr>
-                                <tr><td><label class="watr-check"><input type="checkbox" id="mf-1" aria-label="select centipede.png"></label></td><td class="is-main">centipede.png</td><td class="num" data-sort="860160">840 KB</td><td class="muted">sword</td><td class="num">2026-09-28</td><td><span class="watr-tag">private</span></td></tr>
-                                <tr><td><label class="watr-check"><input type="checkbox" id="mf-2" aria-label="select old-site.tar.gz"></label></td><td class="is-main">old-site.tar.gz</td><td class="num" data-sort="163577856">156 MB</td><td class="muted">watrboi</td><td class="num">2026-08-11</td><td><span class="watr-tag watr-tag--bright">public</span></td></tr>
-                                <tr><td><label class="watr-check"><input type="checkbox" id="mf-3" aria-label="select watrlabs-logo.psd"></label></td><td class="is-main">watrlabs-logo.psd</td><td class="num" data-sort="24222105">23.1 MB</td><td class="muted">watrboi</td><td class="num">2026-07-30</td><td><span class="watr-tag">private</span></td></tr>
-                                <tr><td><label class="watr-check"><input type="checkbox" id="mf-4" aria-label="select notes.txt"></label></td><td class="is-main">notes.txt</td><td class="num" data-sort="2048">2 KB</td><td class="muted">sword</td><td class="num">2026-06-04</td><td><span class="watr-tag watr-tag--warning">expires friday</span></td></tr>
+                                <tr class="is-selected"><td><label class="watr-check"><input type="checkbox" id="mf-0" aria-label="select backup.zip" checked></label></td><td class="is-main">Backup.zip</td><td class="num" data-sort="13002342">12.4 MB</td><td class="muted">Sword</td><td class="num">2026-10-02</td><td><span class="watr-tag watr-tag--bright">Public</span></td></tr>
+                                <tr><td><label class="watr-check"><input type="checkbox" id="mf-1" aria-label="select centipede.png"></label></td><td class="is-main">Centipede.png</td><td class="num" data-sort="860160">840 KB</td><td class="muted">Sword</td><td class="num">2026-09-28</td><td><span class="watr-tag">Private</span></td></tr>
+                                <tr><td><label class="watr-check"><input type="checkbox" id="mf-2" aria-label="select old-site.tar.gz"></label></td><td class="is-main">Old-site.tar.gz</td><td class="num" data-sort="163577856">156 MB</td><td class="muted">Watrboi</td><td class="num">2026-08-11</td><td><span class="watr-tag watr-tag--bright">Public</span></td></tr>
+                                <tr><td><label class="watr-check"><input type="checkbox" id="mf-3" aria-label="select watrlabs-logo.psd"></label></td><td class="is-main">Watrlabs-logo.psd</td><td class="num" data-sort="24222105">23.1 MB</td><td class="muted">Watrboi</td><td class="num">2026-07-30</td><td><span class="watr-tag">Private</span></td></tr>
+                                <tr><td><label class="watr-check"><input type="checkbox" id="mf-4" aria-label="select notes.txt"></label></td><td class="is-main">Notes.txt</td><td class="num" data-sort="2048">2 KB</td><td class="muted">Sword</td><td class="num">2026-06-04</td><td><span class="watr-tag watr-tag--warning">Expires friday</span></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -704,9 +704,9 @@
             <footer class="watr-footer watr-footer--cols">
                 <div class="watr-footer__cols">
                     <div class="watr-footer__brand"><a href="#"><span class="watr-mark"><img src="assets/WatrLabsIcon.png" alt=""></span>watrfiles</a><p>files, but watr.</p></div>
-                    <nav aria-label="explore"><h2>explore</h2><a href="#">home</a><a href="#">files</a></nav>
-                    <nav aria-label="you"><h2>you</h2><a href="#">accounts</a><a href="#">settings</a></nav>
-                    <nav aria-label="help"><h2>help</h2><a href="#">status</a><a href="#">contact</a></nav>
+                    <nav aria-label="explore"><h2>Explore</h2><a href="#">Home</a><a href="#">Files</a></nav>
+                    <nav aria-label="you"><h2>You</h2><a href="#">Accounts</a><a href="#">settings</a></nav>
+                    <nav aria-label="help"><h2>Help</h2><a href="#">Status</a><a href="#">Contact</a></nav>
                 </div>
                 <div class="watr-footer__base">&copy; 2026 watrLabs</div>
             </footer>
@@ -714,25 +714,25 @@
     </section>
 
     <section id="voice">
-        <h2>voice</h2>
-        <p class="lede">Lowercase where it's chrome, normal case where it's a sentence. Plain about what happened, a little weird around the edges.</p>
+        <h2>Voice</h2>
+        <p class="lede">Normal sentence case everywhere. Plain about what happened, a little weird around the edges.</p>
         <div class="watr-table-wrap" style="margin-top: 15px;">
             <table class="watr-table watr-table--stack voice">
-                <thead><tr><th>where</th><th>like this</th><th>not this</th></tr></thead>
+                <thead><tr><th>Where</th><th>Like this</th><th>Not this</th></tr></thead>
                 <tbody>
-                    <tr><td class="is-main">nav links</td><td>home · files · accounts</td><td class="muted">Home · My Files · Account Settings</td></tr>
-                    <tr><td class="is-main">buttons</td><td>Go back · Upload · Delete file</td><td class="muted">Submit · OK · Click here</td></tr>
-                    <tr><td class="is-main">errors</td><td>Your passwords do not match.</td><td class="muted">Oops! Something went wrong 😅</td></tr>
-                    <tr><td class="is-main">server errors</td><td>An issue occurred on our side! Try again later. + panic blob</td><td class="muted">Error 500: Internal Server Error</td></tr>
-                    <tr><td class="is-main">side panels</td><td>one in-joke quote with a fake attribution, like "- sword 2026"</td><td class="muted">a marketing blurb about the product</td></tr>
-                    <tr><td class="is-main">notices</td><td>This site is incomplete!</td><td class="muted">We're working hard to bring you an amazing experience</td></tr>
+                    <tr><td class="is-main">Nav links</td><td>home · files · accounts</td><td class="muted">Home · My Files · Account Settings</td></tr>
+                    <tr><td class="is-main">Buttons</td><td>Go back · Upload · Delete file</td><td class="muted">Submit · OK · Click here</td></tr>
+                    <tr><td class="is-main">Errors</td><td>Your passwords do not match.</td><td class="muted">Oops! Something went wrong 😅</td></tr>
+                    <tr><td class="is-main">Server errors</td><td>An issue occurred on our side! Try again later. + panic blob</td><td class="muted">Error 500: Internal Server Error</td></tr>
+                    <tr><td class="is-main">Side panels</td><td>one in-joke quote with a fake attribution, like "- sword 2026"</td><td class="muted">A marketing blurb about the product</td></tr>
+                    <tr><td class="is-main">Notices</td><td>This site is incomplete!</td><td class="muted">We're working hard to bring you an amazing experience</td></tr>
                 </tbody>
             </table>
         </div>
     </section>
 
     <section id="new-site">
-        <h2>new site</h2>
+        <h2>New site</h2>
         <p class="lede">Do these in order when starting something new.</p>
         <ol class="recipe">
             <li>Link <code>watr.css</code> before your own CSS.</li>
@@ -750,9 +750,9 @@
 
 <dialog class="watr-dialog" id="dlg-rename" aria-labelledby="dlg-rename-title">
     <form method="dialog">
-        <div class="watr-dialog__head"><h2 id="dlg-rename-title">rename file</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
+        <div class="watr-dialog__head"><h2 id="dlg-rename-title">Rename file</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
         <div class="watr-dialog__body">
-            <label class="field-label" for="rename-input">new name</label>
+            <label class="field-label" for="rename-input">New name</label>
             <input class="dialog-input" id="rename-input" value="backup.zip" autocomplete="off">
         </div>
         <div class="watr-dialog__foot">
@@ -764,9 +764,9 @@
 
 <dialog class="watr-dialog watr-dialog--danger" id="dlg-delete" aria-labelledby="dlg-delete-title">
     <form method="dialog">
-        <div class="watr-dialog__head"><h2 id="dlg-delete-title">delete file?</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
+        <div class="watr-dialog__head"><h2 id="dlg-delete-title">Delete file?</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
         <div class="watr-dialog__body">
-            <p><b>backup.zip</b> will be gone for good. Anyone with the link loses access too.</p>
+            <p><b>Backup.zip</b> will be gone for good. Anyone with the link loses access too.</p>
         </div>
         <div class="watr-dialog__foot">
             <button type="button" class="watr-btn watr-btn--quiet" data-watr-close>Keep it</button>
@@ -776,7 +776,7 @@
 </dialog>
 
 <dialog class="watr-dialog watr-dialog--blob" id="dlg-expired" aria-labelledby="dlg-expired-title">
-    <div class="watr-dialog__head"><h2 id="dlg-expired-title">logged out</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
+    <div class="watr-dialog__head"><h2 id="dlg-expired-title">Logged out</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
     <div class="watr-dialog__body">
         <p>Your session ran out, so you got logged out. The upload you started is saved as a draft.</p>
         <img class="watr-blob__face" src="assets/blobpanic.png" alt="Screaming face emoji" width="90" height="90">
@@ -786,7 +786,7 @@
     </div>
 </dialog>
 
-<script src="watr.js?v=0.6.1"></script>
+<script src="watr.js?v=0.6.2"></script>
 <script>
     const root = document.documentElement;
     const knobs = {

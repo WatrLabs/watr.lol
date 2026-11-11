@@ -16,7 +16,7 @@
             <input type="hidden" name="continue" value="{{ here }}">
             {{ m.avatar(currentuser) }}
             <div class="compose__main">
-                <label class="sr-only" for="update-body">post an update</label>
+                <label class="sr-only" for="update-body">Post an update</label>
                 <textarea name="body" id="update-body" rows="2" maxlength="500" placeholder="What's up?" required data-count="update-count"></textarea>
                 <div class="compose__foot">
                     <span class="muted small" id="update-count" aria-live="polite">500 left</span>
@@ -27,8 +27,8 @@
 
         <section class="feed">
             <nav class="watr-tabs" aria-label="feed">
-                <a class="watr-tab" href="/?feed=following"{% if scope == 'following' %} aria-current="page"{% endif %}>following</a>
-                <a class="watr-tab" href="/?feed=everyone"{% if scope == 'everyone' %} aria-current="page"{% endif %}>everyone</a>
+                <a class="watr-tab" href="/?feed=following"{% if scope == 'following' %} aria-current="page"{% endif %}>Following</a>
+                <a class="watr-tab" href="/?feed=everyone"{% if scope == 'everyone' %} aria-current="page"{% endif %}>Everyone</a>
             </nav>
 
             {% for item in feed %}

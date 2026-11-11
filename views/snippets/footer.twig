@@ -1,31 +1,31 @@
 <footer class="watr-footer watr-footer--cols">
     <div class="watr-footer__cols">
         <div class="watr-footer__brand">
-            <a href="/"><span class="watr-mark"><img src="/assets/images/logos/watrlabs-mark-dark.svg" alt="" width="24" height="24"></span>{{ env('APP_NAME') }}</a>
-            <p>{{ env('APP_DESC') }}.</p>
+            <a href="/"><span class="watr-mark"><picture><source srcset="/assets/images/logos/watrlabs-mark-dark.svg" media="(prefers-color-scheme: dark)"><img src="/assets/images/logos/watrlabs-mark.svg" alt="" width="28" height="28"></picture></span>{{ env('APP_NAME') }}</a>
+            <p>{{ env('APP_DESC')|capitalize }}.</p>
         </div>
         <nav aria-label="explore">
-            <h2>explore</h2>
-            <a href="/forum">forum</a>
-            <a href="/people">people</a>
-            <a href="/projects">projects</a>
+            <h2>Explore</h2>
+            <a href="/forum">Forum</a>
+            <a href="/people">People</a>
+            <a href="/projects">Projects</a>
         </nav>
         <nav aria-label="your account">
-            <h2>account</h2>
+            <h2>Account</h2>
             {% if currentuser %}
-                <a href="/u/{{ currentuser.username }}">profile</a>
-                <a href="/settings">settings</a>
-                <a href="/notifications">notifications</a>
+                <a href="/u/{{ currentuser.username }}">Profile</a>
+                <a href="/settings">Settings</a>
+                <a href="/notifications">Notifications</a>
             {% else %}
-                <a href="/auth/login">log in</a>
-                <a href="/auth/register">sign up</a>
-                <a href="/auth/forgot">forgot password</a>
+                <a href="/auth/login">Log in</a>
+                <a href="/auth/register">Sign up</a>
+                <a href="/auth/forgot">Forgot password</a>
             {% endif %}
         </nav>
         <nav aria-label="developers">
-            <h2>developers</h2>
-            <a href="/developers">your apps</a>
-            <a href="/developers/docs">docs</a>
+            <h2>Developers</h2>
+            <a href="/developers">Your apps</a>
+            <a href="/developers/docs">Docs</a>
         </nav>
     </div>
     <div class="watr-footer__base">&copy; {{ "now"|date("Y") }} watrLabs</div>
@@ -34,7 +34,7 @@
 {# one shared "are you sure?" dialog. site.js fills it in from the form's data-confirm #}
 <dialog class="watr-dialog watr-dialog--danger" id="confirm">
     <form method="dialog">
-        <div class="watr-dialog__head"><h2 id="confirm-title">are you sure?</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
+        <div class="watr-dialog__head"><h2 id="confirm-title">Are you sure?</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
         <div class="watr-dialog__body"><p id="confirm-text"></p></div>
         <div class="watr-dialog__foot">
             <button type="button" class="watr-btn watr-btn--quiet" data-watr-close>Cancel</button>

@@ -10,14 +10,14 @@
 {%- if user -%}
 <a href="/u/{{ user.username }}" class="person">{{ user.display_name ?: user.username }}</a>
 {%- else -%}
-<span class="person muted">deleted</span>
+<span class="person muted">Deleted</span>
 {%- endif -%}
 {% endmacro %}
 
 {% macro role_tag(user) %}
-{%- if user and user.banned -%}<span class="watr-tag watr-tag--danger">banned</span>
-{%- elseif user and user.role == 'admin' -%}<span class="watr-tag watr-tag--bright">admin</span>
-{%- elseif user and user.role == 'mod' -%}<span class="watr-tag watr-tag--deep">mod</span>
+{%- if user and user.banned -%}<span class="watr-tag watr-tag--danger">Banned</span>
+{%- elseif user and user.role == 'admin' -%}<span class="watr-tag watr-tag--bright">Admin</span>
+{%- elseif user and user.role == 'mod' -%}<span class="watr-tag watr-tag--deep">Mod</span>
 {%- endif -%}
 {% endmacro %}
 
@@ -44,7 +44,7 @@
 
 {# a one-button form. data-confirm makes site.js ask first, using the danger dialog #}
 {% macro action(url, label, opts) %}
-<form method="post" action="{{ url }}" class="inline-form"{% if opts.confirm is defined %} data-confirm="{{ opts.confirm }}" data-confirm-title="{{ opts.title ?? 'are you sure?' }}" data-confirm-button="{{ opts.button ?? label }}"{% endif %}>
+<form method="post" action="{{ url }}" class="inline-form"{% if opts.confirm is defined %} data-confirm="{{ opts.confirm }}" data-confirm-title="{{ opts.title ?? 'Are you sure?' }}" data-confirm-button="{{ opts.button ?? label }}"{% endif %}>
     {{ csrf_field() }}
     {% for key, value in opts.fields ?? {} %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
     <button type="submit" class="{{ opts.class ?? 'watr-btn watr-btn--quiet' }}">{{ label }}</button>

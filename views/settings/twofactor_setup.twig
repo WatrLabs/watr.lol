@@ -12,7 +12,7 @@
         <h2 class="form__title">1. Scan this with your app</h2>
         <p class="hint">Can't scan it? Add an account by hand with this key:</p>
         <code class="twofa-secret" id="totp-secret">{{ secret }}</code>
-        <button type="button" class="link-button small" data-copy="#totp-secret">copy key</button>
+        <button type="button" class="link-button small" data-copy="#totp-secret">Copy key</button>
 
         <h2 class="form__title">2. Type the code it shows</h2>
         {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}

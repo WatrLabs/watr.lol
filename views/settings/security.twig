@@ -4,11 +4,11 @@
 {# the "prove it's you" fields every risky form here needs #}
 {% macro identity(user, twofactor, prefix) %}
     {% if user.password %}
-        <label class="field-label" for="{{ prefix }}-current">password</label>
+        <label class="field-label" for="{{ prefix }}-current">Password</label>
         <input type="password" name="current" id="{{ prefix }}-current" class="full" autocomplete="current-password" required>
     {% endif %}
     {% if twofactor %}
-        <label class="field-label" for="{{ prefix }}-code">code from your app (or a backup code)</label>
+        <label class="field-label" for="{{ prefix }}-code">Code from your app (or a backup code)</label>
         <input type="text" name="code" id="{{ prefix }}-code" class="full mono" autocomplete="one-time-code" autocapitalize="none" spellcheck="false" maxlength="11" required>
     {% endif %}
 {% endmacro %}
@@ -21,7 +21,7 @@
 <section class="card measure">
     <h2>Two-factor login</h2>
     {% if twofactor %}
-        <p><span class="watr-tag watr-tag--bright">on</span> Logging in needs a code from your authenticator app as well as your {{ user.password ? 'password' : 'linked account' }}.</p>
+        <p><span class="watr-tag watr-tag--bright">On</span> Logging in needs a code from your authenticator app as well as your {{ user.password ? 'password' : 'linked account' }}.</p>
         <p class="muted small">{{ backup_left }} of 10 backup codes left.{% if backup_left < 4 %} Make new ones soon.{% endif %}</p>
 
         <details class="security-more">
@@ -47,7 +47,7 @@
         <form method="post" action="/settings/security/2fa/start" class="watr-stack form">
             {{ csrf_field() }}
             {% if user.password %}
-                <label class="field-label" for="start-current">password</label>
+                <label class="field-label" for="start-current">Password</label>
                 <input type="password" name="current" id="start-current" class="full" autocomplete="current-password" required>
             {% endif %}
             <button type="submit" class="watr-btn">Set up two-factor</button>
@@ -61,11 +61,11 @@
         <div class="watr-msg watr-msg--warning">{{ delete_blocker }}</div>
     {% else %}
         <p>This logs you out everywhere and removes your profile, updates, follows, reactions, notifications, linked accounts, and any apps you made in developers. Sites you signed in to with {{ env('APP_NAME') }} won't know who you are anymore. <b>It can't be undone.</b></p>
-        <form method="post" action="/settings/delete" class="watr-stack form" data-confirm="Your account and everything listed is gone for good. Nobody can bring it back." data-confirm-title="delete your account" data-confirm-button="Delete my account">
+        <form method="post" action="/settings/delete" class="watr-stack form" data-confirm="Your account and everything listed is gone for good. Nobody can bring it back." data-confirm-title="Delete your account" data-confirm-button="Delete my account">
             {{ csrf_field() }}
             <label class="watr-check"><input type="checkbox" name="wipe" value="1"> Also delete my forum posts</label>
             <p class="hint">Left unticked, your posts stay but show "deleted" instead of your name, so threads still make sense. Ticked, your replies go, and threads you started go too, unless someone replied (then just your words go).</p>
-            <label class="field-label" for="confirm-username">type your username to confirm</label>
+            <label class="field-label" for="confirm-username">Type your username to confirm</label>
             <input type="text" name="confirm_username" id="confirm-username" class="full" placeholder="{{ user.username }}" autocomplete="off" autocapitalize="none" spellcheck="false" required>
             {{ here.identity(user, twofactor, 'delete') }}
             <button type="submit" class="watr-btn watr-btn--danger">Delete my account</button>

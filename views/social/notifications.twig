@@ -13,7 +13,7 @@
     {% if notes %}
     <div class="watr-row">
         {% if unread_count(currentuser) %}{{ m.action('/notifications/seen', 'Mark all read') }}{% endif %}
-        {{ m.action('/notifications/clear', 'Clear all', {confirm: 'Every notification goes away, read or not.', title: 'clear notifications', button: 'Clear all'}) }}
+        {{ m.action('/notifications/clear', 'Clear all', {confirm: 'Every notification goes away, read or not.', title: 'Clear notifications', button: 'Clear all'}) }}
     </div>
     {% endif %}
 </div>

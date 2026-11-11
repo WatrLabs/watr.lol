@@ -7,12 +7,12 @@
 <form method="post" action="/admin/categories/{{ category.id }}" class="watr-stack form measure">
     {{ csrf_field() }}
     {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
-    <label class="field-label" for="name">name</label>
+    <label class="field-label" for="name">Name</label>
     <input type="text" name="name" id="name" class="full" maxlength="60" value="{{ category.name }}" required>
-    <label class="field-label" for="slug">url name</label>
+    <label class="field-label" for="slug">URL name</label>
     <input type="text" name="slug" id="slug" class="full" maxlength="40" pattern="[a-z0-9\-]+" value="{{ category.slug }}" required>
     <p class="hint">Changing it breaks old links to /forum/{{ category.slug }}.</p>
-    <label class="field-label" for="description">description</label>
+    <label class="field-label" for="description">Description</label>
     <input type="text" name="description" id="description" class="full" maxlength="255" value="{{ category.description }}">
     <label class="watr-check"><input type="checkbox" name="staff_only" value="1"{% if category.staff_only %} checked{% endif %}> only staff can start threads</label>
     <div class="watr-row">

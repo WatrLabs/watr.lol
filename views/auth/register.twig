@@ -15,14 +15,14 @@
             <form method="post" action="/auth/register" class="watr-stack auth__form">
                 {{ csrf_field() }}
                 <input type="hidden" name="continue" value="{{ continue }}">
-                <label class="sr-only" for="username">username</label>
-                <input type="text" name="username" id="username" placeholder="username" value="{{ username ?? '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" minlength="3" maxlength="20" pattern="[A-Za-z0-9_.\-]+" required autofocus>
-                <label class="sr-only" for="email">email (optional)</label>
-                <input type="email" name="email" id="email" placeholder="email (optional)" value="{{ email ?? '' }}" maxlength="254" autocomplete="email">
-                <label class="sr-only" for="password">password</label>
-                <input type="password" name="password" id="password" placeholder="password" autocomplete="new-password" minlength="8" required>
-                <label class="sr-only" for="password_confirm">password again</label>
-                <input type="password" name="password_confirm" id="password_confirm" placeholder="password again" autocomplete="new-password" minlength="8" required>
+                <label class="sr-only" for="username">Username</label>
+                <input type="text" name="username" id="username" placeholder="Username" value="{{ username ?? '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" minlength="3" maxlength="20" pattern="[A-Za-z0-9_.\-]+" required autofocus>
+                <label class="sr-only" for="email">Email (optional)</label>
+                <input type="email" name="email" id="email" placeholder="Email (optional)" value="{{ email ?? '' }}" maxlength="254" autocomplete="email">
+                <label class="sr-only" for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="Password" autocomplete="new-password" minlength="8" required>
+                <label class="sr-only" for="password_confirm">Password again</label>
+                <input type="password" name="password_confirm" id="password_confirm" placeholder="Password again" autocomplete="new-password" minlength="8" required>
                 <p class="hint">3 to 20 letters, numbers, dots, dashes or underscores. Passwords need 8 characters. An email lets you reset your password.</p>
                 {{ turnstile() }}
                 <button type="submit" class="watr-btn auth__submit">Sign up</button>

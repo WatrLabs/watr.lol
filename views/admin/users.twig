@@ -5,20 +5,20 @@
 {% include 'admin/tabs.twig' %}
 
 <form method="get" action="/admin/users" class="watr-row search">
-    <label class="sr-only" for="q">search usernames</label>
-    <input type="search" name="q" id="q" value="{{ search }}" placeholder="search usernames">
+    <label class="sr-only" for="q">Search usernames</label>
+    <input type="search" name="q" id="q" value="{{ search }}" placeholder="Search usernames">
     <button type="submit" class="watr-btn watr-btn--quiet">Search</button>
 </form>
 
 {% if users %}
 <div class="watr-table-wrap">
     <table class="watr-table watr-table--stack">
-        <thead><tr><th>person</th><th>role</th><th>joined</th><th>last seen</th></tr></thead>
+        <thead><tr><th>Person</th><th>Role</th><th>Joined</th><th>Last seen</th></tr></thead>
         <tbody>
         {% for u in users %}
             <tr>
                 <td class="is-main"><span class="user-cell">{{ m.avatar(u, 'small') }}<a href="/admin/users/{{ u.id }}">{{ u.username }}</a></span></td>
-                <td>{{ m.role_tag(u) }}{% if u.role == 'user' and not u.banned %}<span class="muted">user</span>{% endif %}</td>
+                <td>{{ m.role_tag(u) }}{% if u.role == 'user' and not u.banned %}<span class="muted">User</span>{% endif %}</td>
                 <td class="muted">{{ u.created|day }}</td>
                 <td class="muted">{{ u.last_seen ? u.last_seen|ago : 'never' }}</td>
             </tr>

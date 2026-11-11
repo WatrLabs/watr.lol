@@ -3,29 +3,29 @@
 <aside class="watr-side" id="side" aria-label="sections">
     <div class="watr-side__inner">
         <div>
-            <h2 class="watr-side__label">forum</h2>
+            <h2 class="watr-side__label">Forum</h2>
             <nav class="watr-side__nav">
-                <a href="/forum"{% if request_path == '/forum' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('forum') }}all categories</span></a>
-                <a href="/forum/search"{% if request_path == '/forum/search' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('search') }}search</span></a>
+                <a href="/forum"{% if request_path == '/forum' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('forum') }}All categories</span></a>
+                <a href="/forum/search"{% if request_path == '/forum/search' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('search') }}Search</span></a>
                 {% for c in sidebar_categories() %}
-                    <a href="/forum/{{ c.slug }}"{% if request_path == '/forum/' ~ c.slug or here == c.slug %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('hash') }}{{ c.name|lower }}</span> <span class="watr-side__count">{{ c.threads|number }}</span></a>
+                    <a href="/forum/{{ c.slug }}"{% if request_path == '/forum/' ~ c.slug or here == c.slug %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('hash') }}{{ c.name }}</span> <span class="watr-side__count">{{ c.threads|number }}</span></a>
                 {% endfor %}
             </nav>
         </div>
 
         {% if currentuser %}
         <div>
-            <h2 class="watr-side__label">you</h2>
+            <h2 class="watr-side__label">You</h2>
             <nav class="watr-side__nav">
-                <a href="/"{% if request_path == '/' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('home') }}home</span></a>
-                <a href="/notifications"{% if request_path starts with '/notifications' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('bell') }}notifications</span>{% set unread = unread_count(currentuser) %}{% if unread %} <span class="watr-side__count">{{ unread|number }}</span>{% endif %}</a>
-                <a href="/u/{{ currentuser.username }}"{% if request_path|lower == '/u/' ~ currentuser.username|lower %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('user') }}profile</span></a>
-                <a href="/settings"{% if request_path starts with '/settings' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('gear') }}settings</span></a>
-                <a href="/developers"{% if request_path starts with '/developers' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('code') }}developers</span></a>
+                <a href="/"{% if request_path == '/' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('home') }}Home</span></a>
+                <a href="/notifications"{% if request_path starts with '/notifications' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('bell') }}Notifications</span>{% set unread = unread_count(currentuser) %}{% if unread %} <span class="watr-side__count">{{ unread|number }}</span>{% endif %}</a>
+                <a href="/u/{{ currentuser.username }}"{% if request_path|lower == '/u/' ~ currentuser.username|lower %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('user') }}Profile</span></a>
+                <a href="/settings"{% if request_path starts with '/settings' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('gear') }}Settings</span></a>
+                <a href="/developers"{% if request_path starts with '/developers' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('code') }}Developers</span></a>
                 {% if role_at_least(currentuser, 'admin') %}
-                    <a href="/admin"{% if request_path starts with '/admin' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('shield') }}admin</span></a>
+                    <a href="/admin"{% if request_path starts with '/admin' %} aria-current="page"{% endif %}><span class="watr-side__item">{{ m.icon('shield') }}Admin</span></a>
                 {% endif %}
-                <form method="post" action="/auth/logout">{{ csrf_field() }}<button type="submit"><span class="watr-side__item">{{ m.icon('logout') }}log out</span></button></form>
+                <form method="post" action="/auth/logout">{{ csrf_field() }}<button type="submit"><span class="watr-side__item">{{ m.icon('logout') }}Log out</span></button></form>
             </nav>
         </div>
         {% else %}
@@ -36,11 +36,5 @@
         </div>
         {% endif %}
 
-        <nav class="watr-side__links" aria-label="more">
-            <a href="/people">People</a>
-            <a href="/projects">Projects</a>
-            <a href="/developers/docs">Developer docs</a>
-            <span>&copy; {{ "now"|date("Y") }} {{ env('APP_NAME') }}</span>
-        </nav>
     </div>
 </aside>

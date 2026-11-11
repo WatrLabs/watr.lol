@@ -10,8 +10,8 @@
 </ol>
 
 <nav class="watr-tabs" aria-label="follows">
-    <a class="watr-tab" href="/u/{{ profile.username }}/followers"{% if which == 'followers' %} aria-current="page"{% endif %}>followers</a>
-    <a class="watr-tab" href="/u/{{ profile.username }}/following"{% if which == 'following' %} aria-current="page"{% endif %}>following</a>
+    <a class="watr-tab" href="/u/{{ profile.username }}/followers"{% if which == 'followers' %} aria-current="page"{% endif %}>Followers</a>
+    <a class="watr-tab" href="/u/{{ profile.username }}/following"{% if which == 'following' %} aria-current="page"{% endif %}>Following</a>
 </nav>
 
 {% if people %}

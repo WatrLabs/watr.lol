@@ -7,11 +7,11 @@
 {% if categories %}
 <div class="watr-table-wrap">
     <table class="watr-table watr-table--stack">
-        <thead><tr><th>category</th><th>url</th><th class="num">threads</th><th>order</th><th></th></tr></thead>
+        <thead><tr><th>Category</th><th>URL</th><th class="num">Threads</th><th>Order</th><th></th></tr></thead>
         <tbody>
         {% for c in categories %}
             <tr>
-                <td class="is-main">{{ c.name }}{% if c.staff_only %} <span class="watr-tag">staff posts</span>{% endif %}</td>
+                <td class="is-main">{{ c.name }}{% if c.staff_only %} <span class="watr-tag">Staff posts</span>{% endif %}</td>
                 <td><code>/forum/{{ c.slug }}</code></td>
                 <td class="num">{{ c.threads|number }}</td>
                 <td>
@@ -24,7 +24,7 @@
                     <div class="watr-row row-end">
                         <a class="watr-btn watr-btn--quiet" href="/admin/categories/{{ c.id }}">Edit</a>
                         {% if c.threads == 0 %}
-                            {{ m.action('/admin/categories/' ~ c.id ~ '/delete', 'Delete', {class: 'watr-btn watr-btn--danger', confirm: 'The ' ~ c.name ~ ' category goes away. It has no threads, so nothing else is lost.', title: 'delete category', button: 'Delete category'}) }}
+                            {{ m.action('/admin/categories/' ~ c.id ~ '/delete', 'Delete', {class: 'watr-btn watr-btn--danger', confirm: 'The ' ~ c.name ~ ' category goes away. It has no threads, so nothing else is lost.', title: 'Delete category', button: 'Delete category'}) }}
                         {% endif %}
                     </div>
                 </td>
@@ -40,11 +40,11 @@
     <form method="post" action="/admin/categories" class="watr-stack form measure">
         {{ csrf_field() }}
         {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
-        <label class="field-label" for="name">name</label>
+        <label class="field-label" for="name">Name</label>
         <input type="text" name="name" id="name" class="full" maxlength="60" value="{{ form.name ?? '' }}" required>
-        <label class="field-label" for="slug">url name</label>
-        <input type="text" name="slug" id="slug" class="full" maxlength="40" pattern="[a-z0-9\-]+" value="{{ form.slug ?? '' }}" placeholder="made from the name if you leave it empty">
-        <label class="field-label" for="description">description</label>
+        <label class="field-label" for="slug">URL name</label>
+        <input type="text" name="slug" id="slug" class="full" maxlength="40" pattern="[a-z0-9\-]+" value="{{ form.slug ?? '' }}" placeholder="Made from the name if you leave it empty">
+        <label class="field-label" for="description">Description</label>
         <input type="text" name="description" id="description" class="full" maxlength="255" value="{{ form.description ?? '' }}">
         <label class="watr-check"><input type="checkbox" name="staff_only" value="1"{% if form.staff_only ?? false %} checked{% endif %}> only staff can start threads</label>
         <button type="submit" class="watr-btn">Make category</button>

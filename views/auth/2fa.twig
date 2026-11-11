@@ -11,7 +11,7 @@
         {% if error is defined %}<div class="watr-msg" role="alert">{{ error }}</div>{% endif %}
         <form method="post" action="/auth/2fa" class="watr-stack auth__form">
             {{ csrf_field() }}
-            <label class="sr-only" for="code">code</label>
+            <label class="sr-only" for="code">Code</label>
             <input type="text" name="code" id="code" class="mono twofa-code" placeholder="123456" autocomplete="one-time-code" autocapitalize="none" spellcheck="false" maxlength="11" required autofocus>
             <div class="auth__row">
                 <button type="submit" class="watr-btn auth__submit">Log in</button>

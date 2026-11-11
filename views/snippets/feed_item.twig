@@ -19,12 +19,12 @@
         <div class="feed-item__foot">
             {{ m.reactions(item.kind, item.id, item.reactions, back ~ '#' ~ item.kind ~ item.id) }}
             {% if item.kind == 'status' and currentuser and (currentuser.id == item.user_id or role_at_least(currentuser, 'mod')) %}
-                <form method="post" action="/updates/{{ item.id }}/delete" class="inline-form feed-item__delete" data-confirm="This update will be gone for good." data-confirm-title="delete update" data-confirm-button="Delete">
+                <form method="post" action="/updates/{{ item.id }}/delete" class="inline-form feed-item__delete" data-confirm="This update will be gone for good." data-confirm-title="Delete update" data-confirm-button="Delete">
                     {{ csrf_field() }}<input type="hidden" name="continue" value="{{ back }}">
-                    <button type="submit" class="link-button">delete</button>
+                    <button type="submit" class="link-button">Delete</button>
                 </form>
             {% elseif item.kind == 'post' %}
-                <a href="{{ link }}" class="feed-item__open">open</a>
+                <a href="{{ link }}" class="feed-item__open">Open</a>
             {% endif %}
         </div>
     </div>

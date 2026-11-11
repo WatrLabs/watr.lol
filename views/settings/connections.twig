@@ -9,19 +9,19 @@
 {% if rows %}
 <div class="watr-table-wrap measure-wide">
     <table class="watr-table watr-table--stack">
-        <thead><tr><th>service</th><th>account</th><th>linked</th><th></th></tr></thead>
+        <thead><tr><th>Service</th><th>Account</th><th>Linked</th><th></th></tr></thead>
         <tbody>
         {% for row in rows %}
             <tr>
-                <td class="is-main">{{ row.name }}{% if not row.enabled %} <span class="watr-tag">switched off</span>{% endif %}</td>
-                <td>{{ row.link ? (row.link.provider_username ?: 'linked') : '' }}{% if not row.link %}<span class="muted">not linked</span>{% endif %}</td>
+                <td class="is-main">{{ row.name }}{% if not row.enabled %} <span class="watr-tag">Switched off</span>{% endif %}</td>
+                <td>{{ row.link ? (row.link.provider_username ?: 'Linked') : '' }}{% if not row.link %}<span class="muted">Not linked</span>{% endif %}</td>
                 <td class="muted">{{ row.link ? row.link.created|day : '' }}</td>
                 <td class="num">
                     {% if row.link %}
                         {% if can_unlink %}
-                            {{ m.action('/settings/connections/' ~ row.slug ~ '/unlink', 'Unlink', {confirm: "You won't be able to log in with " ~ row.name ~ " until you link it again.", title: 'unlink ' ~ row.name|lower, button: 'Unlink'}) }}
+                            {{ m.action('/settings/connections/' ~ row.slug ~ '/unlink', 'Unlink', {confirm: "You won't be able to log in with " ~ row.name ~ " until you link it again.", title: 'Unlink ' ~ row.name, button: 'Unlink'}) }}
                         {% else %}
-                            <span class="muted small" data-watr-tip="Set a password first, or you won't be able to log in" data-watr-tip-end>only way in</span>
+                            <span class="muted small" data-watr-tip="Set a password first, or you won't be able to log in" data-watr-tip-end>Only way in</span>
                         {% endif %}
                     {% elseif row.enabled %}
                         <form method="post" action="/auth/connect/{{ row.slug }}" class="inline-form">

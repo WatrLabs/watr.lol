@@ -4,9 +4,9 @@
 {% block body %}
 <div class="watr-split auth consent">
     <div class="watr-split__aside">
-        <p class="consent__kicker">sign in with {{ env('APP_NAME') }}</p>
+        <p class="consent__kicker">Sign in with {{ env('APP_NAME') }}</p>
         <h1>{{ app.name }}</h1>
-        <p class="lede">wants to know who you are.</p>
+        <p class="lede">Wants to know who you are.</p>
         {% if app.description %}<p class="muted">{{ app.description }}</p>{% endif %}
         <p class="muted consent__meta">
             made by {{ m.name(owner) }}

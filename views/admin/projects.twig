@@ -9,12 +9,12 @@
 {% if projects %}
 <div class="watr-table-wrap">
     <table class="watr-table watr-table--stack">
-        <thead><tr><th>project</th><th>link</th><th>on /projects</th><th>order</th><th></th></tr></thead>
+        <thead><tr><th>Project</th><th>Link</th><th>on /projects</th><th>Order</th><th></th></tr></thead>
         <tbody>
         {% for p in projects %}
             <tr>
-                <td class="is-main">{{ p.name }}{% if not p.active %} <span class="watr-tag">hidden</span>{% endif %}</td>
-                <td>{% if p.url %}<a href="{{ p.url }}">{{ p.url|split('://')|last|trim('/', 'right') }}</a>{% else %}<span class="muted">none</span>{% endif %}</td>
+                <td class="is-main">{{ p.name }}{% if not p.active %} <span class="watr-tag">Hidden</span>{% endif %}</td>
+                <td>{% if p.url %}<a href="{{ p.url }}">{{ p.url|split('://')|last|trim('/', 'right') }}</a>{% else %}<span class="muted">None</span>{% endif %}</td>
                 <td>{{ m.action('/admin/projects/' ~ p.id ~ '/active', p.active ? 'Hide' : 'Show', {class: p.active ? 'watr-btn watr-btn--quiet' : 'watr-btn'}) }}</td>
                 <td>
                     <div class="watr-row">
@@ -25,7 +25,7 @@
                 <td class="num">
                     <div class="watr-row row-end">
                         <a class="watr-btn watr-btn--quiet" href="/admin/projects/{{ p.id }}">Edit</a>
-                        {{ m.action('/admin/projects/' ~ p.id ~ '/delete', 'Delete', {class: 'watr-btn watr-btn--danger', confirm: p.name ~ ' comes off the list for good. To take it down for a while, hide it instead.', title: 'delete project', button: 'Delete project'}) }}
+                        {{ m.action('/admin/projects/' ~ p.id ~ '/delete', 'Delete', {class: 'watr-btn watr-btn--danger', confirm: p.name ~ ' comes off the list for good. To take it down for a while, hide it instead.', title: 'Delete project', button: 'Delete project'}) }}
                     </div>
                 </td>
             </tr>
@@ -40,11 +40,11 @@
     <form method="post" action="/admin/projects" class="watr-stack form measure">
         {{ csrf_field() }}
         {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
-        <label class="field-label" for="name">name</label>
+        <label class="field-label" for="name">Name</label>
         <input type="text" name="name" id="name" class="full" maxlength="60" value="{{ form.name ?? '' }}" required>
-        <label class="field-label" for="description">description</label>
-        <input type="text" name="description" id="description" class="full" maxlength="255" value="{{ form.description ?? '' }}" placeholder="one line about what it is">
-        <label class="field-label" for="url">link</label>
+        <label class="field-label" for="description">Description</label>
+        <input type="text" name="description" id="description" class="full" maxlength="255" value="{{ form.description ?? '' }}" placeholder="One line about what it is">
+        <label class="field-label" for="url">Link</label>
         <input type="url" name="url" id="url" class="full" maxlength="255" value="{{ form.url ?? '' }}" placeholder="https://">
         <label class="watr-check"><input type="checkbox" name="active" value="1"{% if form.active ?? true %} checked{% endif %}> show it on /projects</label>
         <button type="submit" class="watr-btn">Add project</button>

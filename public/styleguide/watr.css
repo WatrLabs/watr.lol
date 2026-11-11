@@ -55,10 +55,10 @@
         --watr-field-radius: 0.3em;
         --watr-rule-w: 3px;
 
-        /* the waterline: the rule that splits things. it fades through the ramp instead of
-           being a hard ink stroke. -down runs top to bottom, -across runs left to right */
-        --watr-waterline-down:   linear-gradient(to bottom, transparent, var(--watr-bright) 18%, var(--watr-mid) 72%, transparent);
-        --watr-waterline-across: linear-gradient(to right, var(--watr-bright), var(--watr-mid) 55%, transparent);
+        /* the waterline: the line that splits things (the split, tabs, table headers).
+           one thin solid line in the hue. --watr-rule-w above is for thicker accent bars */
+        --watr-waterline-w: 1px;
+        --watr-waterline:   var(--watr-bright);
     }
 
     @media (prefers-color-scheme: dark) {
@@ -198,7 +198,6 @@ body {
         padding: 6px 10px;
         font-weight: 600;
         white-space: nowrap;
-        text-transform: lowercase;
     }
 
     .watr-bar a:hover { color: var(--watr-text); background-color: var(--watr-field); }
@@ -216,17 +215,10 @@ body {
     }
     .watr-bar .watr-bar__home:hover { background: none; }
 
-    /* the site's mark in a deep-water tile, for the bar and the footer */
-    .watr-mark {
-        display: inline-grid;
-        place-items: center;
-        flex: none;
-        width: 32px;
-        height: 32px;
-        background-color: var(--watr-deep);
-        box-shadow: 2px 2px 2px var(--watr-shadow-color);
-    }
-    .watr-mark img, .watr-mark svg { display: block; width: 24px; height: 24px; }
+    /* the site's mark, for the bar and the footer. no tile behind it: use a light and a
+       dark version in a <picture> if the mark needs one for each theme */
+    .watr-mark { display: inline-flex; flex: none; }
+    .watr-mark img, .watr-mark svg { display: block; width: 28px; height: 28px; }
 
     /* the one loud thing in the bar, like "sign up" */
     .watr-bar a.watr-bar__cta {
@@ -295,7 +287,6 @@ body {
         display: none;
         font: inherit;
         font-weight: 600;
-        text-transform: lowercase;
         min-height: var(--watr-bar-h);
         padding: 0 5px;
         margin-right: 15px;
@@ -374,8 +365,8 @@ body {
     }
     .watr-footer__brand > a { display: inline-flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 800; text-decoration: none; }
     .watr-footer__brand p { margin: 12px 0 0; max-width: 24ch; font-size: 0.9rem; line-height: 1.45; color: var(--watr-muted); }
-    .watr-footer__cols nav h2 { margin: 0 0 10px; font-size: 0.8rem; font-weight: 700; text-transform: lowercase; color: var(--watr-muted); }
-    .watr-footer__cols nav a { display: block; width: fit-content; padding: 4px 0; text-decoration: none; text-transform: lowercase; }
+    .watr-footer__cols nav h2 { margin: 0 0 10px; font-size: 0.8rem; font-weight: 700; color: var(--watr-muted); }
+    .watr-footer__cols nav a { display: block; width: fit-content; padding: 4px 0; text-decoration: none; }
     .watr-footer__cols nav a:hover { color: var(--watr-bright); }
     .watr-footer__base { max-width: 64rem; margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--watr-field); font-size: 0.8rem; color: var(--watr-muted); }
     @media (max-width: 700px) {
@@ -468,8 +459,7 @@ body {
         justify-content: center;
     }
     .watr-split__aside {
-        border-right: var(--watr-rule-w) solid;
-        border-image: var(--watr-waterline-down) 1;
+        border-right: var(--watr-waterline-w) solid var(--watr-waterline);
         padding-right: 40px;
         text-align: left;
     }
@@ -481,8 +471,7 @@ body {
         .watr-split { flex-direction: column; align-items: stretch; }
         .watr-split__aside {
             border-right: none;
-            border-bottom: var(--watr-rule-w) solid;
-            border-image: var(--watr-waterline-across) 1;
+            border-bottom: var(--watr-waterline-w) solid var(--watr-waterline);
             padding: 0 0 20px;
         }
         .watr-split__main { padding: 20px 0 0; }
@@ -552,6 +541,7 @@ body {
         position: relative;
         z-index: 2;
         overflow: hidden;
+        overflow: clip;   /* clip, not hidden: hidden makes it a scroll box and the sticky inner stops sticking */
         background-color: var(--watr-surface);
         color: var(--watr-text);
         box-shadow: var(--watr-drop);
@@ -566,7 +556,7 @@ body {
         overflow-y: auto;
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 22px;
         padding-block: 18px;
     }
     .watr-side__label {
@@ -574,7 +564,6 @@ body {
         padding-inline: 20px;
         font-size: 0.8rem;
         font-weight: 600;
-        text-transform: lowercase;
         color: var(--watr-muted);
     }
     .watr-side__nav { display: flex; flex-direction: column; }
@@ -601,7 +590,7 @@ body {
     }
     .watr-side__nav [aria-current="page"]:hover { background-color: var(--watr-mid); }
     /* an icon and its words, inside a nav link: <a><span class="watr-side__item"><svg/>files</span> <span class="watr-side__count">3</span></a> */
-    .watr-side__item { display: inline-flex; align-items: center; gap: 16px; min-width: 0; text-transform: lowercase; }
+    .watr-side__item { display: inline-flex; align-items: center; gap: 16px; min-width: 0; }
     .watr-side__item svg { flex: none; width: 20px; height: 20px; }
     /* a nudge for signed-out people, and a few small links at the bottom */
     .watr-side__promo { margin: 4px 20px 0; padding-top: 14px; border-top: 1px solid var(--watr-field); font-size: 0.9rem; line-height: 1.45; }
@@ -783,19 +772,18 @@ body {
     .watr-switch input:checked::before { left: 23px; }
     .watr-check input:disabled, .watr-switch input:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* ---------- tabs: sit on a 3px bright line, the active one joins it ---------- */
+    /* ---------- tabs: sit on the waterline, the active one joins it ---------- */
     .watr-tabs {
         display: flex;
         gap: 4px;
         overflow-x: auto;           /* too many tabs for a phone? they scroll sideways on one row */
         scrollbar-width: none;
-        border-bottom: var(--watr-rule-w) solid var(--watr-bright);
+        border-bottom: var(--watr-waterline-w) solid var(--watr-waterline);
     }
     .watr-tabs::-webkit-scrollbar { display: none; }
     .watr-tab {
         font: inherit;
         font-weight: 600;
-        text-transform: lowercase;
         text-decoration: none;
         padding: 8px 14px;
         border: none;
@@ -852,7 +840,6 @@ body {
         font-weight: 700;
         line-height: 1.4;
         padding: 2px 7px;
-        text-transform: lowercase;
         white-space: nowrap;
         background-color: var(--watr-field);
         color: var(--watr-text);
@@ -871,7 +858,6 @@ body {
         width: 48px;
         height: 48px;
         font-weight: 800;
-        text-transform: lowercase;
         overflow: hidden;
         background-color: var(--watr-deep);
         color: var(--watr-bright);
@@ -993,7 +979,7 @@ body {
     .watr-pages [aria-current="page"] { background-color: var(--watr-bright); color: var(--watr-ink); font-weight: 700; }
     .watr-pages .is-gap { background: none; min-width: 0; }
 
-    /* ---------- breadcrumbs: lowercase path with slashes ---------- */
+    /* ---------- breadcrumbs: the path, slashes between ---------- */
     .watr-crumbs {
         display: flex;
         flex-wrap: wrap;
@@ -1002,7 +988,6 @@ body {
         padding: 0;
         list-style: none;
         font-weight: 600;
-        text-transform: lowercase;
     }
     .watr-crumbs li + li::before { content: "/"; margin-right: 6px; font-weight: 400; color: var(--watr-muted); }
     .watr-crumbs a { color: var(--watr-text); text-decoration: none; }
@@ -1027,9 +1012,8 @@ body {
     .watr-table thead th {
         color: var(--watr-muted);
         font-size: 0.85rem;
-        box-shadow: inset 0 calc(var(--watr-rule-w) * -1) 0 var(--watr-bright);
+        box-shadow: inset 0 calc(var(--watr-waterline-w) * -1) 0 var(--watr-waterline);
         font-weight: 600;
-        text-transform: lowercase;
         white-space: nowrap;
     }
     .watr-table tbody tr + tr { border-top: 1px solid var(--watr-field); }
@@ -1086,7 +1070,6 @@ body {
             text-align: left;
             font-size: 0.85rem;
             font-weight: 600;
-            text-transform: lowercase;
             color: var(--watr-muted);
         }
         .watr-table--stack tr.is-selected td::before { color: inherit; }
@@ -1120,7 +1103,7 @@ body {
         background-color: var(--watr-bar);
         color: var(--watr-on-bar);
     }
-    .watr-dialog__head h2 { margin: 0; font-size: 1rem; text-transform: lowercase; }
+    .watr-dialog__head h2 { margin: 0; font-size: 1rem; }
     .watr-dialog__close {
         font: inherit;
         font-size: 1.4rem;
@@ -1183,7 +1166,6 @@ body {
         font-weight: 700;
         text-decoration: underline;
         text-underline-offset: 3px;
-        text-transform: lowercase;
         padding: 0;
         border: none;
         background: none;

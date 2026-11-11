@@ -5,29 +5,29 @@
 {% block pageName %}{{ thread.title }}{% endblock %}
 {% block body %}
 <ol class="watr-crumbs">
-    <li><a href="/forum">forum</a></li>
-    {% if thread.category %}<li><a href="/forum/{{ thread.category.slug }}">{{ thread.category.name|lower }}</a></li>{% endif %}
-    <li aria-current="page">thread</li>
+    <li><a href="/forum">Forum</a></li>
+    {% if thread.category %}<li><a href="/forum/{{ thread.category.slug }}">{{ thread.category.name }}</a></li>{% endif %}
+    <li aria-current="page">Thread</li>
 </ol>
 
 <div class="page__head">
     <div>
         <h1 class="thread-title">{{ thread.title }}</h1>
         <div class="watr-row">
-            {% if thread.pinned %}<span class="watr-tag watr-tag--bright">pinned</span>{% endif %}
-            {% if thread.locked %}<span class="watr-tag">locked</span>{% endif %}
+            {% if thread.pinned %}<span class="watr-tag watr-tag--bright">Pinned</span>{% endif %}
+            {% if thread.locked %}<span class="watr-tag">Locked</span>{% endif %}
             <span class="muted small">{{ (thread.post_count - 1)|number }} {{ thread.post_count - 1 == 1 ? 'reply' : 'replies' }} &middot; started {{ thread.created|ago }}</span>
         </div>
     </div>
     {% if is_staff %}
     <details class="watr-dropdown watr-dropdown--right">
-        <summary class="watr-btn watr-btn--quiet">mod</summary>
+        <summary class="watr-btn watr-btn--quiet">Mod</summary>
         <div class="watr-menu">
             <form method="post" action="/forum/t/{{ thread.id }}/pin">{{ csrf_field() }}<button type="submit">{{ thread.pinned ? 'unpin' : 'pin' }}</button></form>
             <form method="post" action="/forum/t/{{ thread.id }}/lock">{{ csrf_field() }}<button type="submit">{{ thread.locked ? 'unlock' : 'lock' }}</button></form>
-            <button type="button" data-watr-open="move-thread">move</button>
+            <button type="button" data-watr-open="move-thread">Move</button>
             <hr>
-            <form method="post" action="/forum/t/{{ thread.id }}/delete" data-confirm="This deletes &quot;{{ thread.title }}&quot; and all {{ thread.post_count }} posts in it. It can't be undone." data-confirm-title="delete thread" data-confirm-button="Delete thread">{{ csrf_field() }}<button type="submit" class="is-danger">delete thread</button></form>
+            <form method="post" action="/forum/t/{{ thread.id }}/delete" data-confirm="This deletes &quot;{{ thread.title }}&quot; and all {{ thread.post_count }} posts in it. It can't be undone." data-confirm-title="Delete thread" data-confirm-button="Delete thread">{{ csrf_field() }}<button type="submit" class="is-danger">Delete thread</button></form>
         </div>
     </details>
     {% endif %}
@@ -41,23 +41,23 @@
             <div class="post__who">
                 {{ m.name(post.author) }}
                 {% if post.author and post.author.display_name and post.author.display_name != post.author.username %}<small class="muted">@{{ post.author.username }}</small>{% endif %}
-                <div class="watr-row">{{ m.role_tag(post.author) }}{% if post.user_id == thread.user_id and post.id != first_post_id %}<span class="watr-tag">op</span>{% endif %}</div>
+                <div class="watr-row">{{ m.role_tag(post.author) }}{% if post.user_id == thread.user_id and post.id != first_post_id %}<span class="watr-tag">OP</span>{% endif %}</div>
             </div>
         </aside>
         <div class="post__main">
             <div class="post__meta">
                 <a href="/forum/p/{{ post.id }}" class="muted" title="{{ post.created|date('j M Y, H:i') }}">#{{ pager.offset + loop.index }} &middot; {{ post.created|ago }}</a>
-                {% if post.edited %}<span class="muted" title="{{ post.edited|date('j M Y, H:i') }}">edited</span>{% endif %}
+                {% if post.edited %}<span class="muted" title="{{ post.edited|date('j M Y, H:i') }}">Edited</span>{% endif %}
             </div>
             <div class="prose">{{ post.body|markup }}</div>
             {{ m.reactions('post', post.id, reactions[post.id] ?? [], '/forum/t/' ~ thread.id ~ (pager.page > 1 ? '?page=' ~ pager.page : '') ~ '#p' ~ post.id) }}
             {% if currentuser and (is_staff or (post.user_id == currentuser.id and not thread.locked)) %}
             <div class="post__actions">
-                <a href="/forum/p/{{ post.id }}/edit">edit</a>
+                <a href="/forum/p/{{ post.id }}/edit">Edit</a>
                 {% if post.id == first_post_id %}
-                    <form method="post" action="/forum/p/{{ post.id }}/delete" class="inline-form" data-confirm="This is the first post, so the whole thread goes with it: all {{ thread.post_count }} posts. It can't be undone." data-confirm-title="delete thread" data-confirm-button="Delete thread">{{ csrf_field() }}<button type="submit" class="link-button">delete</button></form>
+                    <form method="post" action="/forum/p/{{ post.id }}/delete" class="inline-form" data-confirm="This is the first post, so the whole thread goes with it: all {{ thread.post_count }} posts. It can't be undone." data-confirm-title="Delete thread" data-confirm-button="Delete thread">{{ csrf_field() }}<button type="submit" class="link-button">Delete</button></form>
                 {% else %}
-                    <form method="post" action="/forum/p/{{ post.id }}/delete" class="inline-form" data-confirm="This post will be gone for good." data-confirm-title="delete post" data-confirm-button="Delete post">{{ csrf_field() }}<button type="submit" class="link-button">delete</button></form>
+                    <form method="post" action="/forum/p/{{ post.id }}/delete" class="inline-form" data-confirm="This post will be gone for good." data-confirm-title="Delete post" data-confirm-button="Delete post">{{ csrf_field() }}<button type="submit" class="link-button">Delete</button></form>
                 {% endif %}
             </div>
             {% endif %}
@@ -81,7 +81,7 @@
     {% if error is defined %}<div class="watr-msg" role="alert">{{ error }}</div>{% endif %}
     <form method="post" action="/forum/t/{{ thread.id }}/reply" class="watr-stack editor">
         {{ csrf_field() }}
-        <label class="sr-only" for="body">your reply</label>
+        <label class="sr-only" for="body">Your reply</label>
         <textarea name="body" id="body" rows="6" maxlength="10000" placeholder="Say something nice" required>{{ draft ?? '' }}</textarea>
         <div class="editor__foot">
             {% include 'snippets/format_help.twig' %}
@@ -95,9 +95,9 @@
 <dialog class="watr-dialog" id="move-thread">
     <form method="post" action="/forum/t/{{ thread.id }}/move">
         {{ csrf_field() }}
-        <div class="watr-dialog__head"><h2>move thread</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
+        <div class="watr-dialog__head"><h2>Move thread</h2><button type="button" class="watr-dialog__close" data-watr-close aria-label="close">&times;</button></div>
         <div class="watr-dialog__body">
-            <label class="field-label" for="move-category">category</label>
+            <label class="field-label" for="move-category">Category</label>
             <select name="category" id="move-category" class="full">
                 {% for c in sidebar_categories() %}<option value="{{ c.id }}"{% if c.id == thread.category_id %} selected{% endif %}>{{ c.name }}</option>{% endfor %}
             </select>

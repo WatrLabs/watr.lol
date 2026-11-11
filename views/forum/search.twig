@@ -3,13 +3,13 @@
 {% block pageName %}{{ q ? 'Search: ' ~ q : 'Search the forum' }}{% endblock %}
 {% block body %}
 <ol class="watr-crumbs">
-    <li><a href="/forum">forum</a></li>
-    <li aria-current="page">search</li>
+    <li><a href="/forum">Forum</a></li>
+    <li aria-current="page">Search</li>
 </ol>
 
 <form method="get" action="/forum/search" class="watr-row search search--big" role="search">
-    <label class="sr-only" for="search-q">search the forum</label>
-    <input type="search" name="q" id="search-q" value="{{ q }}" placeholder="search the forum" maxlength="100" autofocus>
+    <label class="sr-only" for="search-q">Search the forum</label>
+    <input type="search" name="q" id="search-q" value="{{ q }}" placeholder="Search the forum" maxlength="100" autofocus>
     <button type="submit" class="watr-btn">Search</button>
 </form>
 

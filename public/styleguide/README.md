@@ -48,7 +48,7 @@ If two of my sites sat side by side, you should be able to tell they're by the s
 
 3. **Framed by bars.** A full-width bar on top (45px), optional notice strips stacked directly under it (a line in red, yellow or blue under it), a footer at the bottom. The bars are the surface color with normal text and cast the drop onto the page, so the hue is saved for things you can press (`--color` brings back the full-hue frame). The site's mark sits at the left of the bar, on its own. The bar and its strips are one block: nothing inside the stack casts a shadow, only the bottom of it does. (The kit handles this with `:has()`, so just put strips straight after the bar.)
 
-4. **Square buttons, soft fields.** Buttons have 0 radius, bright fill, black text, 10px padding, darker on hover. Inputs are filled grey, no border, 0.3em radius. Keep that contrast.
+4. **Square buttons, soft fields.** Buttons have 0 radius, a calm deep fill (`--watr-fill`) with white text, 10px padding, a step lighter or darker on hover. The bright blue stays for small accents (focus rings, checks, dots, lines), never under words. Inputs are filled grey, no border, 0.3em radius. Keep that contrast.
 
 5. **The waterline.** Two-sided layouts put words on the left and the thing (a form, a file, a picture) on the right, split by one thin solid line in the hue (`--watr-waterline-w`, 1px, `--watr-waterline`). On phones it turns horizontal. The same line sits under table headers and tabs. Thicker 3px bars (`--watr-rule-w`) are only for accents, like the current page in the bar or a highlighted post.
 
@@ -114,7 +114,7 @@ The exception is the page itself: the `body` background, text color and font, pl
 | split | `.watr-split` `.watr-split__aside` `.watr-split__main` | the waterline layout |
 | blob | `.watr-blob` `.watr-blob__face` | error and empty states |
 | quote | `.watr-quote` + `<cite>` | cite gets the `- ` prefix automatically |
-| shell + sidebar | `.watr-shell` > `aside.watr-side` (> `.watr-side__inner`) + `.watr-shell__main` | the app layout: sidebar under the bar, page beside it. sidebar is always on the left so its drop falls onto the page. inside: `.watr-side__label` section names, `.watr-side__nav` links (`aria-current="page"` goes bright, `.watr-side__count` for numbers, wrap an icon and the words in `.watr-side__item`), `.watr-side__foot` for a storage meter or the signed-in person (`.watr-side__me`), `.watr-side__promo` to nudge signed-out people, `.watr-side__links` for a few small links and the copyright at the bottom. `--color` gives it the bar's color |
+| shell + sidebar | `.watr-shell` > `aside.watr-side` (> `.watr-side__inner`) + `.watr-shell__main` | the app layout: sidebar under the bar, page beside it. sidebar is always on the left so its drop falls onto the page. inside: `.watr-side__label` section names, `.watr-side__nav` links (`aria-current="page"` gets the button fill, `.watr-side__count` for numbers, wrap an icon and the words in `.watr-side__item`), `.watr-side__foot` for a storage meter or the signed-in person (`.watr-side__me`), `.watr-side__promo` to nudge signed-out people, `.watr-side__links` for a few small links and the copyright at the bottom. `--color` gives it the bar's color |
 | burger | `<button class="watr-burger" data-watr-shell="shell-id">` | first thing in the bar. desktop: folds the sidebar away and remembers it. under 800px: opens the sidebar as a drawer over the page; backdrop, escape or picking a link closes it |
 | old sidebar | `.watr-sidebar` `.is-hidden` | the original fixed sidebar from watrfiles. use `.watr-shell` for new stuff |
 | checks | `.watr-check` wrapping a checkbox or radio | square box (radios stay round), bright when on |
@@ -129,7 +129,7 @@ The exception is the page itself: the `body` background, text color and font, pl
 | loading | `.watr-loading` with three `<i>` | three squares taking turns. sits still for reduced motion |
 | pagination | `.watr-pages` with `aria-current="page"` on the current one | `.is-gap` for the dots |
 | breadcrumbs | `<ol class="watr-crumbs">` | slashes between |
-| table | `.watr-table-wrap` > `table.watr-table` `--compact` `--stack` `--color` | a surface panel: quiet header on the waterline, a thin line between rows (`--color` for the old bar-colored header and stripes), `.num` right-aligns numbers, `tr.is-selected` goes bright, `.muted` for quiet cells. `--stack` turns each row into a card under 600px: mark the title cell `td.is-main`, the rest get their column name (`data-label`, filled from the header by `watr.js`) |
+| table | `.watr-table-wrap` > `table.watr-table` `--compact` `--stack` `--color` | a surface panel: quiet header on the waterline, a thin line between rows (`--color` for the old bar-colored header and stripes), `.num` right-aligns numbers, `tr.is-selected` gets the button fill, `.muted` for quiet cells. `--stack` turns each row into a card under 600px: mark the title cell `td.is-main`, the rest get their column name (`data-label`, filled from the header by `watr.js`) |
 | modal | `<dialog class="watr-dialog">` `--danger` `--blob` with `__head` `__body` `__foot` | a tiny page with its own bar. drops in from the top-left. the danger one gets a red bar |
 | toast | `watr.toast()` or `.watr-toasts` > `.watr-toast` `--plain` `--warning` `--danger` | bottom-right, where the shadows fall. the line along the bottom is the timer, hover pauses it |
 | old modal | `.watr-modal` | the original dimmed backdrop from watrfiles. use `.watr-dialog` for new stuff |
@@ -209,7 +209,7 @@ Everything is built to hold up at 375px wide:
 
 Things I noticed while pulling this out of watrfiles. Decide on each and move it into the guide.
 
-- [x] **White on the bar color is only 3.2:1 contrast.** Bars are the surface color with normal text by default since 0.6, so this only matters for `--color`. There, keep it to bold nav links, never small body text. (Black on bright is 11:1, no problem there.)
+- [x] **White on the bar color is only 3.2:1 contrast.** Bars are the surface color with normal text by default since 0.6, so this only matters for `--color`. There, keep it to bold nav links, never small body text. (Buttons are white on `--watr-fill`, about 5:1 in light and 6:1 in dark.)
 - [ ] **Yellow warnings had no text color** in the original CSS. The kit uses black text on yellow. Confirm that's the look.
 - [x] **Panel color.** The old `.container` grey never applied in `base.css` (`background-color: --container-color;` is missing `var()`). Panels now use a pale wash of the hue instead of grey, so they change with each site.
 - [ ] **Toast position.** Bottom-right fits the light-from-top-left idea. On phones that's also where thumbs are. Check that it doesn't cover anything important on real pages.
@@ -221,7 +221,7 @@ Things I noticed while pulling this out of watrfiles. Decide on each and move it
 
 ## changelog
 
-- **0.6** (2026-11): quieter frame, taken from watrfall. bars, footer and table headers are the surface color by default (`--color` keeps the full-hue look). the thick rule is now the waterline: one thin solid line in the hue. nothing is forced to lowercase any more; write labels in sentence case. the mark sits on its own, without a tile. dark mode is deeper and bluer. new: `.watr-mark`, `.watr-bar__search`, `.watr-bar__cta`, `aria-current` in the bar, `.watr-footer--cols`, `.watr-side__item` / `__promo` / `__links`, flat square scrollbars. messages and strips keep normal text and show their signal color as an edge instead of a solid fill.
+- **0.6** (2026-11): quieter frame, taken from watrfall. bars, footer and table headers are the surface color by default (`--color` keeps the full-hue look). the thick rule is now the waterline: one thin solid line in the hue. nothing is forced to lowercase any more; write labels in sentence case. the mark sits on its own, without a tile. dark mode is deeper and bluer. new: `.watr-mark`, `.watr-bar__search`, `.watr-bar__cta`, `aria-current` in the bar, `.watr-footer--cols`, `.watr-side__item` / `__promo` / `__links`, flat square scrollbars. messages and strips keep normal text and show their signal color as an edge instead of a solid fill. buttons, the current sidebar row, selected tabs, the bar's call to action and toasts use `--watr-fill`, a deeper calmer blue with white text, instead of black on bright.
 
 - **0.5** (2026-10): sidebar. `.watr-shell` + `.watr-side` (light or `--color`), `.watr-burger`, a width knob, and the mockup is now a full sidebar app.
 - **0.4** (2026-10): phone layout pass. bar folds into a menu, tabs scroll, tables can stack into cards. default avatars: a person, or one of six blobs picked from the username.

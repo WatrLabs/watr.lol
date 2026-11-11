@@ -402,8 +402,8 @@ select { cursor: pointer; }
     font-weight: 800;
     line-height: 16px;
     text-align: center;
-    background-color: var(--watr-bright);
-    color: var(--watr-ink);
+    background-color: var(--watr-fill);
+    color: var(--watr-on-fill);
 }
 
 /* ---------- home: feed on the left, extras on the right ---------- */
@@ -478,7 +478,7 @@ select { cursor: pointer; }
 .react:hover:not(:disabled) { background-color: var(--watr-field-over); }
 .react:active:not(:disabled) { transform: translate(1px, 1px); }
 .react:disabled { cursor: default; }
-.react.is-mine { background-color: var(--watr-bright); color: var(--watr-ink); }
+.react.is-mine { background-color: var(--watr-fill); color: var(--watr-on-fill); }
 .react-pick > summary.react--add { list-style: none; color: var(--watr-muted); font-size: 1.1rem; font-weight: 600; }
 .react-pick > summary::after { content: none; }
 .react-pick .watr-menu { flex-direction: row; min-width: 0; padding: 4px; gap: 2px; }

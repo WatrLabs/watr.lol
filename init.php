@@ -92,6 +92,10 @@ $twig->addFunction(new \Twig\TwigFunction('login_providers', fn () => providers:
 $twig->addFunction(new \Twig\TwigFunction('flash', fn () => take_flash()));
 $twig->addFunction(new \Twig\TwigFunction('turnstile', fn () => \watrlabs\turnstile::widget(), ['is_safe' => ['html']]));
 $twig->addFunction(new \Twig\TwigFunction('blob_avatar', fn ($user) => sitefunctions::blobAvatar($user)));
+$twig->addFunction(new \Twig\TwigFunction('unread_count', fn ($user) => $user ? (new \watrlabs\social\notifications())->unreadCount((int) $user->id) : 0));
+$twig->addFunction(new \Twig\TwigFunction('reaction_emoji', fn () => array_keys(\watrlabs\social\reactions::EMOJI)));
+$twig->addFunction(new \Twig\TwigFunction('reaction_image', fn ($emoji) => \watrlabs\social\reactions::image((string) $emoji)));
+$twig->addFunction(new \Twig\TwigFunction('website_label', fn ($url) => preg_replace('#^https?://(www\.)?#i', '', rtrim((string) $url, '/'))));
 
 $twig->addFilter(new \Twig\TwigFilter('ago', fn ($time) => sitefunctions::ago((int) $time)));
 $twig->addFilter(new \Twig\TwigFilter('day', fn ($time) => date('j M Y', (int) $time)));

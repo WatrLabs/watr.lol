@@ -1,10 +1,17 @@
 <?php
+use watrlabs\accountdeletion;
 use watrlabs\accountmail;
 use watrlabs\authentication;
+use watrlabs\cookies;
 use watrlabs\emailtokens;
+use watrlabs\encryption;
 use watrlabs\mail;
 use watrlabs\sessions;
 use watrlabs\throttle;
+use watrlabs\twofactor;
+use watrlabs\social\follows;
+use watrlabs\social\reactions;
+use watrlabs\social\statuses;
 use watrlabs\forum\posts;
 use watrlabs\forum\threads;
 use watrlabs\oauth\server;
@@ -19,12 +26,44 @@ $router->get('/u/{username}', function ($username) {
         abort(404, "Nobody here goes by \"$username\".");
     }
 
+    $me = current_user();
+    $follows = new follows();
+    $statuses = new statuses();
+    $before = (int) query('before') ?: null;
+    $updates = $statuses->byUser($profile->id, 20, $before);
+
     render('users/profile.twig', [
         'profile' => $profile,
         'post_count' => (new posts())->countByUser($profile->id),
+        'update_count' => $statuses->countByUser($profile->id),
         'threads' => (new threads())->byUser($profile->id, 10),
+        'updates' => $updates,
+        'next' => count($updates) === 20 ? (int) end($updates)->created : null,
+        'reactions' => (new reactions())->summarize('status', array_map(fn ($s) => $s->id, $updates), $me ? (int) $me->id : null),
+        'followers' => $follows->followerCount($profile->id),
+        'following' => $follows->followingCount($profile->id),
+        'is_following' => $me ? $follows->isFollowing($me->id, $profile->id) : false,
+        'follows_me' => $me ? $follows->isFollowing($profile->id, $me->id) : false,
     ]);
 });
+
+// checks the "who are you, really" fields on risky forms: password if they have one,
+// and an app code if two-factor is on. null when it's fine
+function confirm_identity($user): ?string {
+    if ($user->password && !password_verify((string) ($_POST['current'] ?? ''), $user->password)) {
+        return 'Your password is wrong.';
+    }
+    if (twofactor::enabled($user)) {
+        if (throttle::tooMany('2fa', (string) $user->id, 5, 900)) {
+            return 'Too many wrong codes. Wait 15 minutes and try again.';
+        }
+        if (!(new twofactor())->verify($user, post('code'))) {
+            throttle::hit('2fa', (string) $user->id);
+            return "That code didn't work.";
+        }
+    }
+    return null;
+}
 
 $router->group('/settings', function ($router) {
 
@@ -41,6 +80,12 @@ $router->group('/settings', function ($router) {
         $username = post('username');
         $displayName = post('display_name');
         $bio = post('bio');
+        $pronouns = post('pronouns');
+        $location = post('location');
+        $website = post('website');
+        if ($website !== '' && !preg_match('#^https?://#i', $website)) {
+            $website = 'https://' . $website;
+        }
 
         $error = null;
         if ($username !== $user->username) {
@@ -52,12 +97,24 @@ $router->group('/settings', function ($router) {
         if (!$error && mb_strlen($bio) > 500) {
             $error = 'Your bio can be 500 characters at most.';
         }
+        if (!$error && mb_strlen($pronouns) > 30) {
+            $error = 'Pronouns can be 30 characters at most.';
+        }
+        if (!$error && mb_strlen($location) > 60) {
+            $error = 'Location can be 60 characters at most.';
+        }
+        if (!$error && $website !== '' && (strlen($website) > 255 || !filter_var($website, FILTER_VALIDATE_URL) || !preg_match('#^https?://[^/\s]+\.[^/\s]+#i', $website))) {
+            $error = "That website link doesn't look right.";
+        }
 
         if ($error) {
             http_response_code(422);
             $user->username = $username;
             $user->display_name = $displayName;
             $user->bio = $bio;
+            $user->pronouns = $pronouns;
+            $user->location = $location;
+            $user->website = $website;
             render('settings/profile.twig', ['user' => $user, 'error' => $error]);
             return;
         }
@@ -67,6 +124,9 @@ $router->group('/settings', function ($router) {
             'username_lower' => strtolower($username),
             'display_name' => $displayName ?: null,
             'bio' => $bio ?: null,
+            'pronouns' => $pronouns ?: null,
+            'location' => $location ?: null,
+            'website' => $website ?: null,
             'updated' => time(),
         ]);
 
@@ -254,6 +314,134 @@ $router->group('/settings', function ($router) {
             'grants' => (new server())->grantsForUser($user->id),
             'scopes' => server::SCOPES,
         ]);
+    });
+
+    // ---------- security: two-factor and deleting the account ----------
+
+    $router->get('/security', function () {
+        $user = require_login();
+        render('settings/security.twig', [
+            'user' => $user,
+            'twofactor' => twofactor::enabled($user),
+            'backup_left' => (new twofactor())->backupCodesLeft($user->id),
+            'delete_blocker' => (new accountdeletion())->blocker($user),
+        ]);
+    });
+
+    // step 1: make a secret and show the qr code. nothing is saved until they type a code back
+    $router->post('/security/2fa/start', function () {
+        require_csrf();
+        $user = require_login();
+        if (twofactor::enabled($user)) {
+            redirect('/settings/security');
+        }
+        if ($user->password && !password_verify((string) ($_POST['current'] ?? ''), $user->password)) {
+            flash('Your password is wrong.', 'danger');
+            redirect('/settings/security');
+        }
+        cookies::set(twofactor::SETUP_COOKIE, encryption::sign([
+            'u' => (int) $user->id,
+            's' => twofactor::newSecret(),
+            'exp' => time() + 900,
+        ]), time() + 900);
+        redirect('/settings/security/2fa');
+    });
+
+    $router->get('/security/2fa', function () {
+        $user = require_login();
+        $setup = encryption::unsign(cookies::get(twofactor::SETUP_COOKIE));
+        if (!$setup || $setup['u'] !== (int) $user->id || twofactor::enabled($user)) {
+            redirect('/settings/security');
+        }
+        $uri = twofactor::uri($setup['s'], $user->username);
+        render('settings/twofactor_setup.twig', [
+            'user' => $user,
+            'secret' => trim(chunk_split($setup['s'], 4, ' ')),
+            'qr' => twofactor::qr($uri),
+        ]);
+    });
+
+    // step 2: the code from the app proves it scanned. then it's on, and they get backup codes
+    $router->post('/security/2fa', function () {
+        require_csrf();
+        $user = require_login();
+        $setup = encryption::unsign(cookies::get(twofactor::SETUP_COOKIE));
+        if (!$setup || $setup['u'] !== (int) $user->id || twofactor::enabled($user)) {
+            flash('That took too long. Start again.', 'warning');
+            redirect('/settings/security');
+        }
+
+        $step = twofactor::match($setup['s'], post('code'));
+        if ($step === null) {
+            http_response_code(422);
+            render('settings/twofactor_setup.twig', [
+                'user' => $user,
+                'secret' => trim(chunk_split($setup['s'], 4, ' ')),
+                'qr' => twofactor::qr(twofactor::uri($setup['s'], $user->username)),
+                'error' => "That code didn't work. Make sure your phone's clock is right and try the newest code.",
+            ]);
+            return;
+        }
+
+        $codes = (new twofactor())->enable($user->id, $setup['s'], $step);
+        cookies::destroy(twofactor::SETUP_COOKIE);
+        (new accountmail())->notifyTwoFactor($user, true);
+
+        render('settings/backup_codes.twig', ['user' => $user, 'codes' => $codes, 'fresh' => true]);
+    });
+
+    $router->post('/security/2fa/backup', function () {
+        require_csrf();
+        $user = require_login();
+        if (!twofactor::enabled($user)) {
+            redirect('/settings/security');
+        }
+        if ($error = confirm_identity($user)) {
+            flash($error, 'danger');
+            redirect('/settings/security');
+        }
+        $codes = (new twofactor())->newBackupCodes($user->id);
+        render('settings/backup_codes.twig', ['user' => $user, 'codes' => $codes, 'fresh' => false]);
+    });
+
+    $router->post('/security/2fa/disable', function () {
+        require_csrf();
+        $user = require_login();
+        if (!twofactor::enabled($user)) {
+            redirect('/settings/security');
+        }
+        if ($error = confirm_identity($user)) {
+            flash($error, 'danger');
+            redirect('/settings/security');
+        }
+        (new twofactor())->disable($user->id);
+        (new accountmail())->notifyTwoFactor($user, false);
+        flash('Turned off two-factor. Logging in only needs your password now.', 'plain');
+        redirect('/settings/security');
+    });
+
+    $router->post('/delete', function () {
+        require_csrf();
+        $user = require_login();
+        $deletion = new accountdeletion();
+
+        $error = $deletion->blocker($user);
+        if (!$error && strtolower(post('confirm_username')) !== strtolower($user->username)) {
+            $error = 'Type your username exactly to confirm.';
+        }
+        $error ??= confirm_identity($user);
+
+        if ($error) {
+            flash($error, 'danger');
+            redirect('/settings/security');
+        }
+
+        (new accountmail())->notifyDeleted($user);
+        $deletion->delete($user, post('wipe') === '1');
+        cookies::destroy(sessions::cookieName());
+
+        flash('Your account is gone. Thanks for being here.', 'plain');
+        redirect('/');
     });
 
     $router->post('/apps/{id}/revoke', function ($id) {

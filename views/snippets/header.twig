@@ -1,24 +1,35 @@
 {% import "snippets/macros.twig" as m %}
+{% set in_forum_search = request_path == '/forum' or request_path == '/forum/search' %}
 <nav class="watr-bar" aria-label="site">
     {% if has_sidebar ?? false %}<button type="button" class="watr-burger" data-watr-shell="app" aria-controls="side" aria-label="sidebar"></button>{% endif %}
-    <a href="/" class="watr-bar__home"><img src="/assets/images/logos/watrlabs-mark-dark.svg" alt="" width="26" height="26">{{ env('APP_NAME') }}</a>
-    <button type="button" class="watr-bar__toggle">menu</button>
+    <a href="/" class="watr-bar__home"><span class="watr-mark"><picture><source srcset="/assets/images/logos/watrlabs-mark-dark.svg" media="(prefers-color-scheme: dark)"><img src="/assets/images/logos/watrlabs-mark.svg" alt="" width="28" height="28"></picture></span>{{ env('APP_NAME') }}</a>
+    <button type="button" class="watr-bar__toggle">Menu</button>
     <div class="watr-bar__links">
         <div class="watr-bar__group">
-            <a href="/forum">forum</a>
-            <a href="/projects">projects</a>
+            <a href="/forum"{% if request_path starts with '/forum' %} aria-current="page"{% endif %}>Forum</a>
+            <a href="/people"{% if request_path starts with '/people' %} aria-current="page"{% endif %}>People</a>
+            <a href="/projects"{% if request_path starts with '/projects' %} aria-current="page"{% endif %}>Projects</a>
         </div>
+        {% if not in_forum_search %}
+        <form method="get" action="/forum/search" class="watr-bar__search" role="search">
+            <label class="sr-only" for="bar-q">Search the forum</label>
+            <input type="search" name="q" id="bar-q" placeholder="Search the forum" maxlength="100">
+            <button type="submit" aria-label="search">{{ m.icon('search') }}</button>
+        </form>
+        {% endif %}
         <div class="watr-bar__group">
             {% if currentuser %}
+                {% set unread = unread_count(currentuser) %}
+                <a href="/notifications" class="bell{% if unread %} has-unread{% endif %}" aria-label="notifications{% if unread %}, {{ unread }} new{% endif %}"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm7-6V11a7 7 0 0 0-5.5-6.84V3.5a1.5 1.5 0 0 0-3 0v.66A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Z"/></svg>{% if unread %}<span class="bell__count">{{ unread > 99 ? '99+' : unread }}</span>{% endif %}</a>
                 <a href="/u/{{ currentuser.username }}" class="watr-bar__me">{{ m.avatar(currentuser, 'small') }}{{ currentuser.username }}</a>
             {% else %}
                 {% set back = request_path starts with '/auth' or request_path == '/' ? '' : '?continue=' ~ (request_path|url_encode) %}
-                <a href="/auth/login{{ back }}">log in</a>
-                <a href="/auth/register{{ back }}">sign up</a>
+                <a href="/auth/login{{ back }}">Log in</a>
+                <a href="/auth/register{{ back }}" class="watr-bar__cta">Sign up</a>
             {% endif %}
         </div>
     </div>
 </nav>
 {% if env('SITE_NOTICE') %}
-<div class="watr-strip watr-strip--warning"><p>{{ env('SITE_NOTICE') }}</p></div>
+<div class="watr-strip watr-strip--warning site-notice"><p>{{ env('SITE_NOTICE') }}</p></div>
 {% endif %}

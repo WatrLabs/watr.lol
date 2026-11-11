@@ -25,10 +25,10 @@
             {{ csrf_field() }}
             <input type="hidden" name="token" value="{{ token }}">
             <input type="text" name="username" value="{{ person.username }}" autocomplete="username" hidden>
-            <label class="sr-only" for="password">new password</label>
-            <input type="password" name="password" id="password" placeholder="new password" autocomplete="new-password" minlength="8" required autofocus>
-            <label class="sr-only" for="password_confirm">new password again</label>
-            <input type="password" name="password_confirm" id="password_confirm" placeholder="new password again" autocomplete="new-password" minlength="8" required>
+            <label class="sr-only" for="password">New password</label>
+            <input type="password" name="password" id="password" placeholder="New password" autocomplete="new-password" minlength="8" required autofocus>
+            <label class="sr-only" for="password_confirm">New password again</label>
+            <input type="password" name="password_confirm" id="password_confirm" placeholder="New password again" autocomplete="new-password" minlength="8" required>
             <p class="hint">At least 8 characters.</p>
             <button type="submit" class="watr-btn auth__submit">Change password</button>
         </form>

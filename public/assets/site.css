@@ -9,6 +9,7 @@
     --watr-chroma: 1.1;        /* a touch louder than watrfiles */
     --watr-head-weight: 800;   /* and heavier headings */
     --watr-sidebar-w: 240px;
+    --watr-bar-h: 52px;        /* a touch taller than the kit's 45, like watrfall's bar */
 }
 
 /* ---------- page ---------- */
@@ -81,7 +82,6 @@ code { font-family: ui-monospace, "Cascadia Mono", Menlo, monospace; font-size: 
     margin-top: 10px;
     font-size: 0.85rem;
     font-weight: 600;
-    text-transform: lowercase;
 }
 .form .field-label:first-of-type { margin-top: 0; }
 textarea { resize: vertical; line-height: 1.5; }
@@ -105,13 +105,9 @@ select { cursor: pointer; }
 .auth__logo {
     display: inline-grid;
     place-items: center;
-    width: 180px;
-    height: 180px;
     margin-bottom: 18px;
-    background-color: var(--watr-deep);
-    box-shadow: var(--watr-drop);
 }
-.auth__logo img { width: 148px; height: 148px; }
+.auth__logo img { display: block; width: 148px; height: 148px; }
 .auth .watr-split__aside h1 { margin-bottom: 4px; }
 .auth__tag { margin: 0; }
 
@@ -146,12 +142,12 @@ select { cursor: pointer; }
 .provider-btn__icon { flex: none; width: 20px; height: 20px; }
 
 @media (max-width: 480px) {
-    .auth__logo { width: 120px; height: 120px; margin-bottom: 12px; }
+    .auth__logo { margin-bottom: 12px; }
     .auth__logo img { width: 96px; height: 96px; }
 }
 
 /* the consent screen */
-.consent__kicker { margin: 0 0 6px; font-size: 0.85rem; font-weight: 600; text-transform: lowercase; color: var(--watr-muted); }
+.consent__kicker { margin: 0 0 6px; font-size: 0.85rem; font-weight: 600; color: var(--watr-muted); }
 .consent .watr-split__aside h1 { margin: 0; overflow-wrap: anywhere; }
 .consent .lede { margin-top: 2px; }
 .consent__meta { font-size: 0.9rem; }
@@ -179,11 +175,11 @@ select { cursor: pointer; }
 
 .home { display: flex; flex-direction: column; gap: 28px; max-width: 46rem; }
 .home h1 { margin: 0; }
-.home .watr-msg a { color: inherit; font-weight: 700; }
+
 .home > p { margin: 0; }
 
 .home-latest { display: flex; flex-direction: column; gap: 6px; width: min(100%, 46rem); }
-.home-latest h2 { margin: 0 0 4px; font-size: 1rem; text-transform: lowercase; color: var(--watr-muted); }
+.home-latest h2 { margin: 0 0 4px; font-size: 1rem; color: var(--watr-muted); }
 .more-link { align-self: flex-start; margin-top: 8px; font-size: 0.9rem; text-underline-offset: 3px; }
 
 /* threads as plain rows: title, then a quiet line under it */
@@ -219,9 +215,6 @@ select { cursor: pointer; }
 /* ---------- footer ---------- */
 .watr-footer a { color: inherit; text-underline-offset: 3px; }
 
-/* ---------- bar ---------- */
-.watr-bar__home { display: inline-flex; align-items: center; gap: 7px; }
-.watr-bar__home img { width: 26px; height: 26px; flex: none; }
 
 /* ---------- projects ---------- */
 .projects {
@@ -248,8 +241,6 @@ select { cursor: pointer; }
 
 /* ---------- sidebar bits ---------- */
 .watr-side__nav form { display: contents; }
-/* .muted above is unlayered, so it would beat the kit's white-on-color rule */
-.watr-side--color .muted { color: rgb(255 255 255 / 0.75); }
 .watr-side__foot .watr-btn { padding: 8px 10px; }
 
 /* ---------- cards, facts, stats ---------- */
@@ -264,7 +255,7 @@ select { cursor: pointer; }
 .card > p { margin: 0; }
 
 .facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 16px; margin: 0; }
-.facts dt { font-size: 0.85rem; font-weight: 600; text-transform: lowercase; color: var(--watr-muted); padding-top: 1px; }
+.facts dt { font-size: 0.85rem; font-weight: 600; color: var(--watr-muted); padding-top: 1px; }
 .facts dd { margin: 0; overflow-wrap: anywhere; }
 .facts--wide dt { min-width: 7rem; }
 @media (max-width: 480px) {
@@ -275,7 +266,7 @@ select { cursor: pointer; }
 .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
 .stat { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; background-color: var(--watr-surface); }
 .stat__value { font-size: 1.8rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-.stat__label { font-size: 0.85rem; font-weight: 600; text-transform: lowercase; color: var(--watr-muted); }
+.stat__label { font-size: 0.85rem; font-weight: 600; color: var(--watr-muted); }
 
 .plain-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .people li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -372,7 +363,7 @@ select { cursor: pointer; }
 .editor textarea { width: 100%; box-sizing: border-box; }
 .editor__foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 10px; margin-top: 6px; }
 .format-help { font-size: 0.85rem; color: var(--watr-muted); max-width: 32rem; }
-.format-help summary { cursor: pointer; font-weight: 600; text-transform: lowercase; }
+.format-help summary { cursor: pointer; font-weight: 600; }
 .format-help p { margin: 6px 0 0; line-height: 1.8; }
 .format-help code { padding: 1px 4px; background-color: var(--watr-field); }
 
@@ -396,3 +387,240 @@ select { cursor: pointer; }
 .docs__list { padding-left: 1.2em; }
 .docs__list li { margin-bottom: 0.6em; }
 .docs .watr-table-wrap { margin-bottom: 1em; }
+
+/* ---------- the bell in the bar ---------- */
+.watr-bar .bell { position: relative; display: inline-flex; align-items: center; padding: 5px 6px; }
+.watr-bar .bell svg { display: block; }
+.bell__count {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    min-width: 16px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 16px;
+    text-align: center;
+    background-color: var(--watr-fill);
+    color: var(--watr-on-fill);
+}
+
+/* ---------- home: feed on the left, extras on the right ---------- */
+.home-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 40rem) minmax(0, 18rem);
+    gap: 40px;
+    align-items: start;
+    justify-content: center;
+}
+.home-grid .home { max-width: none; gap: 20px; }
+.home-aside { display: flex; flex-direction: column; gap: 28px; position: sticky; top: calc(var(--watr-bar-h) + 16px); }
+.home-aside section { display: flex; flex-direction: column; gap: 6px; }
+.home-aside h2 { margin: 0 0 4px; font-size: 1rem; color: var(--watr-muted); }
+.home-aside .more-link { margin-top: 2px; }
+@media (max-width: 1050px) {
+    .home-grid { grid-template-columns: minmax(0, 40rem); gap: 32px; }
+    .home-aside { position: static; }
+}
+
+.compose { display: flex; gap: 12px; align-items: flex-start; }
+.compose__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.compose textarea { width: 100%; box-sizing: border-box; min-height: 3.2em; }
+.compose__foot { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+.compose__foot .is-over { color: var(--watr-danger); font-weight: 700; }
+
+.feed { display: flex; flex-direction: column; }
+.feed .watr-tabs { margin-bottom: 4px; }
+.feed__more { align-self: flex-start; margin-top: 12px; }
+
+.feed-item {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--watr-field);
+    scroll-margin-top: 16px;
+}
+.feed-item:target .feed-item__main { box-shadow: inset var(--watr-rule-w) 0 0 var(--watr-bright); padding-left: 12px; }
+.feed-item__main { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.feed-item__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; font-size: 0.9rem; }
+.feed-item__time { text-decoration: none; }
+.feed-item__time:hover { text-decoration: underline; text-underline-offset: 3px; }
+.feed-item__thread { font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
+.feed-item__thread:hover { text-decoration: underline; text-underline-offset: 3px; }
+.feed-item__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; font-size: 0.85rem; color: var(--watr-muted); }
+.feed-item__foot a { color: inherit; text-underline-offset: 3px; }
+.section > .feed-item:first-of-type { padding-top: 4px; }
+
+/* long forum posts get cut short in the feed, "open" has the rest */
+.prose--clamp { max-height: 12em; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent); mask-image: linear-gradient(to bottom, #000 70%, transparent); }
+
+/* ---------- reactions ---------- */
+.reacts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; }
+.react {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 30px;
+    padding: 0 8px;
+    box-sizing: border-box;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    border: none;
+    cursor: pointer;
+    background-color: var(--watr-field);
+    color: var(--watr-text);
+}
+.react img { width: 20px; height: 20px; display: block; }
+.react:hover:not(:disabled) { background-color: var(--watr-field-over); }
+.react:active:not(:disabled) { transform: translate(1px, 1px); }
+.react:disabled { cursor: default; }
+.react.is-mine { background-color: var(--watr-fill); color: var(--watr-on-fill); }
+.react-pick > summary.react--add { list-style: none; color: var(--watr-muted); font-size: 1.1rem; font-weight: 600; }
+.react-pick > summary::after { content: none; }
+.react-pick .watr-menu { flex-direction: row; min-width: 0; padding: 4px; gap: 2px; }
+.react-pick .watr-menu button { padding: 4px; line-height: 0; }
+.react-pick .watr-menu img { width: 28px; height: 28px; transition: transform var(--watr-speed, 0.12s); }
+.react-pick .watr-menu button:hover img { transform: scale(1.15); }
+.post .reacts { margin-top: 2px; }
+/* the reaction row always shows, unlike edit and delete */
+@media (hover: hover) {
+    .post .react-pick { opacity: 0.6; }
+    .post:hover .react-pick, .react-pick[open], .react-pick:focus-within { opacity: 1; }
+}
+
+/* ---------- people ---------- */
+.online { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.online a { display: block; line-height: 0; }
+
+.people-list { gap: 0; }
+.person-row {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--watr-field);
+}
+.person-row__pic { line-height: 0; }
+.person-row__text { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; min-width: 0; }
+.person-row__text small { flex-basis: 100%; }
+.person-row__bio { color: var(--watr-text); line-height: 1.4; overflow-wrap: anywhere; }
+.person-row .watr-btn { padding: 6px 12px; }
+.people-list--compact .person-row { grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; padding: 8px 0; }
+.people-list--compact .blob-avatar { width: 28px; height: 28px; }
+.people-list--compact .person-row__bio { display: none; }
+
+/* ---------- profile extras ---------- */
+.profile__extra { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.9rem; }
+.profile__extra a { text-underline-offset: 3px; overflow-wrap: anywhere; }
+.profile__counts { display: flex; gap: 16px; font-size: 0.9rem; }
+.profile__counts a { color: inherit; text-decoration: none; }
+.profile__counts a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.profile-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 40rem) minmax(0, 22rem);
+    gap: 40px;
+    align-items: start;
+}
+@media (max-width: 1050px) {
+    .profile-cols { grid-template-columns: minmax(0, 40rem); gap: 16px; }
+}
+
+/* ---------- notifications ---------- */
+.notes { gap: 0; }
+.note { border-bottom: 1px solid var(--watr-field); }
+.note__link { display: flex; align-items: flex-start; gap: 12px; padding: 12px 8px; color: inherit; text-decoration: none; }
+.note__link:hover { background-color: var(--watr-field); }
+.note__text { flex: 1; min-width: 0; line-height: 1.45; overflow-wrap: anywhere; }
+.note__text small { display: block; margin-top: 2px; }
+.note__what { font-weight: 600; }
+.note.is-new { box-shadow: inset var(--watr-rule-w) 0 0 var(--watr-bright); }
+.note__dot { flex: none; width: 8px; height: 8px; margin-top: 8px; background-color: var(--watr-bright); }
+
+/* ---------- security ---------- */
+.card.measure { margin-bottom: 24px; }
+.card p { margin: 0; line-height: 1.5; }
+.security-more { border-top: 1px solid var(--watr-field); padding-top: 10px; }
+.security-more summary { cursor: pointer; font-weight: 600; }
+.security-more form { margin-top: 10px; }
+.danger-zone { padding-top: 20px; border-top: var(--watr-rule-w) solid var(--watr-danger); }
+.danger-zone h2 { color: var(--watr-danger); }
+
+.twofa-setup { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
+.twofa-setup__qr { flex: none; padding: 10px; background-color: #ffffff; line-height: 0; box-shadow: var(--watr-drop); }
+.twofa-setup__qr img { width: 220px; height: 220px; image-rendering: pixelated; }
+.twofa-setup__steps { flex: 1; min-width: min(100%, 18rem); max-width: 26rem; }
+.twofa-setup__steps .form__title:first-of-type { margin-top: 0; }
+.twofa-secret { display: block; padding: 8px 10px; background-color: var(--watr-field); letter-spacing: 0.05em; word-spacing: 0.2em; }
+.twofa-code { font-size: 1.3rem; letter-spacing: 0.2em; }
+.backup-codes {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: 6px 32px;
+    margin: 0;
+    padding: 14px 18px 14px 40px;
+    background-color: var(--watr-surface);
+    box-shadow: var(--watr-drop);
+    font-size: 1.05rem;
+}
+@media (max-width: 400px) { .backup-codes { grid-template-columns: max-content; } }
+
+/* ---------- search ---------- */
+.search--big input { max-width: 30rem; }
+.search-results { gap: 0; }
+.search-results li { padding: 12px 0; border-bottom: 1px solid var(--watr-field); }
+.search-results__snip { margin: 4px 0; line-height: 1.5; overflow-wrap: anywhere; }
+
+/* =====================================================================
+   the look, after watrfall (watr.css 0.6 carries most of it: the surface bar,
+   the waterline, sidebar icons, the columned footer, quiet tables). these are
+   the bits that are only watr.lol's.
+   ===================================================================== */
+
+/* ---------- montserrat, served from here (the csp only allows our own fonts) ---------- */
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 100 900; font-display: swap;
+    src: url("/assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+    font-family: "Montserrat"; font-style: normal; font-weight: 100 900; font-display: swap;
+    src: url("/assets/fonts/montserrat-latin.woff2") format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- the bar stays put, and the sidebar sits under it ---------- */
+.watr-bar { position: sticky; top: 0; z-index: 50; gap: 0 8px; }
+.watr-bar .watr-bar__me { color: var(--watr-text); }
+.watr-bar .bell { color: var(--watr-muted); padding: 6px 8px; }
+.watr-bar .bell:hover { color: var(--watr-text); }
+.watr-side__inner {
+    top: var(--watr-bar-h);
+    max-height: calc(100vh - var(--watr-bar-h));
+    padding-block: 18px 20px;
+}
+.watr-side__nav :not([aria-current]) > .watr-side__item svg { opacity: 0.85; }
+.watr-side__promo .watr-btn svg { width: 18px; height: 18px; }
+/* links to a post land below the sticky bar */
+.post, .feed-item { scroll-margin-top: calc(var(--watr-bar-h) + 16px); }
+
+/* the notice under the bar: still yellow, just not a second bar */
+.site-notice { min-height: 34px; justify-content: center; text-align: center; font-size: 0.9rem; font-weight: 600; }
+
+/* ---------- waterlines on our own parts ---------- */
+.reply { border-top: var(--watr-waterline-w) solid var(--watr-waterline); }
+.danger-zone { border-top: var(--watr-waterline-w) solid var(--watr-danger); }
+
+/* ---------- project cards float up toward the light when you point at them ---------- */
+.project { position: relative; transition: transform var(--watr-speed), box-shadow var(--watr-speed); }
+.project:hover { transform: translate(-2px, -2px); box-shadow: var(--watr-drop-big); }
+.project h2 a { text-decoration: none; }
+.project h2 a::after { content: ""; position: absolute; inset: 0; }   /* the whole card is the link */
+.project__host { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+    .project:hover { transform: none; }
+}

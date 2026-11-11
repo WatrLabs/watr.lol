@@ -8,11 +8,11 @@
     {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
 
     <dl class="facts">
-        <dt>email</dt>
-        <dd>{% if user.email %}{{ user.email }} <span class="watr-tag watr-tag--bright">confirmed</span>{% else %}<span class="muted">none</span>{% endif %}</dd>
+        <dt>Email</dt>
+        <dd>{% if user.email %}{{ user.email }} <span class="watr-tag watr-tag--bright">Confirmed</span>{% else %}<span class="muted">None</span>{% endif %}</dd>
         {% if pending %}
-        <dt>waiting on</dt>
-        <dd>{{ pending }} <span class="watr-tag watr-tag--warning">not confirmed</span></dd>
+        <dt>Waiting on</dt>
+        <dd>{{ pending }} <span class="watr-tag watr-tag--warning">Not confirmed</span></dd>
         {% endif %}
     </dl>
 
@@ -37,7 +37,7 @@
     <input type="email" name="email" id="email" class="full" value="{{ email ?? '' }}" maxlength="254" autocomplete="email" required>
 
     {% if user.password %}
-        <label class="field-label" for="current">your password</label>
+        <label class="field-label" for="current">Your password</label>
         <input type="password" name="current" id="current" class="full" autocomplete="current-password" required>
     {% endif %}
 
@@ -46,7 +46,7 @@
 
 {% if user.email %}
 <div class="section measure">
-    {{ m.action('/settings/email/remove', 'Remove email', {confirm: "You won't be able to reset your password by email until you add one again.", title: 'remove email', button: 'Remove email'}) }}
+    {{ m.action('/settings/email/remove', 'Remove email', {confirm: "You won't be able to reset your password by email until you add one again.", title: 'Remove email', button: 'Remove email'}) }}
 </div>
 {% endif %}
 {% endblock %}

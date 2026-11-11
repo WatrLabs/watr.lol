@@ -1,0 +1,18 @@
+{% extends "models/app.twig" %}
+{% block pageName %}Backup codes{% endblock %}
+{% block body %}
+{% include 'settings/tabs.twig' %}
+
+<section class="card measure">
+    {% if fresh %}<div class="watr-msg watr-msg--info">Two-factor is on.</div>{% endif %}
+    <h2>Save your backup codes</h2>
+    <p>If you lose your phone, each of these gets you in once. <b>This is the only time you'll see them</b>, so write them down or keep them in a password manager.</p>
+    <ol class="backup-codes mono" id="backup-codes">
+        {% for code in codes %}<li>{{ code }}</li>{% endfor %}
+    </ol>
+    <div class="watr-row">
+        <button type="button" class="watr-btn watr-btn--quiet" data-copy="#backup-codes">Copy them</button>
+        <a href="/settings/security" class="watr-btn">I saved them</a>
+    </div>
+</section>
+{% endblock %}

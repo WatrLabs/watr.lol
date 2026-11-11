@@ -2,8 +2,8 @@
 {% block pageName %}{{ app ? 'Edit ' ~ app.name : 'New app' }}{% endblock %}
 {% block body %}
 <ol class="watr-crumbs">
-    <li><a href="/developers">your apps</a></li>
-    {% if app %}<li><a href="/developers/{{ app.id }}">{{ app.name|lower }}</a></li><li aria-current="page">edit</li>{% else %}<li aria-current="page">new</li>{% endif %}
+    <li><a href="/developers">Your apps</a></li>
+    {% if app %}<li><a href="/developers/{{ app.id }}">{{ app.name }}</a></li><li aria-current="page">Edit</li>{% else %}<li aria-current="page">New</li>{% endif %}
 </ol>
 
 <h1>{{ app ? 'Edit ' ~ app.name : 'New app' }}</h1>
@@ -12,17 +12,17 @@
     {{ csrf_field() }}
     {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
 
-    <label class="field-label" for="name">name</label>
+    <label class="field-label" for="name">Name</label>
     <input type="text" name="name" id="name" class="full" maxlength="40" value="{{ form.name ?? '' }}" required>
     <p class="hint">People see this on the "allow this app?" screen.</p>
 
-    <label class="field-label" for="description">description</label>
+    <label class="field-label" for="description">Description</label>
     <input type="text" name="description" id="description" class="full" maxlength="255" value="{{ form.description ?? '' }}">
 
-    <label class="field-label" for="homepage">homepage</label>
+    <label class="field-label" for="homepage">Homepage</label>
     <input type="url" name="homepage" id="homepage" class="full" maxlength="255" placeholder="https://" value="{{ form.homepage ?? '' }}">
 
-    <label class="field-label" for="redirect_uris">callback urls</label>
+    <label class="field-label" for="redirect_uris">Callback URLs</label>
     <textarea name="redirect_uris" id="redirect_uris" class="full mono" rows="4" placeholder="https://yoursite.com/auth/callback" required>{{ form.redirect_uris ?? '' }}</textarea>
     <p class="hint">One per line. Where people land after signing in. Has to match exactly. https:// only, except http://localhost for testing.</p>
 

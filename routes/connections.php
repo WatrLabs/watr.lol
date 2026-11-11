@@ -96,8 +96,7 @@ $router->group('/auth', function ($router) {
             if ($account->banned) {
                 abort(403, 'This account is banned' . ($account->ban_reason ? ': ' . $account->ban_reason : '.'));
             }
-            (new sessions())->createSession($account->id);
-            redirect($pending['continue']);
+            finish_login($account, $pending['continue']);
         }
 
         if (($_ENV['REGISTRATION_OPEN'] ?? 'true') !== 'true') {

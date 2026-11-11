@@ -2,7 +2,7 @@
 {% set providers = login_providers() %}
 {% if providers %}
 <div class="providers">
-    <p class="providers__or"><span>or</span></p>
+    <p class="providers__or"><span>Or</span></p>
     {% for p in providers %}
     <form method="post" action="/auth/connect/{{ p.slug }}">
         {{ csrf_field() }}

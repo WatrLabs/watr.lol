@@ -1,0 +1,31 @@
+{# one thing in the home feed: an update, or a forum post. item comes from feed::build #}
+{% import "snippets/macros.twig" as m %}
+{% set link = item.kind == 'status' ? '/updates/' ~ item.id : '/forum/p/' ~ item.id %}
+<article class="feed-item feed-item--{{ item.kind }}" id="{{ item.kind }}{{ item.id }}">
+    <a href="/u/{{ item.author.username }}" class="feed-item__pic">{{ m.avatar(item.author) }}</a>
+    <div class="feed-item__main">
+        <div class="feed-item__head">
+            {{ m.name(item.author) }}
+            <span class="muted">@{{ item.author.username }}</span>
+            {% if item.kind == 'post' %}
+                <span class="muted">{{ item.started ? 'started a thread' : 'replied' }}</span>
+            {% endif %}
+            <a href="{{ link }}" class="muted feed-item__time" title="{{ item.created|date('j M Y, H:i') }}">{{ item.created|ago }}</a>
+        </div>
+        {% if item.kind == 'post' %}
+            <a href="{{ item.started ? '/forum/t/' ~ item.thread.id : link }}" class="feed-item__thread">{{ item.thread.title }}</a>
+        {% endif %}
+        <div class="prose{% if item.kind == 'post' and (item.body|length > 500 or item.body|split("\n")|length > 8) %} prose--clamp{% endif %}">{{ item.body|markup }}</div>
+        <div class="feed-item__foot">
+            {{ m.reactions(item.kind, item.id, item.reactions, back ~ '#' ~ item.kind ~ item.id) }}
+            {% if item.kind == 'status' and currentuser and (currentuser.id == item.user_id or role_at_least(currentuser, 'mod')) %}
+                <form method="post" action="/updates/{{ item.id }}/delete" class="inline-form feed-item__delete" data-confirm="This update will be gone for good." data-confirm-title="Delete update" data-confirm-button="Delete">
+                    {{ csrf_field() }}<input type="hidden" name="continue" value="{{ back }}">
+                    <button type="submit" class="link-button">Delete</button>
+                </form>
+            {% elseif item.kind == 'post' %}
+                <a href="{{ link }}" class="feed-item__open">Open</a>
+            {% endif %}
+        </div>
+    </div>
+</article>

@@ -9,14 +9,14 @@
 {% if grants %}
 <div class="watr-table-wrap measure-wide">
     <table class="watr-table watr-table--stack">
-        <thead><tr><th>app</th><th>can see</th><th>since</th><th></th></tr></thead>
+        <thead><tr><th>App</th><th>Can see</th><th>Since</th><th></th></tr></thead>
         <tbody>
         {% for g in grants %}
             <tr>
-                <td class="is-main">{{ g.app_name }}{% if g.app_homepage %} <a class="muted small" href="{{ g.app_homepage }}" rel="noopener" target="_blank">site</a>{% endif %}</td>
+                <td class="is-main">{{ g.app_name }}{% if g.app_homepage %} <a class="muted small" href="{{ g.app_homepage }}" rel="noopener" target="_blank">Site</a>{% endif %}</td>
                 <td>{{ g.scope|split(' ')|join(', ') }}</td>
                 <td class="muted">{{ g.created|day }}</td>
-                <td class="num">{{ m.action('/settings/apps/' ~ g.app_id ~ '/revoke', 'Disconnect', {confirm: g.app_name ~ " will be logged out and has to ask before it can sign you in again.", title: 'disconnect ' ~ g.app_name, button: 'Disconnect'}) }}</td>
+                <td class="num">{{ m.action('/settings/apps/' ~ g.app_id ~ '/revoke', 'Disconnect', {confirm: g.app_name ~ " will be logged out and has to ask before it can sign you in again.", title: 'Disconnect ' ~ g.app_name, button: 'Disconnect'}) }}</td>
             </tr>
         {% endfor %}
         </tbody>

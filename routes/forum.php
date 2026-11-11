@@ -4,6 +4,8 @@ use watrlabs\throttle;
 use watrlabs\forum\categories;
 use watrlabs\forum\threads;
 use watrlabs\forum\posts;
+use watrlabs\social\notifications;
+use watrlabs\social\reactions;
 
 global $router; // IMPORTANT: KEEP THIS HERE!
 
@@ -34,6 +36,29 @@ function forum_can_edit($user, $post, $thread): bool {
     return (int) $post->user_id === (int) $user->id && !$thread->locked;
 }
 
+// a page of a thread, with everyone's reactions on it
+function forum_thread_view($thread, array $pager, array $extra = []): array {
+    $posts = new posts();
+    $list = $posts->listForThread($thread->id, $pager['offset'], $pager['per']);
+    $me = current_user();
+    return [
+        'thread' => $thread,
+        'first_post_id' => $posts->first($thread->id)->id ?? null,
+        'posts' => $list,
+        'reactions' => (new reactions())->summarize('post', array_map(fn ($p) => $p->id, $list), $me ? (int) $me->id : null),
+        'pager' => $pager,
+    ] + $extra;
+}
+
+// a bit of text around the first match, for search results
+function forum_snippet(string $body, string $q, int $length = 180): string {
+    $plain = trim(preg_replace('/\s+/', ' ', str_replace(['**', '```', '`', '~~', '> '], '', $body)));
+    $at = mb_stripos($plain, $q);
+    $start = $at === false ? 0 : max(0, $at - 60);
+    $snip = mb_substr($plain, $start, $length);
+    return ($start > 0 ? '…' : '') . $snip . (mb_strlen($plain) > $start + $length ? '…' : '');
+}
+
 function forum_post_too_fast($user): bool {
     if (roles::atLeast($user, 'mod')) {
         return false;
@@ -47,16 +72,47 @@ $router->group('/forum', function ($router) {
         render('forum/index.twig', ['categories' => (new categories())->all()]);
     });
 
+    // titles and post text. LIKE is plenty for a forum this size
+    $router->get('/search', function () {
+        global $db;
+        $q = mb_substr(query('q'), 0, 100);
+        $results = [];
+        $threads = [];
+        $pager = null;
+
+        if (mb_strlen($q) >= 2) {
+            $like = '%' . addcslashes($q, '%_\\') . '%';
+            $threads = (new threads())->withCategories((new threads())->withPeople(
+                $db->table('forum_threads')->where('title', 'LIKE', $like)->orderBy('last_post_at', 'DESC')->limit(10)->get()
+            ));
+
+            $matching = fn () => $db->table('forum_posts')
+                ->join('forum_threads', 'forum_threads.id', '=', 'forum_posts.thread_id')
+                ->where('forum_posts.body', 'LIKE', $like);
+
+            $pager = paginate($matching()->count(), THREADS_PER_PAGE);
+            $rows = $matching()
+                ->select(['forum_posts.id', 'forum_posts.thread_id', 'forum_posts.user_id', 'forum_posts.body', 'forum_posts.created', 'forum_threads.title'])
+                ->orderBy('forum_posts.created', 'DESC')
+                ->limit($pager['per'])
+                ->offset($pager['offset'])
+                ->get();
+
+            $people = (new \watrlabs\authentication())->mapByIds(array_map(fn ($r) => $r->user_id, $rows));
+            foreach ($rows as $row) {
+                $row->author = $people[$row->user_id] ?? null;
+                $row->snippet = forum_snippet($row->body, $q);
+                $results[] = $row;
+            }
+        }
+
+        render('forum/search.twig', ['q' => $q, 'threads' => $threads, 'results' => $results, 'pager' => $pager]);
+    });
+
     $router->get('/t/{id}', function ($id) {
         $thread = forum_thread_or_404($id);
         $pager = paginate((int) $thread->post_count, POSTS_PER_PAGE);
-
-        render('forum/thread.twig', [
-            'thread' => $thread,
-            'first_post_id' => (new posts())->first($thread->id)->id ?? null,
-            'posts' => (new posts())->listForThread($thread->id, $pager['offset'], $pager['per']),
-            'pager' => $pager,
-        ]);
+        render('forum/thread.twig', forum_thread_view($thread, $pager));
     });
 
     $router->post('/t/{id}/reply', function ($id) {
@@ -78,20 +134,20 @@ $router->group('/forum', function ($router) {
         if ($error) {
             http_response_code(422);
             $pager = paginate((int) $thread->post_count, POSTS_PER_PAGE, PHP_INT_MAX);
-            render('forum/thread.twig', [
-                'thread' => $thread,
-                'first_post_id' => $posts->first($thread->id)->id ?? null,
-                'posts' => $posts->listForThread($thread->id, $pager['offset'], $pager['per']),
-                'pager' => $pager,
-                'error' => $error,
-                'draft' => $body,
-            ]);
+            render('forum/thread.twig', forum_thread_view($thread, $pager, ['error' => $error, 'draft' => $body]));
             return;
         }
 
         throttle::hit('post', (string) $user->id);
         $postId = $posts->create($thread->id, $user->id, $body);
-        redirect('/forum/p/' . $postId);
+
+        // the thread's starter hears about replies, anyone @mentioned hears about that
+        $notes = new notifications();
+        $url = '/forum/p/' . $postId;
+        $notes->add((int) $thread->user_id, (int) $user->id, 'reply', $url, 'post', $postId, $thread->title);
+        $notes->mentions($body, (int) $user->id, $url, 'post', $postId, $thread->title, [(int) $thread->user_id]);
+
+        redirect($url);
     });
 
     // staff buttons on a thread
@@ -180,6 +236,9 @@ $router->group('/forum', function ($router) {
         }
 
         $posts->update($post->id, $body);
+
+        // only people who weren't mentioned before get pinged, so fixing a typo doesn't spam anyone
+        (new notifications())->mentions($body, (int) $post->user_id, '/forum/p/' . $post->id, 'post', (int) $post->id, $isFirst ? $title : $thread->title, [], notifications::mentioned($post->body));
         if ($isFirst && $title !== $thread->title) {
             $threads->update($thread->id, ['title' => $title]);
         }
@@ -265,6 +324,10 @@ $router->group('/forum', function ($router) {
 
         throttle::hit('post', (string) $user->id);
         $threadId = $threads->create($category->id, $user->id, $title, $body);
+
+        $first = (new posts())->first($threadId);
+        (new notifications())->mentions($body, (int) $user->id, '/forum/t/' . $threadId, 'post', (int) $first->id, $title);
+
         redirect('/forum/t/' . $threadId);
     });
 

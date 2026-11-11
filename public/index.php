@@ -24,7 +24,7 @@ try {
     header('X-Frame-Options: DENY');
     // turnstile needs its script and its little iframe from cloudflare
     $cloudflare = \watrlabs\turnstile::enabled() ? ' https://challenges.cloudflare.com' : '';
-    header("Content-Security-Policy: default-src 'self'; script-src 'self'$cloudflare; frame-src 'self'$cloudflare; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'");
+    header("Content-Security-Policy: default-src 'self'; script-src 'self'$cloudflare; frame-src 'self'$cloudflare; style-src 'self'; font-src 'self'; img-src 'self' data: https:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'");
 
     $router = new routing();
 
@@ -33,6 +33,7 @@ try {
         'auth',
         'connections',
         'account',
+        'social',
         'forum',
         'projects',
         'oauth',

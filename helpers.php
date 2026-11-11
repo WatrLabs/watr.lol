@@ -88,6 +88,29 @@ function safe_continue(?string $url, string $fallback = '/'): string
     return $url;
 }
 
+// the last step of every way in (password, discord and co, a password reset). with two-factor on,
+// it stops at the code page first and remembers where they were going
+function finish_login($user, string $continue = '/'): never
+{
+    if (\watrlabs\twofactor::enabled($user)) {
+        cookies::set(\watrlabs\twofactor::PENDING_COOKIE, encryption::sign([
+            'u' => (int) $user->id,
+            'c' => safe_continue($continue),
+            'exp' => time() + 600,
+        ]), time() + 600);
+        redirect('/auth/2fa');
+    }
+
+    (new \watrlabs\sessions())->createSession((int) $user->id);
+    redirect(safe_continue($continue));
+}
+
+// asked for json (the reaction buttons do this), so answer with data instead of a page
+function wants_json(): bool
+{
+    return str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
+}
+
 // a message that shows up as a toast on the next page
 function flash(string $message, string $type = 'info'): void
 {

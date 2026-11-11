@@ -10,14 +10,14 @@
 {%- if user -%}
 <a href="/u/{{ user.username }}" class="person">{{ user.display_name ?: user.username }}</a>
 {%- else -%}
-<span class="person muted">deleted</span>
+<span class="person muted">Deleted</span>
 {%- endif -%}
 {% endmacro %}
 
 {% macro role_tag(user) %}
-{%- if user and user.banned -%}<span class="watr-tag watr-tag--danger">banned</span>
-{%- elseif user and user.role == 'admin' -%}<span class="watr-tag watr-tag--bright">admin</span>
-{%- elseif user and user.role == 'mod' -%}<span class="watr-tag watr-tag--deep">mod</span>
+{%- if user and user.banned -%}<span class="watr-tag watr-tag--danger">Banned</span>
+{%- elseif user and user.role == 'admin' -%}<span class="watr-tag watr-tag--bright">Admin</span>
+{%- elseif user and user.role == 'mod' -%}<span class="watr-tag watr-tag--deep">Mod</span>
 {%- endif -%}
 {% endmacro %}
 
@@ -44,7 +44,7 @@
 
 {# a one-button form. data-confirm makes site.js ask first, using the danger dialog #}
 {% macro action(url, label, opts) %}
-<form method="post" action="{{ url }}" class="inline-form"{% if opts.confirm is defined %} data-confirm="{{ opts.confirm }}" data-confirm-title="{{ opts.title ?? 'are you sure?' }}" data-confirm-button="{{ opts.button ?? label }}"{% endif %}>
+<form method="post" action="{{ url }}" class="inline-form"{% if opts.confirm is defined %} data-confirm="{{ opts.confirm }}" data-confirm-title="{{ opts.title ?? 'Are you sure?' }}" data-confirm-button="{{ opts.button ?? label }}"{% endif %}>
     {{ csrf_field() }}
     {% for key, value in opts.fields ?? {} %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
     <button type="submit" class="{{ opts.class ?? 'watr-btn watr-btn--quiet' }}">{{ label }}</button>
@@ -61,4 +61,72 @@
     </div>
     <img class="empty__face" src="/assets/images/blobs/u{{ faces[mood] ?? '1f610' }}.png" alt="" width="120" height="120">
 </div>
+{% endmacro %}
+
+{# blob reactions under a post or update. one form, each emoji is its own submit button.
+   site.js sends it in the background and redraws the counts. summary comes from reactions::summarize #}
+{% macro reactions(target, id, summary, back) %}
+<form method="post" action="/react" class="reacts" data-react>
+    {{ csrf_field() }}
+    <input type="hidden" name="target" value="{{ target }}">
+    <input type="hidden" name="id" value="{{ id }}">
+    <input type="hidden" name="continue" value="{{ back }}">
+    {% for emoji, r in summary %}
+        <button type="submit" name="emoji" value="{{ emoji }}" class="react{% if r.mine %} is-mine{% endif %}" aria-pressed="{{ r.mine ? 'true' : 'false' }}" title="{{ emoji }}"{% if not currentuser %} disabled{% endif %}><img src="{{ reaction_image(emoji) }}" alt="{{ emoji }}" width="20" height="20"><span>{{ r.count }}</span></button>
+    {% endfor %}
+    {% if currentuser %}
+    <details class="watr-dropdown react-pick">
+        <summary class="react react--add" aria-label="add a reaction" title="react">+</summary>
+        <div class="watr-menu react-menu">
+            {% for emoji in reaction_emoji() %}<button type="submit" name="emoji" value="{{ emoji }}" title="{{ emoji }}"><img src="{{ reaction_image(emoji) }}" alt="{{ emoji }}" width="28" height="28"></button>{% endfor %}
+        </div>
+    </details>
+    {% endif %}
+</form>
+{% endmacro %}
+
+{# follow / unfollow, or nothing when it's you or you're logged out #}
+{% macro follow_button(person, following, back) %}
+{% if currentuser and currentuser.id != person.id %}
+<form method="post" action="/u/{{ person.username }}/{{ following ? 'unfollow' : 'follow' }}" class="inline-form">
+    {{ csrf_field() }}
+    <input type="hidden" name="continue" value="{{ back }}">
+    <button type="submit" class="watr-btn{% if following %} watr-btn--quiet{% endif %}">{{ following ? 'Following' : 'Follow' }}</button>
+</form>
+{% endif %}
+{% endmacro %}
+
+{# a person in a list: blob, name, @handle, and a follow button #}
+{% macro person_row(person, following, back) %}
+{% import _self as m %}
+<li class="person-row">
+    <a href="/u/{{ person.username }}" class="person-row__pic">{{ m.avatar(person) }}</a>
+    <div class="person-row__text">
+        {{ m.name(person) }} {{ m.role_tag(person) }}
+        <small class="muted">@{{ person.username }}{% if person.pronouns %} &middot; {{ person.pronouns }}{% endif %}</small>
+        {% if person.bio %}<small class="person-row__bio">{{ person.bio|length > 120 ? person.bio|slice(0, 120) ~ '…' : person.bio }}</small>{% endif %}
+    </div>
+    {{ m.follow_button(person, following, back) }}
+</li>
+{% endmacro %}
+
+{# a small line icon, 20px, drawn in currentColor. names: home, forum, hash, search, bell, user, users,
+   gear, code, shield, logout, login, box #}
+{% macro icon(name) %}
+{% set paths = {
+    home:   '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
+    forum:  '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12Z"/>',
+    hash:   '<path d="M5 9h15M4 15h15M10 3 8 21M16 3l-2 18"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    bell:   '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2Z"/><path d="M10 21h4"/>',
+    user:   '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    users:  '<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M16 4a4 4 0 0 1 0 8M18 14.5a7 7 0 0 1 4 6.5"/>',
+    gear:   '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+    code:   '<path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/>',
+    shield: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/>',
+    logout: '<path d="M14 4h6v16h-6"/><path d="M10 8l-4 4 4 4M6 12h10"/>',
+    login:  '<path d="M14 4h6v16h-6"/><path d="M9 8l4 4-4 4M3 12h10"/>',
+    box:    '<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5v-9Z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/>',
+} %}
+<svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">{{ (paths[name] ?? '')|raw }}</svg>
 {% endmacro %}

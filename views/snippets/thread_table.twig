@@ -3,21 +3,21 @@
 <div class="watr-table-wrap">
     <table class="watr-table watr-table--stack threads">
         <thead><tr>
-            <th>thread</th>
-            {% if show_category ?? false %}<th>category</th>{% endif %}
-            <th class="num">replies</th>
-            <th>last post</th>
+            <th>Thread</th>
+            {% if show_category ?? false %}<th>Category</th>{% endif %}
+            <th class="num">Replies</th>
+            <th>Last post</th>
         </tr></thead>
         <tbody>
         {% for t in threads %}
             <tr>
                 <td class="is-main">
                     <a href="/forum/t/{{ t.id }}" class="thread-link">{{ t.title }}</a>
-                    {% if t.pinned %}<span class="watr-tag watr-tag--bright">pinned</span>{% endif %}
-                    {% if t.locked %}<span class="watr-tag">locked</span>{% endif %}
+                    {% if t.pinned %}<span class="watr-tag watr-tag--bright">Pinned</span>{% endif %}
+                    {% if t.locked %}<span class="watr-tag">Locked</span>{% endif %}
                     <small class="muted thread-by">by {{ m.name(t.author) }}</small>
                 </td>
-                {% if show_category ?? false %}<td>{% if t.category %}<a href="/forum/{{ t.category.slug }}">{{ t.category.name|lower }}</a>{% endif %}</td>{% endif %}
+                {% if show_category ?? false %}<td>{% if t.category %}<a href="/forum/{{ t.category.slug }}">{{ t.category.name }}</a>{% endif %}</td>{% endif %}
                 <td class="num">{{ (t.post_count - 1)|number }}</td>
                 <td class="muted">{{ t.last_post_at|ago }} by {{ m.name(t.last_poster) }}</td>
             </tr>

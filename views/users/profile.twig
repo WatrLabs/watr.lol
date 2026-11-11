@@ -2,30 +2,61 @@
 {% import "snippets/macros.twig" as m %}
 {% block pageName %}{{ profile.display_name ?: profile.username }} (@{{ profile.username }}){% endblock %}
 {% block body %}
+{% set here = '/u/' ~ profile.username %}
 <section class="profile">
     {{ m.avatar(profile, 'big') }}
     <div class="profile__text">
         <h1>{{ profile.display_name ?: profile.username }}</h1>
         <div class="watr-row">
             <span class="muted">@{{ profile.username }}</span>
+            {% if profile.pronouns %}<span class="muted">&middot; {{ profile.pronouns }}</span>{% endif %}
             {{ m.role_tag(profile) }}
+            {% if follows_me %}<span class="watr-tag">Follows you</span>{% endif %}
         </div>
         {% if profile.bio %}<p class="profile__bio">{{ profile.bio }}</p>{% endif %}
-        <p class="muted small">Joined {{ profile.created|day }} &middot; {{ post_count|number }} {{ post_count == 1 ? 'post' : 'posts' }}{% if profile.last_seen %} &middot; last seen {{ profile.last_seen|ago }}{% endif %}</p>
-        {% if currentuser and currentuser.id == profile.id %}
-            <a class="watr-btn watr-btn--quiet" href="/settings">Edit profile</a>
-        {% elseif currentuser and role_at_least(currentuser, 'admin') %}
-            <a class="watr-btn watr-btn--quiet" href="/admin/users/{{ profile.id }}">Manage in admin</a>
+        {% if profile.location or profile.website %}
+        <p class="profile__extra">
+            {% if profile.location %}<span>{{ profile.location }}</span>{% endif %}
+            {% if profile.website %}<a href="{{ profile.website }}" rel="nofollow ugc noopener me" target="_blank">{{ website_label(profile.website) }}</a>{% endif %}
+        </p>
         {% endif %}
+        <p class="profile__counts">
+            <a href="{{ here }}/followers"><b>{{ followers|number }}</b> {{ followers == 1 ? 'follower' : 'followers' }}</a>
+            <a href="{{ here }}/following"><b>{{ following|number }}</b> following</a>
+        </p>
+        <p class="muted small">Joined {{ profile.created|day }} &middot; {{ post_count|number }} forum {{ post_count == 1 ? 'post' : 'posts' }}{% if profile.last_seen %} &middot; last seen {{ profile.last_seen|ago }}{% endif %}</p>
+        <div class="watr-row">
+            {% if currentuser and currentuser.id == profile.id %}
+                <a class="watr-btn watr-btn--quiet" href="/settings">Edit profile</a>
+            {% elseif not profile.banned %}
+                {{ m.follow_button(profile, is_following, here) }}
+            {% endif %}
+            {% if currentuser and currentuser.id != profile.id and role_at_least(currentuser, 'admin') %}
+                <a class="watr-btn watr-btn--quiet" href="/admin/users/{{ profile.id }}">Manage in admin</a>
+            {% endif %}
+        </div>
+        {% if not currentuser %}<p class="small"><a href="/auth/login?continue={{ here|url_encode }}">Log in</a> to follow {{ profile.display_name ?: profile.username }}.</p>{% endif %}
     </div>
 </section>
 
-<section class="section">
-    <h2>Threads</h2>
-    {% if threads %}
-        {% include 'snippets/thread_table.twig' with {show_category: true} %}
-    {% else %}
-        <p class="muted">{{ profile.username }} hasn't started any threads.</p>
-    {% endif %}
-</section>
+<div class="profile-cols">
+    <section class="section">
+        <h2>Updates</h2>
+        {% for s in updates %}
+            {% include 'snippets/feed_item.twig' with {item: {kind: 'status', id: s.id, user_id: s.user_id, body: s.body, created: s.created, author: profile, reactions: reactions[s.id] ?? []}, back: here} %}
+        {% else %}
+            <p class="muted">{{ currentuser and currentuser.id == profile.id ? "You haven't posted an update yet. Post one from the home page." : (profile.username ~ " hasn't posted an update.") }}</p>
+        {% endfor %}
+        {% if next %}<a href="{{ here }}?before={{ next }}" class="watr-btn watr-btn--quiet feed__more">Older</a>{% endif %}
+    </section>
+
+    <section class="section">
+        <h2>Threads</h2>
+        {% if threads %}
+            {% include 'snippets/thread_list.twig' with {threads: threads} %}
+        {% else %}
+            <p class="muted">{{ profile.username }} hasn't started any threads.</p>
+        {% endif %}
+    </section>
+</div>
 {% endblock %}

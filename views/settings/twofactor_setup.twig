@@ -1,0 +1,27 @@
+{% extends "models/app.twig" %}
+{% block pageName %}Set up two-factor{% endblock %}
+{% block body %}
+{% include 'settings/tabs.twig' %}
+
+<div class="twofa-setup measure-wide">
+    <div class="twofa-setup__qr">
+        <img src="{{ qr }}" alt="QR code for your authenticator app" width="220" height="220">
+    </div>
+    <form method="post" action="/settings/security/2fa" class="watr-stack form twofa-setup__steps">
+        {{ csrf_field() }}
+        <h2 class="form__title">1. Scan this with your app</h2>
+        <p class="hint">Can't scan it? Add an account by hand with this key:</p>
+        <code class="twofa-secret" id="totp-secret">{{ secret }}</code>
+        <button type="button" class="link-button small" data-copy="#totp-secret">Copy key</button>
+
+        <h2 class="form__title">2. Type the code it shows</h2>
+        {% if error is defined %}<div class="watr-msg full" role="alert">{{ error }}</div>{% endif %}
+        <label class="sr-only" for="code">6-digit code</label>
+        <input type="text" name="code" id="code" class="full mono twofa-code" inputmode="numeric" pattern="[0-9 ]{6,7}" maxlength="7" autocomplete="one-time-code" placeholder="123456" required autofocus>
+        <div class="watr-row">
+            <button type="submit" class="watr-btn">Turn on</button>
+            <a href="/settings/security" class="watr-btn watr-btn--quiet">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

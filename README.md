@@ -4,11 +4,14 @@ one account for every watr thing, plus a forum.
 built on [watrfiles](https://github.com/watrabi/watrfiles) (the newest watrkit) and styled with [the watr style](https://github.com/WatrLabs/watr-style) v0.5.
 
 ## what's in it
-- **accounts**: sign up, log in (username or email), profiles, settings, see and log out your devices. the first account made becomes admin
+- **accounts**: sign up, log in (username or email), profiles (bio, pronouns, location, website), settings, see and log out your devices, delete your account. the first account made becomes admin
+- **two-factor login**: codes from any authenticator app, plus 10 one-time backup codes. it covers password logins, discord and co, and password resets. admins can turn it off for someone who lost their phone
+- **social**: follow people, post short updates, react with blob emoji (on updates and forum posts), and a home feed of updates and forum posts from people you follow (or everyone). `/people` finds people
+- **notifications**: the bell in the bar. replies to your threads, @mentions, new followers and reactions
 - **email**: confirm an address, reset a forgotten password, and get a heads up when your password or email changes. sends through any smtp login (zoho, see below)
 - **sign in with discord, github, google, or any oauth2 provider**: log in with them, sign up with them (you just pick a username), or link them to an account you already have. each one turns on when you put its client id and secret in `.env`
 - **sign in with watr.lol**: other sites send people here to log in, like "sign in with discord" but it's us. plain oauth 2.0 authorization code flow, with optional pkce. anyone can register an app at `/developers`, docs are at `/developers/docs`
-- **forum**: categories, threads, replies, light formatting (`**bold**`, quotes, code, links, @mentions), pin, lock, move, edit, delete
+- **forum**: categories, threads, replies, light formatting (`**bold**`, quotes, code, links, @mentions), pin, lock, move, edit, delete, search
 - **projects**: `/projects` lists every watrlabs thing that's running right now. admins add, edit, reorder and hide them in admin > projects
 - **admin**: people (roles, bans), forum categories, projects, apps (mark watrlabs' own sites as trusted so they skip the "allow?" screen)
 
@@ -84,8 +87,8 @@ nobody gets matched up by email, so nobody can take over an account by making a 
 
 ## how it's laid out
 same as watrkit:
-- `routes/`: one file per area (`auth`, `connections`, `account`, `forum`, `oauth`, `developers`, `admin`, `web`). returning an array from a route still makes it a json response
-- `classes/watrlabs/`: the logic. `oauth/` is watr.lol being the login for other sites, `connections/` is other sites being a login for watr.lol, `mail.php` + `accountmail.php` send email
+- `routes/`: one file per area (`auth`, `connections`, `account`, `social`, `forum`, `oauth`, `developers`, `admin`, `web`). returning an array from a route still makes it a json response
+- `classes/watrlabs/`: the logic. `oauth/` is watr.lol being the login for other sites, `connections/` is other sites being a login for watr.lol, `social/` is follows, updates, reactions, notifications and the feed, `twofactor.php` is the authenticator codes, `accountdeletion.php` is deleting an account, `mail.php` + `accountmail.php` send email
 - `views/emails/`: the emails. each has an html version and a `text` block for plain text
 - `views/`: twig. `models/app.twig` is the bar + sidebar layout, `models/plain.twig` is the centered one
 - `public/assets/watr/`: the watr style kit, copied in at v0.5 so the site doesn't change when the kit does. `site.css` sets the knobs (hue 237, the logo blue) and lays out the pages
@@ -99,6 +102,12 @@ same as watrkit:
 - `roles.php` and `encryption.php` were broken (missing `global $db`, a missing `;`, `construct__`), they're rewritten
 - the router does `PUT` properly and passes url params like `/forum/t/{id}`
 
+## updating a running copy
+pull, then
+```
+composer install          # new packages, like the qr code one for two-factor
+vendor/bin/phinx migrate  # new tables
+```
+
 ## not done yet
-- deleting your own account
 - refresh tokens. access tokens last 30 days, then the site sends you through login again (instant if you're still logged in here)

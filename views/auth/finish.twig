@@ -11,8 +11,8 @@
         {% if error is defined %}<div class="watr-msg" role="alert">{{ error }}</div>{% endif %}
         <form method="post" action="/auth/finish" class="watr-stack auth__form">
             {{ csrf_field() }}
-            <label class="sr-only" for="username">username</label>
-            <input type="text" name="username" id="username" placeholder="username" value="{{ username }}" autocomplete="username" autocapitalize="none" spellcheck="false" minlength="3" maxlength="20" pattern="[A-Za-z0-9_.\-]+" required autofocus>
+            <label class="sr-only" for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Username" value="{{ username }}" autocomplete="username" autocapitalize="none" spellcheck="false" minlength="3" maxlength="20" pattern="[A-Za-z0-9_.\-]+" required autofocus>
             <p class="hint">3 to 20 letters, numbers, dots, dashes or underscores.</p>
             <button type="submit" class="watr-btn auth__submit">Create account</button>
         </form>

@@ -1,0 +1,25 @@
+{% extends "emails/layout.twig" %}
+{% block html %}
+{% if on %}
+<h1 style="margin:0 0 12px;font-size:22px;font-weight:800;">Two-factor login is on</h1>
+<p style="margin:0;">Logging in to <b>@{{ user.username }}</b> now needs a code from your authenticator app as well as your password. It was turned on from {{ ip }}.</p>
+<p style="margin:14px 0 0;">Keep your backup codes somewhere safe. They're how you get in if you lose your phone.</p>
+{% else %}
+<h1 style="margin:0 0 12px;font-size:22px;font-weight:800;">Two-factor login was turned off</h1>
+<p style="margin:0;">Logging in to <b>@{{ user.username }}</b> only needs your password now. It was turned off from {{ ip }}.</p>
+<p style="margin:14px 0 0;">If that wasn't you, change your password and turn it back on:</p>
+{% endif %}
+{% include "emails/button.twig" with {label: 'Security settings'} %}
+{% endblock %}
+{% block text %}
+{% if on %}
+Logging in to @{{ user.username }} on {{ app_name }} now needs a code from your authenticator app as well as your password. It was turned on from {{ ip }}.
+
+Keep your backup codes somewhere safe. They're how you get in if you lose your phone.
+{% else %}
+Logging in to @{{ user.username }} on {{ app_name }} only needs your password now. Two-factor was turned off from {{ ip }}.
+
+If that wasn't you, change your password and turn it back on:
+{% endif %}
+{{ link }}
+{% endblock %}

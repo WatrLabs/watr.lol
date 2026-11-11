@@ -2,18 +2,25 @@
 {% import "snippets/macros.twig" as m %}
 {% block pageName %}Forum{% endblock %}
 {% block body %}
-<h1>Forum</h1>
+<div class="page__head">
+    <h1>Forum</h1>
+    <form method="get" action="/forum/search" class="watr-row search" role="search">
+        <label class="sr-only" for="forum-q">Search the forum</label>
+        <input type="search" name="q" id="forum-q" placeholder="Search the forum" maxlength="100">
+        <button type="submit" class="watr-btn watr-btn--quiet">Search</button>
+    </form>
+</div>
 
 {% if categories %}
 <div class="watr-table-wrap">
     <table class="watr-table watr-table--stack">
-        <thead><tr><th>category</th><th class="num">threads</th><th class="num">posts</th><th>last post</th></tr></thead>
+        <thead><tr><th>Category</th><th class="num">Threads</th><th class="num">Posts</th><th>Last post</th></tr></thead>
         <tbody>
         {% for c in categories %}
             <tr>
                 <td class="is-main">
                     <a href="/forum/{{ c.slug }}" class="thread-link">{{ c.name }}</a>
-                    {% if c.staff_only %}<span class="watr-tag">staff posts</span>{% endif %}
+                    {% if c.staff_only %}<span class="watr-tag">Staff posts</span>{% endif %}
                     {% if c.description %}<small class="muted thread-by">{{ c.description }}</small>{% endif %}
                 </td>
                 <td class="num">{{ c.threads|number }}</td>

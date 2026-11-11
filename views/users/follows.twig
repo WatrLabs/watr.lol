@@ -1,0 +1,26 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% set who = profile.display_name ?: profile.username %}
+{% block pageName %}{{ which == 'followers' ? 'People following ' ~ who : 'People ' ~ who ~ ' follows' }}{% endblock %}
+{% block body %}
+{% set here = '/u/' ~ profile.username ~ '/' ~ which %}
+<ol class="watr-crumbs">
+    <li><a href="/u/{{ profile.username }}">@{{ profile.username }}</a></li>
+    <li aria-current="page">{{ which }}</li>
+</ol>
+
+<nav class="watr-tabs" aria-label="follows">
+    <a class="watr-tab" href="/u/{{ profile.username }}/followers"{% if which == 'followers' %} aria-current="page"{% endif %}>Followers</a>
+    <a class="watr-tab" href="/u/{{ profile.username }}/following"{% if which == 'following' %} aria-current="page"{% endif %}>Following</a>
+</nav>
+
+{% if people %}
+    <ul class="plain-list people-list measure-wide">
+        {% for p in people %}{{ m.person_row(p, p.id in my_following, here) }}{% endfor %}
+    </ul>
+    {{ m.pages(pager, here) }}
+{% else %}
+    {{ m.empty(which == 'followers' ? 'No followers yet' : 'Not following anyone',
+        which == 'followers' ? 'Nobody follows ' ~ who ~ ' yet.' : who ~ " doesn't follow anyone yet.", 'meh') }}
+{% endif %}
+{% endblock %}

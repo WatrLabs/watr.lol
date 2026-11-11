@@ -1,0 +1,46 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}Notifications{% endblock %}
+{% block body %}
+{% set words = {
+    reply: 'replied to',
+    mention: 'mentioned you in',
+    follow: 'followed you',
+    reaction: 'reacted to'
+} %}
+<div class="page__head measure-wide">
+    <h1>Notifications</h1>
+    {% if notes %}
+    <div class="watr-row">
+        {% if unread_count(currentuser) %}{{ m.action('/notifications/seen', 'Mark all read') }}{% endif %}
+        {{ m.action('/notifications/clear', 'Clear all', {confirm: 'Every notification goes away, read or not.', title: 'Clear notifications', button: 'Clear all'}) }}
+    </div>
+    {% endif %}
+</div>
+
+{% if notes %}
+<ul class="plain-list notes measure-wide">
+    {% for n in notes %}
+    <li class="note{% if not n.seen %} is-new{% endif %}">
+        <a href="/notifications/{{ n.id }}" class="note__link">
+            {{ m.avatar(n.actor, 'small') }}
+            <span class="note__text">
+                <b>{{ n.actor ? (n.actor.display_name ?: n.actor.username) : 'Someone' }}</b>
+                {{ words[n.type] ?? n.type }}
+                {% if n.type == 'reply' or (n.type in ['mention', 'reaction'] and n.target == 'post') %}
+                    {{ n.type == 'reaction' ? 'your post in' : '' }} <span class="note__what">{{ n.summary }}</span>
+                {% elseif n.target == 'status' %}
+                    {{ n.type == 'reaction' ? 'your update' : 'an update' }}{% if n.summary %}: <span class="note__what">{{ n.summary|length > 80 ? n.summary|slice(0, 80) ~ '…' : n.summary }}</span>{% endif %}
+                {% endif %}
+                <small class="muted">{{ n.created|ago }}</small>
+            </span>
+            {% if not n.seen %}<span class="note__dot" aria-label="new"></span>{% endif %}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{{ m.pages(pager, '/notifications') }}
+{% else %}
+    {{ m.empty('Nothing yet', 'When someone replies to you, mentions you, follows you or reacts to something you wrote, it shows up here.', 'sleepy') }}
+{% endif %}
+{% endblock %}

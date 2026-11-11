@@ -12,10 +12,10 @@
         <form method="post" action="/auth/login" class="watr-stack auth__form">
             {{ csrf_field() }}
             <input type="hidden" name="continue" value="{{ continue }}">
-            <label class="sr-only" for="username">username or email</label>
-            <input type="text" name="username" id="username" placeholder="username or email" value="{{ username ?? '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" required{% if username is not defined %} autofocus{% endif %}>
-            <label class="sr-only" for="password">password</label>
-            <input type="password" name="password" id="password" placeholder="password" autocomplete="current-password" required{% if username is defined %} autofocus{% endif %}>
+            <label class="sr-only" for="username">Username or email</label>
+            <input type="text" name="username" id="username" placeholder="Username or email" value="{{ username ?? '' }}" autocomplete="username" autocapitalize="none" spellcheck="false" required{% if username is not defined %} autofocus{% endif %}>
+            <label class="sr-only" for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" autocomplete="current-password" required{% if username is defined %} autofocus{% endif %}>
             {{ turnstile() }}
             <div class="auth__row">
                 <button type="submit" class="watr-btn auth__submit">Log in</button>

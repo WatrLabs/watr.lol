@@ -1,0 +1,13 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}{{ status.author.display_name ?: status.author.username }}: {{ status.body|length > 50 ? status.body|slice(0, 50) ~ '…' : status.body }}{% endblock %}
+{% block description %}{{ status.body|slice(0, 160) }}{% endblock %}
+{% block body %}
+<ol class="watr-crumbs">
+    <li><a href="/u/{{ status.author.username }}">@{{ status.author.username }}</a></li>
+    <li aria-current="page">Update</li>
+</ol>
+<div class="measure-wide">
+    {% include 'snippets/feed_item.twig' with {item: {kind: 'status', id: status.id, user_id: status.user_id, body: status.body, created: status.created, author: status.author, reactions: status.reactions}, back: '/updates/' ~ status.id} %}
+</div>
+{% endblock %}

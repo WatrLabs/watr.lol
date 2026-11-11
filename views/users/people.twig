@@ -1,0 +1,25 @@
+{% extends "models/app.twig" %}
+{% import "snippets/macros.twig" as m %}
+{% block pageName %}People{% endblock %}
+{% block body %}
+{% set here = '/people' ~ (q ? '?q=' ~ (q|url_encode) : '') %}
+<div class="page__head measure-wide">
+    <h1>People</h1>
+    <form method="get" action="/people" class="watr-row search" role="search">
+        <label class="sr-only" for="people-q">Find someone</label>
+        <input type="search" name="q" id="people-q" value="{{ q }}" placeholder="Find someone" maxlength="40">
+        <button type="submit" class="watr-btn watr-btn--quiet">Search</button>
+    </form>
+</div>
+
+{% if people %}
+    <ul class="plain-list people-list measure-wide">
+        {% for p in people %}{{ m.person_row(p, p.id in my_following, here) }}{% endfor %}
+    </ul>
+    {{ m.pages(pager, here) }}
+{% elseif q %}
+    {{ m.empty('Nobody by that name', 'Nobody here is called "' ~ q ~ '". Check the spelling, or try part of it.', 'upside') }}
+{% else %}
+    {{ m.empty('Nobody yet', "It's just you so far.", 'meh') }}
+{% endif %}
+{% endblock %}

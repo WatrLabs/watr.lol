@@ -46,7 +46,7 @@ If two of my sites sat side by side, you should be able to tell they're by the s
 
 2. **Light from the top-left.** Shadows are always offset down and to the right, with x, y and blur equal: `5px 5px 5px rgb(15 15 15 / .4)`. Never a centered glow, never a shadow going up.
 
-3. **Framed by bars.** A full-width bar on top (45px), optional notice strips stacked directly under it (red, yellow, or bright), a footer at the bottom. The bars are the surface color with normal text and cast the drop onto the page, so the hue is saved for things you can press (`--color` brings back the full-hue frame). The site's mark sits at the left of the bar, on its own. The bar and its strips are one block: nothing inside the stack casts a shadow, only the bottom of it does. (The kit handles this with `:has()`, so just put strips straight after the bar.)
+3. **Framed by bars.** A full-width bar on top (45px), optional notice strips stacked directly under it (a line in red, yellow or blue under it), a footer at the bottom. The bars are the surface color with normal text and cast the drop onto the page, so the hue is saved for things you can press (`--color` brings back the full-hue frame). The site's mark sits at the left of the bar, on its own. The bar and its strips are one block: nothing inside the stack casts a shadow, only the bottom of it does. (The kit handles this with `:has()`, so just put strips straight after the bar.)
 
 4. **Square buttons, soft fields.** Buttons have 0 radius, bright fill, black text, 10px padding, darker on hover. Inputs are filled grey, no border, 0.3em radius. Keep that contrast.
 
@@ -105,11 +105,11 @@ The exception is the page itself: the `body` background, text color and font, pl
 | --- | --- | --- |
 | nav bar | `.watr-bar` > `.watr-bar__home` + `.watr-bar__toggle` + `.watr-bar__links` > two `.watr-bar__group` | surface color by default, `--color` for the full-hue bar. `aria-current="page"` gets a bright line under it. under 600px wide the links fold behind a "menu" button and open as full-width rows inside the bar (needs `watr.js`; without it they just wrap). `.watr-bar__me` for the signed-in person's avatar + name |
 | bar extras | `.watr-mark` (in `__home`), `form.watr-bar__search` between the groups, `a.watr-bar__cta` | the mark: the site's icon, 28px, no tile (put a light and a dark version in a `<picture>` if it needs one per theme). search: a field welded to a square button; hidden 600-1000px wide, moves into the menu on phones. cta: one bright link, like "sign up" |
-| notice strip | `.watr-strip` `--warning` `--info` | red by default. goes straight under the bar |
+| notice strip | `.watr-strip` `--warning` `--info` | normal text over a red line by default. goes straight under the bar |
 | footer | `.watr-footer` `--cols` `--color` | sticks to the bottom on short pages. plain, it's one centered line. `--cols`: `.watr-footer__cols` > `.watr-footer__brand` (mark, name, one line about the site) + up to three `<nav>`s with an `<h2>` each, then `.watr-footer__base` for the copyright. two columns on phones |
 | button | `.watr-btn` `--quiet` `--danger`, `:disabled` | works on `<a>` and `<button>` |
 | fields | plain `input`, `select`, `textarea` | styled by default, no class needed |
-| message | `.watr-msg` `--warning` `--info` | solid block, no icon, no border |
+| message | `.watr-msg` `--warning` `--info` | a surface block with a 3px edge in the signal color on the left, normal text color, no icon |
 | panel | `.watr-panel` | a raised block with a pale wash of the site's hue. use it for one thing per area, not every box |
 | split | `.watr-split` `.watr-split__aside` `.watr-split__main` | the waterline layout |
 | blob | `.watr-blob` `.watr-blob__face` | error and empty states |
@@ -221,7 +221,7 @@ Things I noticed while pulling this out of watrfiles. Decide on each and move it
 
 ## changelog
 
-- **0.6** (2026-11): quieter frame, taken from watrfall. bars, footer and table headers are the surface color by default (`--color` keeps the full-hue look). the thick rule is now the waterline: one thin solid line in the hue. nothing is forced to lowercase any more; write labels in sentence case. the mark sits on its own, without a tile. dark mode is deeper and bluer. new: `.watr-mark`, `.watr-bar__search`, `.watr-bar__cta`, `aria-current` in the bar, `.watr-footer--cols`, `.watr-side__item` / `__promo` / `__links`, flat square scrollbars.
+- **0.6** (2026-11): quieter frame, taken from watrfall. bars, footer and table headers are the surface color by default (`--color` keeps the full-hue look). the thick rule is now the waterline: one thin solid line in the hue. nothing is forced to lowercase any more; write labels in sentence case. the mark sits on its own, without a tile. dark mode is deeper and bluer. new: `.watr-mark`, `.watr-bar__search`, `.watr-bar__cta`, `aria-current` in the bar, `.watr-footer--cols`, `.watr-side__item` / `__promo` / `__links`, flat square scrollbars. messages and strips keep normal text and show their signal color as an edge instead of a solid fill.
 
 - **0.5** (2026-10): sidebar. `.watr-shell` + `.watr-side` (light or `--color`), `.watr-burger`, a width knob, and the mockup is now a full sidebar app.
 - **0.4** (2026-10): phone layout pass. bar folds into a menu, tabs scroll, tables can stack into cards. default avatars: a person, or one of six blobs picked from the username.

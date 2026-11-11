@@ -175,7 +175,7 @@ select { cursor: pointer; }
 
 .home { display: flex; flex-direction: column; gap: 28px; max-width: 46rem; }
 .home h1 { margin: 0; }
-.home .watr-msg a { color: inherit; font-weight: 700; }
+
 .home > p { margin: 0; }
 
 .home-latest { display: flex; flex-direction: column; gap: 6px; width: min(100%, 46rem); }
@@ -412,6 +412,7 @@ select { cursor: pointer; }
     grid-template-columns: minmax(0, 40rem) minmax(0, 18rem);
     gap: 40px;
     align-items: start;
+    justify-content: center;
 }
 .home-grid .home { max-width: none; gap: 20px; }
 .home-aside { display: flex; flex-direction: column; gap: 28px; position: sticky; top: calc(var(--watr-bar-h) + 16px); }
